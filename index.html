@@ -499,19 +499,23 @@
           </div>
         </div>
       </div>
-      <div class="contact-form reveal">
+      <form class="contact-form reveal" id="estimateForm" action="https://formsubmit.co/Josecas3311942@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="New Estimate Request — S. Castillo Construction"/>
+        <input type="hidden" name="_captcha" value="false"/>
+        <input type="hidden" name="_next" value="https://jc0271724-cyber.github.io/santos-castillo-stucco-site/#contact"/>
+        <input type="hidden" name="_template" value="table"/>
         <p class="form-title">Request a Free Estimate</p>
         <div class="frow">
-          <div class="fgroup"><label>First Name</label><input type="text" placeholder="James"/></div>
-          <div class="fgroup"><label>Last Name</label><input type="text" placeholder="Anderson"/></div>
+          <div class="fgroup"><label>First Name</label><input type="text" name="first_name" placeholder="James" required/></div>
+          <div class="fgroup"><label>Last Name</label><input type="text" name="last_name" placeholder="Anderson" required/></div>
         </div>
         <div class="frow">
-          <div class="fgroup"><label>Phone</label><input type="tel" placeholder="(832) 000-0000"/></div>
-          <div class="fgroup"><label>Email</label><input type="email" placeholder="james@email.com"/></div>
+          <div class="fgroup"><label>Phone</label><input type="tel" name="phone" placeholder="(832) 000-0000" required/></div>
+          <div class="fgroup"><label>Email</label><input type="email" name="email" placeholder="james@email.com" required/></div>
         </div>
         <div class="fgroup">
           <label>Service</label>
-          <select>
+          <select name="service">
             <option>Stucco Application</option>
             <option>Natural Stone Work</option>
             <option>Exterior Painting</option>
@@ -520,9 +524,9 @@
             <option>Other</option>
           </select>
         </div>
-        <div class="fgroup"><label>Project Details</label><textarea placeholder="Tell us about your property, vision, and timeline…"></textarea></div>
-        <button class="btn-submit" onclick="handleSubmit(event)">Send Request →</button>
-      </div>
+        <div class="fgroup"><label>Project Details</label><textarea name="project_details" placeholder="Tell us about your property, vision, and timeline…"></textarea></div>
+        <button type="submit" class="btn-submit">Send Request →</button>
+      </form>
     </div>
   </div>
 </section>
@@ -568,15 +572,38 @@
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
 
-  // Form submit
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = e.target;
-    btn.textContent = 'Request Sent ✓';
-    btn.style.background = '#4a7c59';
-    btn.style.color = '#fff';
-    btn.disabled = true;
-  }
+  // Form submit — save to admin dashboard + send email
+  const form = document.getElementById('estimateForm');
+  form.addEventListener('submit', function() {
+    var data = {
+      date: new Date().toISOString(),
+      first_name: form.querySelector('[name="first_name"]').value,
+      last_name: form.querySelector('[name="last_name"]').value,
+      phone: form.querySelector('[name="phone"]').value,
+      email: form.querySelector('[name="email"]').value,
+      service: form.querySelector('[name="service"]').value,
+      project_details: form.querySelector('[name="project_details"]').value,
+      read: false
+    };
+    var subs = JSON.parse(localStorage.getItem('sc_submissions') || '[]');
+    subs.push(data);
+    localStorage.setItem('sc_submissions', JSON.stringify(subs));
+    var btn = form.querySelector('.btn-submit');
+    btn.textContent = 'Sending...';
+    btn.style.background = '#D4AF72';
+  });
+
+  // Simple visitor tracking (stored in localStorage for admin)
+  (function(){
+    var visits = JSON.parse(localStorage.getItem('sc_visits') || '[]');
+    visits.push({
+      date: new Date().toISOString(),
+      page: location.pathname,
+      ref: document.referrer || 'direct'
+    });
+    if (visits.length > 500) visits = visits.slice(-500);
+    localStorage.setItem('sc_visits', JSON.stringify(visits));
+  })();
 </script>
 </body>
 </html>

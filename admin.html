@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — S. Castillo Construction</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --navy:#0D1117;--navy2:#161B24;--navy3:#1C222D;
+      --gold:#B8975A;--gold-light:#D4AF72;
+      --platinum:#E8E4DC;--white:#FFFFFF;
+      --green:#4a7c59;--red:#c0392b;--blue:#2980b9;
+    }
+    body{font-family:'Inter',sans-serif;background:var(--navy);color:var(--platinum);min-height:100vh;}
+
+    /* LOGIN */
+    .login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem;}
+    .login-box{background:var(--navy2);border:1px solid rgba(184,151,90,.2);padding:3rem;max-width:400px;width:100%;text-align:center;}
+    .login-box h1{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--white);font-weight:300;margin-bottom:.5rem;}
+    .login-box p{font-size:.75rem;color:rgba(232,228,220,.4);margin-bottom:2rem;letter-spacing:1px;}
+    .login-box input{width:100%;background:rgba(255,255,255,.05);border:none;border-bottom:1px solid rgba(184,151,90,.25);color:var(--platinum);font-family:'Inter',sans-serif;font-size:.9rem;padding:.75rem 0;margin-bottom:1.2rem;outline:none;}
+    .login-box input:focus{border-bottom-color:var(--gold);}
+    .login-box button{width:100%;background:var(--gold);color:var(--navy);font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;font-weight:600;padding:1rem;border:none;cursor:pointer;margin-top:.5rem;}
+    .login-box button:hover{background:var(--gold-light);}
+    .login-error{color:var(--red);font-size:.8rem;margin-top:1rem;display:none;}
+
+    /* DASHBOARD LAYOUT */
+    .dashboard{display:none;min-height:100vh;}
+    .dash-header{background:var(--navy2);border-bottom:1px solid rgba(184,151,90,.15);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;}
+    .dash-header h1{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--white);font-weight:300;letter-spacing:2px;}
+    .dash-header-right{display:flex;align-items:center;gap:1rem;}
+    .dash-header a{color:var(--gold);font-size:.7rem;text-decoration:none;letter-spacing:2px;text-transform:uppercase;font-weight:500;}
+    .dash-header a:hover{color:var(--gold-light);}
+    .dash-body{display:flex;min-height:calc(100vh - 56px);}
+
+    /* SIDEBAR */
+    .sidebar{width:220px;background:var(--navy2);border-right:1px solid rgba(184,151,90,.1);padding:1.5rem 0;flex-shrink:0;}
+    .sidebar-item{display:flex;align-items:center;gap:10px;padding:.8rem 1.5rem;font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(232,228,220,.45);cursor:pointer;transition:all .2s;font-weight:500;border-left:2px solid transparent;}
+    .sidebar-item:hover{color:var(--platinum);background:rgba(184,151,90,.05);}
+    .sidebar-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(184,151,90,.08);}
+    .sidebar-item svg{width:16px;height:16px;fill:currentColor;flex-shrink:0;}
+
+    /* MAIN CONTENT */
+    .dash-content{flex:1;padding:2rem;overflow-y:auto;}
+    .tab-panel{display:none;}
+    .tab-panel.active{display:block;}
+    .panel-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--white);font-weight:300;margin-bottom:.5rem;}
+    .panel-subtitle{font-size:.75rem;color:rgba(232,228,220,.35);letter-spacing:1px;margin-bottom:2rem;}
+
+    /* OVERVIEW CARDS */
+    .overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem;}
+    .stat-card{background:var(--navy2);border:1px solid rgba(184,151,90,.15);padding:1.5rem;text-align:center;}
+    .stat-card .big{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--gold);font-weight:300;}
+    .stat-card .label{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(232,228,220,.4);margin-top:.3rem;font-weight:500;}
+
+    /* SUBMISSIONS TABLE */
+    .sub-table{width:100%;border-collapse:collapse;}
+    .sub-table th{text-align:left;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);padding:.8rem 1rem;border-bottom:1px solid rgba(184,151,90,.2);font-weight:500;}
+    .sub-table td{padding:.8rem 1rem;font-size:.85rem;color:rgba(232,228,220,.7);border-bottom:1px solid rgba(184,151,90,.08);font-weight:300;}
+    .sub-table tr:hover td{background:rgba(184,151,90,.05);}
+    .sub-badge{font-size:.6rem;padding:.2rem .6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;}
+    .sub-badge.new{background:var(--gold);color:var(--navy);}
+    .sub-badge.read{background:rgba(255,255,255,.1);color:rgba(232,228,220,.5);}
+    .empty-state{text-align:center;padding:4rem 2rem;color:rgba(232,228,220,.3);}
+    .empty-state p{font-size:.9rem;margin-bottom:.5rem;}
+    .empty-state small{font-size:.7rem;}
+
+    /* SUBMISSION DETAIL MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;padding:1.5rem;}
+    .modal-overlay.active{display:flex;}
+    .modal-box{background:var(--navy2);border:1px solid rgba(184,151,90,.2);padding:2.5rem;max-width:550px;width:100%;max-height:80vh;overflow-y:auto;}
+    .modal-box h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--white);font-weight:300;margin-bottom:1.5rem;}
+    .modal-row{display:flex;gap:.8rem;margin-bottom:1rem;align-items:flex-start;}
+    .modal-label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:500;min-width:70px;padding-top:.15rem;}
+    .modal-val{font-size:.85rem;color:rgba(232,228,220,.7);line-height:1.6;font-weight:300;}
+    .modal-close{background:var(--gold);color:var(--navy);font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:.7rem 1.5rem;border:none;cursor:pointer;margin-top:1rem;}
+    .modal-close:hover{background:var(--gold-light);}
+    .modal-actions{display:flex;gap:.8rem;margin-top:1.5rem;}
+    .modal-delete{background:transparent;border:1px solid var(--red);color:var(--red);font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:.7rem 1.5rem;cursor:pointer;}
+
+    /* CONTENT EDITOR */
+    .edit-section{background:var(--navy2);border:1px solid rgba(184,151,90,.15);padding:2rem;margin-bottom:1.5rem;}
+    .edit-section h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--white);font-weight:300;margin-bottom:1rem;}
+    .edit-group{margin-bottom:1.2rem;}
+    .edit-group label{display:block;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:.4rem;}
+    .edit-group input,.edit-group textarea{width:100%;background:rgba(255,255,255,.05);border:none;border-bottom:1px solid rgba(184,151,90,.2);color:var(--platinum);font-family:'Inter',sans-serif;font-size:.85rem;padding:.6rem 0;outline:none;}
+    .edit-group input:focus,.edit-group textarea:focus{border-bottom-color:var(--gold);}
+    .edit-group textarea{resize:vertical;min-height:80px;}
+    .save-btn{background:var(--gold);color:var(--navy);font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:.7rem 1.5rem;border:none;cursor:pointer;margin-top:.5rem;}
+    .save-btn:hover{background:var(--gold-light);}
+    .save-msg{font-size:.75rem;color:var(--green);margin-left:1rem;display:none;}
+
+    /* GALLERY MANAGER */
+    .gallery-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;}
+    .gallery-admin-item{position:relative;background:var(--navy2);border:1px solid rgba(184,151,90,.15);overflow:hidden;}
+    .gallery-admin-item img{width:100%;height:140px;object-fit:cover;display:block;}
+    .gallery-admin-item .ga-info{padding:.8rem;font-size:.7rem;color:rgba(232,228,220,.5);}
+    .gallery-admin-item .ga-toggle{position:absolute;top:8px;right:8px;background:var(--green);color:#fff;border:none;font-size:.55rem;padding:.3rem .6rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-weight:600;}
+    .gallery-admin-item .ga-toggle.hidden{background:var(--red);}
+    .gallery-admin-item.disabled{opacity:.4;}
+
+    /* ANALYTICS */
+    .analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:2rem;}
+    .analytics-card{background:var(--navy2);border:1px solid rgba(184,151,90,.15);padding:1.5rem;}
+    .analytics-card h4{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:1rem;}
+    .bar-chart{display:flex;flex-direction:column;gap:.4rem;}
+    .bar-row{display:flex;align-items:center;gap:.8rem;}
+    .bar-label{font-size:.7rem;color:rgba(232,228,220,.5);min-width:50px;text-align:right;}
+    .bar-fill{height:20px;background:linear-gradient(to right,var(--gold),var(--gold-light));min-width:2px;transition:width .3s;}
+    .bar-count{font-size:.7rem;color:rgba(232,228,220,.4);margin-left:.5rem;}
+    .referrer-list{list-style:none;}
+    .referrer-list li{display:flex;justify-content:space-between;padding:.4rem 0;font-size:.75rem;color:rgba(232,228,220,.5);border-bottom:1px solid rgba(184,151,90,.06);}
+    .referrer-list li span:last-child{color:var(--gold);}
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      .sidebar{width:60px;}.sidebar-item span{display:none;}.sidebar-item{justify-content:center;padding:.8rem;}
+      .dash-content{padding:1.5rem;}
+      .overview-grid{grid-template-columns:1fr 1fr;}
+      .sub-table{font-size:.75rem;}.sub-table th,.sub-table td{padding:.6rem .5rem;}
+      .gallery-admin-grid{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <h1>S. Castillo</h1>
+    <p>Admin Dashboard</p>
+    <input type="text" id="loginUser" placeholder="Username"/>
+    <input type="password" id="loginPass" placeholder="Password"/>
+    <button onclick="doLogin()">Sign In</button>
+    <p class="login-error" id="loginError">Invalid username or password</p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <div class="dash-header">
+    <h1>S. Castillo — Admin</h1>
+    <div class="dash-header-right">
+      <a href="index.html" target="_blank">View Site</a>
+      <a href="#" onclick="doLogout()">Logout</a>
+    </div>
+  </div>
+  <div class="dash-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-item active" onclick="switchTab('overview',this)">
+        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        <span>Overview</span>
+      </div>
+      <div class="sidebar-item" onclick="switchTab('submissions',this)">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <span>Submissions</span>
+      </div>
+      <div class="sidebar-item" onclick="switchTab('content',this)">
+        <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        <span>Content</span>
+      </div>
+      <div class="sidebar-item" onclick="switchTab('gallery',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+        <span>Gallery</span>
+      </div>
+      <div class="sidebar-item" onclick="switchTab('analytics',this)">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+        <span>Analytics</span>
+      </div>
+      <div class="sidebar-item" onclick="switchTab('settings',this)">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.6 3.6 0 0112 15.6z"/></svg>
+        <span>Settings</span>
+      </div>
+    </div>
+
+    <!-- CONTENT PANELS -->
+    <div class="dash-content">
+
+      <!-- OVERVIEW -->
+      <div class="tab-panel active" id="tab-overview">
+        <h2 class="panel-title">Dashboard</h2>
+        <p class="panel-subtitle">Welcome back. Here's your site overview.</p>
+        <div class="overview-grid">
+          <div class="stat-card"><div class="big" id="ov-submissions">0</div><div class="label">Total Submissions</div></div>
+          <div class="stat-card"><div class="big" id="ov-new">0</div><div class="label">New (Unread)</div></div>
+          <div class="stat-card"><div class="big" id="ov-visits">0</div><div class="label">Page Visits</div></div>
+          <div class="stat-card"><div class="big" id="ov-photos">18</div><div class="label">Gallery Photos</div></div>
+        </div>
+        <div class="edit-section">
+          <h3>Recent Submissions</h3>
+          <div id="recentSubs"></div>
+        </div>
+      </div>
+
+      <!-- SUBMISSIONS -->
+      <div class="tab-panel" id="tab-submissions">
+        <h2 class="panel-title">Form Submissions</h2>
+        <p class="panel-subtitle">Customer estimate requests sent from your website.</p>
+        <div id="subsContainer"></div>
+      </div>
+
+      <!-- CONTENT EDITOR -->
+      <div class="tab-panel" id="tab-content">
+        <h2 class="panel-title">Edit Content</h2>
+        <p class="panel-subtitle">Update text on your website. Changes save to your browser.</p>
+        <div class="edit-section">
+          <h3>Hero Section</h3>
+          <div class="edit-group">
+            <label>Headline</label>
+            <input type="text" id="ed-hero-h1" value="Crafted for Exceptional Homes"/>
+          </div>
+          <div class="edit-group">
+            <label>Subtitle</label>
+            <input type="text" id="ed-hero-sub" value="Fine stucco, stone, and remodeling for discerning homeowners across the greater Houston area since 2000."/>
+          </div>
+        </div>
+        <div class="edit-section">
+          <h3>About Section</h3>
+          <div class="edit-group">
+            <label>Title</label>
+            <input type="text" id="ed-about-title" value="Built on Precision. Trusted by Houston's Finest."/>
+          </div>
+          <div class="edit-group">
+            <label>Paragraph 1</label>
+            <textarea id="ed-about-p1">S. Castillo Construction has spent over two decades perfecting the art of exterior finishing for Houston's most distinguished homes and commercial properties.</textarea>
+          </div>
+        </div>
+        <div class="edit-section">
+          <h3>Contact Info</h3>
+          <div class="edit-group">
+            <label>Email</label>
+            <input type="email" id="ed-email" value="Josecas3311942@gmail.com"/>
+          </div>
+          <div class="edit-group">
+            <label>Address</label>
+            <input type="text" id="ed-address" value="414 Oaks Dr, South Houston, TX 77587"/>
+          </div>
+          <div class="edit-group">
+            <label>Hours</label>
+            <input type="text" id="ed-hours" value="Mon – Sat, 7am – 6pm"/>
+          </div>
+        </div>
+        <div class="edit-section">
+          <h3>Team Phone Numbers</h3>
+          <div class="edit-group"><label>Santos Castillo</label><input type="tel" id="ed-ph1" value="832-781-9726"/></div>
+          <div class="edit-group"><label>Adrian</label><input type="tel" id="ed-ph2" value="832-552-5651"/></div>
+          <div class="edit-group"><label>Felix</label><input type="tel" id="ed-ph3" value="832-618-6092"/></div>
+          <div class="edit-group"><label>Jose</label><input type="tel" id="ed-ph4" value="832-330-3687"/></div>
+        </div>
+        <button class="save-btn" onclick="saveContent()">Save Changes</button>
+        <span class="save-msg" id="saveMsg">Changes saved!</span>
+      </div>
+
+      <!-- GALLERY MANAGER -->
+      <div class="tab-panel" id="tab-gallery">
+        <h2 class="panel-title">Gallery Manager</h2>
+        <p class="panel-subtitle">Click images to show/hide them on your website.</p>
+        <div class="gallery-admin-grid" id="galleryGrid"></div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="tab-panel" id="tab-analytics">
+        <h2 class="panel-title">Analytics</h2>
+        <p class="panel-subtitle">Visitor activity tracked from your website.</p>
+        <div class="overview-grid" style="margin-bottom:2rem;">
+          <div class="stat-card"><div class="big" id="an-today">0</div><div class="label">Today</div></div>
+          <div class="stat-card"><div class="big" id="an-week">0</div><div class="label">This Week</div></div>
+          <div class="stat-card"><div class="big" id="an-month">0</div><div class="label">This Month</div></div>
+          <div class="stat-card"><div class="big" id="an-total">0</div><div class="label">All Time</div></div>
+        </div>
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <h4>Visits — Last 7 Days</h4>
+            <div class="bar-chart" id="weekChart"></div>
+          </div>
+          <div class="analytics-card">
+            <h4>Top Referrers</h4>
+            <ul class="referrer-list" id="refList"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="tab-panel" id="tab-settings">
+        <h2 class="panel-title">Settings</h2>
+        <p class="panel-subtitle">Change your admin password.</p>
+        <div class="edit-section">
+          <h3>Change Password</h3>
+          <div class="edit-group"><label>Current Password</label><input type="password" id="set-old-pass"/></div>
+          <div class="edit-group"><label>New Password</label><input type="password" id="set-new-pass"/></div>
+          <div class="edit-group"><label>Confirm New Password</label><input type="password" id="set-confirm-pass"/></div>
+          <button class="save-btn" onclick="changePassword()">Update Password</button>
+          <span class="save-msg" id="passMsg"></span>
+        </div>
+        <div class="edit-section">
+          <h3>Change Username</h3>
+          <div class="edit-group"><label>New Username</label><input type="text" id="set-new-user"/></div>
+          <button class="save-btn" onclick="changeUsername()">Update Username</button>
+          <span class="save-msg" id="userMsg"></span>
+        </div>
+        <div class="edit-section" style="border-color:rgba(192,57,43,.3);">
+          <h3>Clear All Data</h3>
+          <p style="font-size:.8rem;color:rgba(232,228,220,.4);margin-bottom:1rem;">This will delete all saved submissions and analytics data from this browser.</p>
+          <button class="modal-delete" onclick="if(confirm('Delete ALL data? This cannot be undone.')){localStorage.clear();location.reload();}">Clear Data</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SUBMISSION DETAIL MODAL -->
+<div class="modal-overlay" id="subModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <h3>Submission Details</h3>
+    <div id="modalContent"></div>
+    <div class="modal-actions">
+      <button class="modal-close" onclick="closeModal()">Close</button>
+      <button class="modal-delete" id="modalDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// === AUTH ===
+var DEFAULT_USER = 'admin';
+var DEFAULT_PASS = 'castillo2024';
+
+function getCredentials() {
+  var u = localStorage.getItem('sc_admin_user') || DEFAULT_USER;
+  var p = localStorage.getItem('sc_admin_pass') || DEFAULT_PASS;
+  return { user: u, pass: p };
+}
+
+function doLogin() {
+  var u = document.getElementById('loginUser').value.trim();
+  var p = document.getElementById('loginPass').value;
+  var creds = getCredentials();
+  if (u === creds.user && p === creds.pass) {
+    sessionStorage.setItem('sc_logged_in', '1');
+    showDashboard();
+  } else {
+    var err = document.getElementById('loginError');
+    err.style.display = 'block';
+    setTimeout(function(){ err.style.display = 'none'; }, 3000);
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('sc_logged_in');
+  location.reload();
+}
+
+function showDashboard() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  loadOverview();
+  loadSubmissions();
+  loadGallery();
+  loadAnalytics();
+}
+
+document.getElementById('loginPass').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+if (sessionStorage.getItem('sc_logged_in') === '1') showDashboard();
+
+// === TABS ===
+function switchTab(tabId, el) {
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.sidebar-item').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('tab-' + tabId).classList.add('active');
+  el.classList.add('active');
+}
+
+// === SUBMISSIONS ===
+function getSubmissions() {
+  return JSON.parse(localStorage.getItem('sc_submissions') || '[]');
+}
+
+function saveSubmissions(subs) {
+  localStorage.setItem('sc_submissions', JSON.stringify(subs));
+}
+
+function loadSubmissions() {
+  var subs = getSubmissions();
+  var container = document.getElementById('subsContainer');
+  if (subs.length === 0) {
+    container.innerHTML = '<div class="empty-state"><p>No submissions yet</p><small>When customers fill out the estimate form on your website, their requests will appear here.</small></div>';
+    return;
+  }
+  var html = '<table class="sub-table"><thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Service</th><th>Status</th></tr></thead><tbody>';
+  subs.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
+  subs.forEach(function(s, i) {
+    var status = s.read ? '<span class="sub-badge read">Read</span>' : '<span class="sub-badge new">New</span>';
+    var d = new Date(s.date);
+    var dateStr = (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getFullYear();
+    html += '<tr style="cursor:pointer" onclick="viewSubmission(' + i + ')">';
+    html += '<td>' + dateStr + '</td>';
+    html += '<td>' + esc(s.first_name || '') + ' ' + esc(s.last_name || '') + '</td>';
+    html += '<td>' + esc(s.phone || '') + '</td>';
+    html += '<td>' + esc(s.service || '') + '</td>';
+    html += '<td>' + status + '</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+function viewSubmission(idx) {
+  var subs = getSubmissions();
+  var s = subs[idx];
+  if (!s) return;
+  s.read = true;
+  saveSubmissions(subs);
+  var d = new Date(s.date);
+  var html = '';
+  html += '<div class="modal-row"><span class="modal-label">Date</span><span class="modal-val">' + d.toLocaleDateString() + ' ' + d.toLocaleTimeString() + '</span></div>';
+  html += '<div class="modal-row"><span class="modal-label">Name</span><span class="modal-val">' + esc(s.first_name||'') + ' ' + esc(s.last_name||'') + '</span></div>';
+  html += '<div class="modal-row"><span class="modal-label">Phone</span><span class="modal-val"><a href="tel:' + esc(s.phone||'') + '" style="color:var(--gold)">' + esc(s.phone||'') + '</a></span></div>';
+  html += '<div class="modal-row"><span class="modal-label">Email</span><span class="modal-val">' + esc(s.email||'') + '</span></div>';
+  html += '<div class="modal-row"><span class="modal-label">Service</span><span class="modal-val">' + esc(s.service||'') + '</span></div>';
+  html += '<div class="modal-row"><span class="modal-label">Details</span><span class="modal-val">' + esc(s.project_details||'None provided') + '</span></div>';
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalDeleteBtn').onclick = function() {
+    if (confirm('Delete this submission?')) {
+      subs.splice(idx, 1);
+      saveSubmissions(subs);
+      closeModal();
+      loadSubmissions();
+      loadOverview();
+    }
+  };
+  document.getElementById('subModal').classList.add('active');
+  loadSubmissions();
+  loadOverview();
+}
+
+function closeModal() {
+  document.getElementById('subModal').classList.remove('active');
+}
+
+// === OVERVIEW ===
+function loadOverview() {
+  var subs = getSubmissions();
+  var visits = JSON.parse(localStorage.getItem('sc_visits') || '[]');
+  var gallery = getGalleryState();
+  var visible = 0;
+  for (var k in gallery) { if (gallery[k]) visible++; }
+
+  document.getElementById('ov-submissions').textContent = subs.length;
+  document.getElementById('ov-new').textContent = subs.filter(function(s){ return !s.read; }).length;
+  document.getElementById('ov-visits').textContent = visits.length;
+  document.getElementById('ov-photos').textContent = visible;
+
+  var recent = document.getElementById('recentSubs');
+  if (subs.length === 0) {
+    recent.innerHTML = '<p style="font-size:.8rem;color:rgba(232,228,220,.3)">No submissions yet.</p>';
+  } else {
+    var top3 = subs.sort(function(a,b){ return new Date(b.date) - new Date(a.date); }).slice(0, 3);
+    var html = '<table class="sub-table"><thead><tr><th>Date</th><th>Name</th><th>Service</th></tr></thead><tbody>';
+    top3.forEach(function(s, i) {
+      var d = new Date(s.date);
+      html += '<tr style="cursor:pointer" onclick="switchTab(\'submissions\',document.querySelectorAll(\'.sidebar-item\')[1])">';
+      html += '<td>' + (d.getMonth()+1) + '/' + d.getDate() + '</td>';
+      html += '<td>' + esc(s.first_name||'') + ' ' + esc(s.last_name||'') + '</td>';
+      html += '<td>' + esc(s.service||'') + '</td></tr>';
+    });
+    html += '</tbody></table>';
+    recent.innerHTML = html;
+  }
+}
+
+// === CONTENT EDITOR ===
+function saveContent() {
+  var data = {
+    heroH1: document.getElementById('ed-hero-h1').value,
+    heroSub: document.getElementById('ed-hero-sub').value,
+    aboutTitle: document.getElementById('ed-about-title').value,
+    aboutP1: document.getElementById('ed-about-p1').value,
+    email: document.getElementById('ed-email').value,
+    address: document.getElementById('ed-address').value,
+    hours: document.getElementById('ed-hours').value,
+    ph1: document.getElementById('ed-ph1').value,
+    ph2: document.getElementById('ed-ph2').value,
+    ph3: document.getElementById('ed-ph3').value,
+    ph4: document.getElementById('ed-ph4').value
+  };
+  localStorage.setItem('sc_content', JSON.stringify(data));
+  var msg = document.getElementById('saveMsg');
+  msg.style.display = 'inline';
+  msg.textContent = 'Changes saved!';
+  msg.style.color = 'var(--green)';
+  setTimeout(function(){ msg.style.display = 'none'; }, 3000);
+}
+
+function loadContent() {
+  var data = JSON.parse(localStorage.getItem('sc_content') || 'null');
+  if (!data) return;
+  if (data.heroH1) document.getElementById('ed-hero-h1').value = data.heroH1;
+  if (data.heroSub) document.getElementById('ed-hero-sub').value = data.heroSub;
+  if (data.aboutTitle) document.getElementById('ed-about-title').value = data.aboutTitle;
+  if (data.aboutP1) document.getElementById('ed-about-p1').value = data.aboutP1;
+  if (data.email) document.getElementById('ed-email').value = data.email;
+  if (data.address) document.getElementById('ed-address').value = data.address;
+  if (data.hours) document.getElementById('ed-hours').value = data.hours;
+  if (data.ph1) document.getElementById('ed-ph1').value = data.ph1;
+  if (data.ph2) document.getElementById('ed-ph2').value = data.ph2;
+  if (data.ph3) document.getElementById('ed-ph3').value = data.ph3;
+  if (data.ph4) document.getElementById('ed-ph4').value = data.ph4;
+}
+loadContent();
+
+// === GALLERY MANAGER ===
+var ALL_IMAGES = [
+  { file: 'IMG_8173.jpg', label: 'Residential Estate — Stucco & Stone' },
+  { file: 'IMG_8175.jpg', label: 'Commercial — Stone Base' },
+  { file: 'IMG_8176.jpg', label: 'Custom Residence — Stucco Finish' },
+  { file: 'IMG_8177.jpg', label: 'Estate — Stucco & Natural Stone' },
+  { file: 'IMG_8178.jpg', label: 'Modern Residence — White Stucco' },
+  { file: 'IMG_8179.jpg', label: 'Completed Commercial Finish' },
+  { file: 'IMG_8180.jpg', label: 'Hotel Stucco In Progress' },
+  { file: 'IMG_8181.jpg', label: 'Stone Facade — Detail Work' },
+  { file: 'project-1.jpg', label: 'Mediterranean Estate — Stucco & Stone' },
+  { file: 'project-2.jpg', label: 'Estate — Stucco Restoration' },
+  { file: 'project-3.jpg', label: 'Scratch Coat Application' },
+  { file: 'project-4.jpg', label: 'Commercial — Stucco Application' },
+  { file: 'project-5.jpg', label: 'Completed — Stucco & Stone Finish' },
+  { file: 'project-6.jpg', label: 'Modern Residence — Stucco In Progress' },
+  { file: 'project-7.jpg', label: 'Commercial — Natural Stone Wall' },
+  { file: 'project-8.jpg', label: 'Custom Home — Stucco & Columns' },
+  { file: 'project-9.jpg', label: 'Stone & Stucco — Finished Home' },
+  { file: 'project-10.jpg', label: 'Luxury Estate — Stucco & Tile Roof' }
+];
+
+function getGalleryState() {
+  var state = JSON.parse(localStorage.getItem('sc_gallery') || '{}');
+  ALL_IMAGES.forEach(function(img) {
+    if (state[img.file] === undefined) state[img.file] = true;
+  });
+  return state;
+}
+
+function toggleImage(file) {
+  var state = getGalleryState();
+  state[file] = !state[file];
+  localStorage.setItem('sc_gallery', JSON.stringify(state));
+  loadGallery();
+  loadOverview();
+}
+
+function loadGallery() {
+  var state = getGalleryState();
+  var grid = document.getElementById('galleryGrid');
+  var html = '';
+  ALL_IMAGES.forEach(function(img) {
+    var visible = state[img.file];
+    html += '<div class="gallery-admin-item' + (visible ? '' : ' disabled') + '">';
+    html += '<img src="' + img.file + '" alt="' + esc(img.label) + '"/>';
+    html += '<button class="ga-toggle' + (visible ? '' : ' hidden') + '" onclick="toggleImage(\'' + img.file + '\')">' + (visible ? 'Visible' : 'Hidden') + '</button>';
+    html += '<div class="ga-info">' + esc(img.label) + '</div>';
+    html += '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+// === ANALYTICS ===
+function loadAnalytics() {
+  var visits = JSON.parse(localStorage.getItem('sc_visits') || '[]');
+  var now = new Date();
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var weekAgo = new Date(today.getTime() - 7 * 86400000);
+  var monthAgo = new Date(today.getTime() - 30 * 86400000);
+
+  var todayCount = 0, weekCount = 0, monthCount = 0;
+  var dayBuckets = {};
+  var refs = {};
+
+  for (var d = 6; d >= 0; d--) {
+    var dt = new Date(today.getTime() - d * 86400000);
+    var key = (dt.getMonth()+1) + '/' + dt.getDate();
+    dayBuckets[key] = 0;
+  }
+
+  visits.forEach(function(v) {
+    var vd = new Date(v.date);
+    if (vd >= today) todayCount++;
+    if (vd >= weekAgo) weekCount++;
+    if (vd >= monthAgo) monthCount++;
+    var bk = (vd.getMonth()+1) + '/' + vd.getDate();
+    if (dayBuckets[bk] !== undefined) dayBuckets[bk]++;
+    var r = v.ref || 'direct';
+    if (r.length > 40) r = r.substring(0, 40) + '...';
+    refs[r] = (refs[r] || 0) + 1;
+  });
+
+  document.getElementById('an-today').textContent = todayCount;
+  document.getElementById('an-week').textContent = weekCount;
+  document.getElementById('an-month').textContent = monthCount;
+  document.getElementById('an-total').textContent = visits.length;
+
+  var maxDay = 1;
+  for (var k in dayBuckets) { if (dayBuckets[k] > maxDay) maxDay = dayBuckets[k]; }
+  var chartHtml = '';
+  for (var k in dayBuckets) {
+    var pct = Math.max(2, (dayBuckets[k] / maxDay) * 100);
+    chartHtml += '<div class="bar-row"><span class="bar-label">' + k + '</span><div class="bar-fill" style="width:' + pct + '%"></div><span class="bar-count">' + dayBuckets[k] + '</span></div>';
+  }
+  document.getElementById('weekChart').innerHTML = chartHtml;
+
+  var sorted = Object.entries(refs).sort(function(a,b){ return b[1] - a[1]; }).slice(0, 8);
+  var refHtml = '';
+  if (sorted.length === 0) {
+    refHtml = '<li><span style="color:rgba(232,228,220,.3)">No data yet</span><span></span></li>';
+  } else {
+    sorted.forEach(function(r) {
+      refHtml += '<li><span>' + esc(r[0]) + '</span><span>' + r[1] + '</span></li>';
+    });
+  }
+  document.getElementById('refList').innerHTML = refHtml;
+}
+
+// === SETTINGS ===
+function changePassword() {
+  var old = document.getElementById('set-old-pass').value;
+  var np = document.getElementById('set-new-pass').value;
+  var cp = document.getElementById('set-confirm-pass').value;
+  var msg = document.getElementById('passMsg');
+  msg.style.display = 'inline';
+
+  var creds = getCredentials();
+  if (old !== creds.pass) { msg.textContent = 'Current password is wrong'; msg.style.color = 'var(--red)'; return; }
+  if (np.length < 4) { msg.textContent = 'Password too short (min 4 chars)'; msg.style.color = 'var(--red)'; return; }
+  if (np !== cp) { msg.textContent = 'Passwords do not match'; msg.style.color = 'var(--red)'; return; }
+
+  localStorage.setItem('sc_admin_pass', np);
+  msg.textContent = 'Password updated!';
+  msg.style.color = 'var(--green)';
+  document.getElementById('set-old-pass').value = '';
+  document.getElementById('set-new-pass').value = '';
+  document.getElementById('set-confirm-pass').value = '';
+}
+
+function changeUsername() {
+  var nu = document.getElementById('set-new-user').value.trim();
+  var msg = document.getElementById('userMsg');
+  msg.style.display = 'inline';
+  if (nu.length < 3) { msg.textContent = 'Username too short'; msg.style.color = 'var(--red)'; return; }
+  localStorage.setItem('sc_admin_user', nu);
+  msg.textContent = 'Username updated to: ' + nu;
+  msg.style.color = 'var(--green)';
+}
+
+// === HELPERS ===
+function esc(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>
