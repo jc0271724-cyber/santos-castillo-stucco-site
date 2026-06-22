@@ -80,7 +80,20 @@
     .nav-links a:hover{color:var(--gold);}
     .nav-cta{background:transparent;border:1px solid var(--gold);color:var(--gold)!important;font-family:'Inter',sans-serif;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;padding:.55rem 1.4rem;cursor:pointer;transition:background .2s,color .2s!important;text-decoration:none;font-weight:500;}
     .nav-cta:hover{background:var(--gold);color:var(--navy)!important;}
-    @media(max-width:768px){nav{padding:0 1.5rem;}.nav-links{display:none;}}
+    /* HAMBURGER */
+    .hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;z-index:201;}
+    .hamburger span{display:block;width:22px;height:2px;background:var(--gold);margin:5px 0;transition:all .3s;}
+    .mobile-lang{display:none;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:.35rem .7rem;cursor:pointer;border-radius:4px;margin-left:auto;margin-right:.5rem;}
+    @media(max-width:768px){
+      nav{padding:0 1.5rem;}
+      .hamburger{display:block;}
+      .mobile-lang{display:block;}
+      .nav-links{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(13,17,23,0.98);flex-direction:column;gap:0;padding:1rem 0;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+      .nav-links.open{display:flex;}
+      .nav-links li{text-align:center;padding:.8rem 0;border-bottom:1px solid rgba(184,151,90,0.1);}
+      .nav-links li:last-child{border:none;}
+      .nav-links .lang-toggle{margin:.5rem auto;display:inline-block;}
+    }
 
     /* HERO */
     .hero{position:relative;height:100vh;min-height:640px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
@@ -407,7 +420,9 @@
       <span class="logo-sub">Construction</span>
     </div>
   </a>
-  <ul class="nav-links">
+  <button class="mobile-lang" id="mobileLang">ES</button>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="navLinks">
     <li><a href="#about" data-en="About" data-es="Nosotros">About</a></li>
     <li><a href="#services" data-en="Services" data-es="Servicios">Services</a></li>
     <li><a href="#gallery" data-en="Portfolio" data-es="Portafolio">Portfolio</a></li>
@@ -1189,15 +1204,31 @@
     });
   });
 
+  // HAMBURGER MENU
+  var hamburger = document.getElementById('hamburger');
+  var navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', function() {
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      navLinks.classList.remove('open');
+    });
+  });
+
   // LANGUAGE TOGGLE
   var currentLang = 'en';
-  document.getElementById('langToggle').addEventListener('click', function() {
+  function switchLang() {
     currentLang = currentLang === 'en' ? 'es' : 'en';
-    this.textContent = currentLang === 'en' ? 'ES' : 'EN';
+    var label = currentLang === 'en' ? 'ES' : 'EN';
+    document.getElementById('langToggle').textContent = label;
+    document.getElementById('mobileLang').textContent = label;
     document.querySelectorAll('[data-en]').forEach(function(el) {
       el.textContent = el.getAttribute('data-' + currentLang);
     });
-  });
+  }
+  document.getElementById('langToggle').addEventListener('click', switchLang);
+  document.getElementById('mobileLang').addEventListener('click', switchLang);
 
   // CHAT BOT
   (function(){
