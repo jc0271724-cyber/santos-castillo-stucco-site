@@ -361,6 +361,34 @@
     .callback-close:hover{color:var(--charcoal);}
     @media(max-width:480px){.callback-toggle{bottom:16px;left:16px;padding:.6rem 1rem;font-size:.6rem;}}
 
+    /* CALCULATOR */
+    #calculator{background:var(--light-bg);padding:7rem 0;}
+    .calc-wrap{max-width:720px;margin:3rem auto 0;background:var(--white);border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.08);overflow:hidden;}
+    .calc-header{background:var(--navy);padding:2rem 2.5rem;color:var(--white);}
+    .calc-header h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;}
+    .calc-header p{font-size:.8rem;color:rgba(232,228,220,0.5);margin-top:.3rem;}
+    .calc-body{padding:2rem 2.5rem;}
+    @media(max-width:500px){.calc-body{padding:1.5rem;}.calc-header{padding:1.5rem;}}
+    .calc-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.2rem;}
+    @media(max-width:500px){.calc-row{grid-template-columns:1fr;gap:1rem;}}
+    .calc-field label{display:block;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:.5rem;}
+    .calc-field select,.calc-field input{width:100%;border:1.5px solid #e0ddd6;border-radius:8px;padding:.75rem;font-family:'Inter',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s;background:var(--white);color:var(--charcoal);}
+    .calc-field select:focus,.calc-field input:focus{border-color:var(--gold);}
+    .calc-field .field-hint{font-size:.7rem;color:var(--gray);margin-top:.3rem;line-height:1.4;}
+    .calc-btn{width:100%;background:var(--gold);color:var(--navy);font-family:'Inter',sans-serif;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:1rem;border:none;border-radius:8px;cursor:pointer;margin-top:.5rem;transition:background .2s,transform .15s;}
+    .calc-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+    .calc-result{display:none;margin-top:1.5rem;padding:2rem;background:var(--navy);border-radius:12px;text-align:center;}
+    .calc-result.show{display:block;animation:chatSlideUp .4s ease;}
+    .calc-result-label{font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500;}
+    .calc-result-price{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--white);margin:.5rem 0;}
+    .calc-result-note{font-size:.75rem;color:rgba(232,228,220,0.5);line-height:1.6;margin-bottom:1.2rem;}
+    .calc-result-detail{text-align:left;margin:1rem 0;padding:1rem;background:rgba(255,255,255,0.05);border-radius:8px;}
+    .calc-detail-row{display:flex;justify-content:space-between;padding:.4rem 0;font-size:.8rem;color:rgba(232,228,220,0.6);border-bottom:1px solid rgba(184,151,90,0.1);}
+    .calc-detail-row:last-child{border:none;}
+    .calc-detail-row span:last-child{color:var(--gold);font-weight:500;}
+    .calc-cta{display:inline-block;background:var(--gold);color:var(--navy);font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:.8rem 2rem;border-radius:6px;text-decoration:none;transition:background .2s;}
+    .calc-cta:hover{background:var(--gold-light);}
+
     /* GALLERY FILTERS */
     .gallery-filters{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2rem;}
     .gallery-filter-btn{background:rgba(184,151,90,0.1);border:1px solid rgba(184,151,90,0.3);color:var(--gold);font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:1px;text-transform:uppercase;font-weight:500;padding:.5rem 1.2rem;border-radius:20px;cursor:pointer;transition:all .2s;}
@@ -666,6 +694,108 @@
   </div>
 </section>
 
+<!-- CALCULATOR -->
+<section id="calculator">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;" data-en="Instant Estimate" data-es="Presupuesto Instant&aacute;neo">Instant Estimate</div>
+      <h2 class="display-title" data-en="Stucco Price Calculator" data-es="Calculadora de Precios de Estuco">Stucco Price Calculator</h2>
+    </div>
+    <div class="calc-wrap reveal">
+      <div class="calc-header">
+        <h3 data-en="Get an Instant Price Range" data-es="Obtenga un Rango de Precios">Get an Instant Price Range</h3>
+        <p data-en="Prices adjusted for Houston-area labor, materials, and climate conditions." data-es="Precios ajustados para mano de obra, materiales y condiciones clim&aacute;ticas del &aacute;rea de Houston.">Prices adjusted for Houston-area labor, materials, and climate conditions.</p>
+      </div>
+      <div class="calc-body">
+        <div class="calc-row">
+          <div class="calc-field">
+            <label data-en="Service Type" data-es="Tipo de Servicio">Service Type</label>
+            <select id="calcService">
+              <option value="stucco-new">New Stucco Application</option>
+              <option value="stucco-repair">Stucco Repair / Patch</option>
+              <option value="re-stucco">Re-Stucco (Remove & Replace)</option>
+              <option value="eifs">Synthetic Stucco (EIFS)</option>
+              <option value="stone-natural">Natural Stone Veneer</option>
+              <option value="stone-manufactured">Manufactured Stone</option>
+              <option value="painting">Exterior Painting</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label data-en="Square Footage" data-es="Pies Cuadrados">Square Footage</label>
+            <input type="number" id="calcSqft" placeholder="e.g. 1500" min="50" max="50000"/>
+            <div class="field-hint" data-en="Total wall area to be covered" data-es="&Aacute;rea total de pared a cubrir">Total wall area to be covered</div>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-field">
+            <label data-en="Number of Stories" data-es="N&uacute;mero de Pisos">Number of Stories</label>
+            <select id="calcStories">
+              <option value="1">1 Story</option>
+              <option value="2">2 Stories</option>
+              <option value="3">3+ Stories</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label data-en="Finish Type" data-es="Tipo de Acabado">Finish Type</label>
+            <select id="calcFinish">
+              <option value="standard">Standard Texture</option>
+              <option value="smooth">Smooth / Santa Barbara</option>
+              <option value="dash">Dash / Roughcast</option>
+              <option value="lace">Lace / Skip Trowel</option>
+              <option value="venetian">Venetian / Polished</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-field">
+            <label data-en="Location" data-es="Ubicaci&oacute;n">Location</label>
+            <select id="calcLocation">
+              <option value="inland">Inland Houston (standard)</option>
+              <option value="coastal-near">Near Coast (League City, La Porte, Deer Park)</option>
+              <option value="coastal">Coastal (Galveston, Clear Lake, Kemah)</option>
+            </select>
+            <div class="field-hint" data-en="Coastal areas need marine-grade materials" data-es="&Aacute;reas costeras necesitan materiales de grado marino">Coastal areas need marine-grade materials</div>
+          </div>
+          <div class="calc-field">
+            <label data-en="Building Type" data-es="Tipo de Edificio">Building Type</label>
+            <select id="calcBuilding">
+              <option value="residential">Residential</option>
+              <option value="commercial">Commercial</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-field">
+            <label data-en="Surface Condition" data-es="Condici&oacute;n de la Superficie">Surface Condition</label>
+            <select id="calcCondition">
+              <option value="new">New Construction (bare substrate)</option>
+              <option value="good">Existing — Good Condition</option>
+              <option value="damaged">Existing — Needs Repair / Prep</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label data-en="Moisture Protection" data-es="Protecci&oacute;n contra Humedad">Moisture Protection</label>
+            <select id="calcMoisture">
+              <option value="standard">Standard (Houston Inland)</option>
+              <option value="enhanced">Enhanced (Near Water / Flood Zone)</option>
+              <option value="marine">Marine-Grade (Salt Air Exposure)</option>
+            </select>
+            <div class="field-hint" data-en="Houston humidity requires proper barriers" data-es="La humedad de Houston requiere barreras adecuadas">Houston humidity requires proper barriers</div>
+          </div>
+        </div>
+        <button class="calc-btn" id="calcBtn" data-en="Calculate My Estimate" data-es="Calcular Mi Presupuesto">Calculate My Estimate</button>
+        <div class="calc-result" id="calcResult">
+          <div class="calc-result-label" data-en="Estimated Price Range" data-es="Rango de Precio Estimado">Estimated Price Range</div>
+          <div class="calc-result-price" id="calcPrice"></div>
+          <div class="calc-result-detail" id="calcBreakdown"></div>
+          <div class="calc-result-note" data-en="This is an estimate based on Houston-area averages. Actual pricing depends on site conditions, access, and design complexity. Get an exact quote with a free on-site visit." data-es="Este es un estimado basado en promedios del &aacute;rea de Houston. El precio real depende de las condiciones del sitio. Obtenga un presupuesto exacto con una visita gratuita.">This is an estimate based on Houston-area averages. Actual pricing depends on site conditions, access, and design complexity. Get an exact quote with a free on-site visit.</div>
+          <a href="#contact" class="calc-cta" data-en="Get Your Free Exact Quote" data-es="Obtenga Su Presupuesto Exacto Gratis">Get Your Free Exact Quote</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FAQ -->
 <section id="faq">
   <div class="container">
@@ -890,6 +1020,89 @@
     });
     if (visits.length > 500) visits = visits.slice(-500);
     localStorage.setItem('sc_visits', JSON.stringify(visits));
+  })();
+
+  // STUCCO PRICE CALCULATOR
+  (function(){
+    var basePrices = {
+      'stucco-new':          { low: 7,    high: 10,   label: 'New Stucco Application' },
+      'stucco-repair':       { low: 8,    high: 14,   label: 'Stucco Repair / Patch' },
+      're-stucco':           { low: 9,    high: 13,   label: 'Re-Stucco (Remove & Replace)' },
+      'eifs':                { low: 8,    high: 12,   label: 'Synthetic Stucco (EIFS)' },
+      'stone-natural':       { low: 18,   high: 30,   label: 'Natural Stone Veneer' },
+      'stone-manufactured':  { low: 11,   high: 18,   label: 'Manufactured Stone' },
+      'painting':            { low: 1.75, high: 3.50, label: 'Exterior Painting' }
+    };
+    var storyMult =  { '1': 1, '2': 1.15, '3': 1.30 };
+    var finishMult = {
+      'standard': { mult: 1,    label: 'Standard Texture' },
+      'smooth':   { mult: 1.10, label: 'Smooth / Santa Barbara' },
+      'dash':     { mult: 1.05, label: 'Dash / Roughcast' },
+      'lace':     { mult: 1.08, label: 'Lace / Skip Trowel' },
+      'venetian': { mult: 1.20, label: 'Venetian / Polished' }
+    };
+    var locationMult = {
+      'inland':       { mult: 1,    label: 'Inland Houston' },
+      'coastal-near': { mult: 1.12, label: 'Near Coast (+12%)' },
+      'coastal':      { mult: 1.22, label: 'Coastal (+22%)' }
+    };
+    var buildingMult = { 'residential': 1, 'commercial': 1.08 };
+    var conditionMult = {
+      'new':     { mult: 1,    label: 'New Construction' },
+      'good':    { mult: 1.05, label: 'Existing — Good' },
+      'damaged': { mult: 1.18, label: 'Existing — Needs Prep (+18%)' }
+    };
+    var moistureMult = {
+      'standard': { mult: 1,    cost: 0,    label: 'Standard Moisture Barrier' },
+      'enhanced': { mult: 1,    cost: 1.25, label: 'Enhanced Barrier (+$1.25/sqft)' },
+      'marine':   { mult: 1,    cost: 2.50, label: 'Marine-Grade Barrier (+$2.50/sqft)' }
+    };
+
+    document.getElementById('calcBtn').addEventListener('click', function() {
+      var service   = document.getElementById('calcService').value;
+      var sqft      = parseFloat(document.getElementById('calcSqft').value);
+      var stories   = document.getElementById('calcStories').value;
+      var finish    = document.getElementById('calcFinish').value;
+      var location  = document.getElementById('calcLocation').value;
+      var building  = document.getElementById('calcBuilding').value;
+      var condition = document.getElementById('calcCondition').value;
+      var moisture  = document.getElementById('calcMoisture').value;
+
+      if (!sqft || sqft < 50) {
+        alert('Please enter the square footage (minimum 50 sq ft).');
+        return;
+      }
+
+      var base = basePrices[service];
+      var sm = storyMult[stories];
+      var fm = finishMult[finish].mult;
+      var lm = locationMult[location].mult;
+      var bm = buildingMult[building];
+      var cm = conditionMult[condition].mult;
+      var mm = moistureMult[moisture];
+
+      var lowPerSqft = base.low * sm * fm * lm * bm * cm + mm.cost;
+      var highPerSqft = base.high * sm * fm * lm * bm * cm + mm.cost;
+
+      var totalLow = Math.round(lowPerSqft * sqft / 100) * 100;
+      var totalHigh = Math.round(highPerSqft * sqft / 100) * 100;
+
+      document.getElementById('calcPrice').textContent =
+        '$' + totalLow.toLocaleString() + ' — $' + totalHigh.toLocaleString();
+
+      var breakdown = document.getElementById('calcBreakdown');
+      breakdown.innerHTML =
+        '<div class="calc-detail-row"><span>' + base.label + '</span><span>$' + lowPerSqft.toFixed(2) + ' – $' + highPerSqft.toFixed(2) + '/sqft</span></div>' +
+        '<div class="calc-detail-row"><span>Area</span><span>' + sqft.toLocaleString() + ' sq ft</span></div>' +
+        '<div class="calc-detail-row"><span>Stories</span><span>' + stories + (sm > 1 ? ' (+' + Math.round((sm-1)*100) + '% scaffolding)' : '') + '</span></div>' +
+        '<div class="calc-detail-row"><span>Finish</span><span>' + finishMult[finish].label + '</span></div>' +
+        '<div class="calc-detail-row"><span>Location</span><span>' + locationMult[location].label + '</span></div>' +
+        '<div class="calc-detail-row"><span>Surface</span><span>' + conditionMult[condition].label + '</span></div>' +
+        '<div class="calc-detail-row"><span>Moisture</span><span>' + moistureMult[moisture].label + '</span></div>';
+
+      document.getElementById('calcResult').classList.add('show');
+      document.getElementById('calcResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   })();
 
   // FAQ ACCORDION
