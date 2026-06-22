@@ -978,6 +978,19 @@
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
 
+  // Google Sheets API endpoint (set this after Apps Script setup)
+  var SHEET_API = localStorage.getItem('sc_sheet_api') || '';
+
+  function sendToSheet(data) {
+    if (!SHEET_API) return;
+    fetch(SHEET_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(function(){});
+  }
+
   // Form submit — save to admin dashboard + send email
   const form = document.getElementById('estimateForm');
   form.addEventListener('submit', function(e) {
@@ -995,6 +1008,7 @@
     var subs = JSON.parse(localStorage.getItem('sc_submissions') || '[]');
     subs.push(data);
     localStorage.setItem('sc_submissions', JSON.stringify(subs));
+    sendToSheet(data);
     var btn = form.querySelector('.btn-submit');
     btn.textContent = 'Sending...';
     btn.style.background = '#D4AF72';
@@ -1150,14 +1164,18 @@
     var data = {
       date: new Date().toISOString(),
       type: 'callback',
-      name: cbForm.querySelector('[name="callback_name"]').value,
+      first_name: cbForm.querySelector('[name="callback_name"]').value,
+      last_name: '',
       phone: cbForm.querySelector('[name="callback_phone"]').value,
-      time: cbForm.querySelector('[name="callback_time"]').value,
+      email: '',
+      service: 'Callback — ' + cbForm.querySelector('[name="callback_time"]').value,
+      project_details: 'Requested callback: ' + cbForm.querySelector('[name="callback_time"]').value,
       read: false
     };
     var subs = JSON.parse(localStorage.getItem('sc_submissions') || '[]');
     subs.push(data);
     localStorage.setItem('sc_submissions', JSON.stringify(subs));
+    sendToSheet(data);
     var cbBtn = cbForm.querySelector('.btn-submit');
     cbBtn.textContent = 'Sending...';
     var formData = new FormData(cbForm);

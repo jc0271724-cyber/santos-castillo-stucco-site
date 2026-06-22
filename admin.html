@@ -302,6 +302,14 @@
           <button class="save-btn" onclick="changeUsername()">Update Username</button>
           <span class="save-msg" id="userMsg"></span>
         </div>
+        <div class="edit-section">
+          <h3>Google Sheets Connection</h3>
+          <p style="font-size:.8rem;color:rgba(232,228,220,.4);margin-bottom:1rem;">Paste your Google Apps Script URL here to sync submissions across all devices. Without this, submissions only show on the same browser they were sent from.</p>
+          <div class="edit-group"><label>Apps Script URL</label><input type="text" id="set-sheet-api" placeholder="https://script.google.com/macros/s/.../exec"/></div>
+          <button class="save-btn" onclick="saveSheetApi()">Save &amp; Test Connection</button>
+          <span class="save-msg" id="sheetMsg"></span>
+          <button class="save-btn" style="margin-left:.5rem;background:transparent;border:1px solid var(--gold);color:var(--gold);" onclick="fetchSheetSubmissions()">Sync Now</button>
+        </div>
         <div class="edit-section" style="border-color:rgba(192,57,43,.3);">
           <h3>Clear All Data</h3>
           <p style="font-size:.8rem;color:rgba(232,228,220,.4);margin-bottom:1rem;">This will delete all saved submissions and analytics data from this browser.</p>
@@ -358,6 +366,18 @@ function doLogout() {
 function showDashboard() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
+  // Load saved Sheet API URL into settings field
+  var apiField = document.getElementById('set-sheet-api');
+  if (apiField) apiField.value = SHEET_API;
+  // Auto-sync from Google Sheets on login
+  if (SHEET_API) {
+    fetch(SHEET_API)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data && Array.isArray(data)) mergeSheetData(data);
+      })
+      .catch(function(){});
+  }
   loadOverview();
   loadSubmissions();
   loadGallery();
@@ -376,6 +396,77 @@ function switchTab(tabId, el) {
   document.querySelectorAll('.sidebar-item').forEach(function(s){ s.classList.remove('active'); });
   document.getElementById('tab-' + tabId).classList.add('active');
   el.classList.add('active');
+}
+
+// === GOOGLE SHEETS SYNC ===
+var SHEET_API = localStorage.getItem('sc_sheet_api') || '';
+
+function saveSheetApi() {
+  var url = document.getElementById('set-sheet-api').value.trim();
+  localStorage.setItem('sc_sheet_api', url);
+  SHEET_API = url;
+  var msg = document.getElementById('sheetMsg');
+  if (!url) {
+    msg.textContent = 'URL cleared.';
+    msg.style.color = '#f39c12';
+    return;
+  }
+  msg.textContent = 'Testing...';
+  msg.style.color = 'var(--gold)';
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && Array.isArray(data)) {
+        msg.textContent = 'Connected! Found ' + data.length + ' submissions.';
+        msg.style.color = '#4ade80';
+        mergeSheetData(data);
+      } else {
+        msg.textContent = 'Connected but no data yet.';
+        msg.style.color = '#4ade80';
+      }
+    })
+    .catch(function() {
+      msg.textContent = 'Could not connect. Check the URL.';
+      msg.style.color = '#e74c3c';
+    });
+}
+
+function fetchSheetSubmissions() {
+  if (!SHEET_API) {
+    alert('Set your Google Apps Script URL in Settings first.');
+    return;
+  }
+  fetch(SHEET_API)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && Array.isArray(data)) {
+        mergeSheetData(data);
+        var msg = document.getElementById('sheetMsg');
+        msg.textContent = 'Synced! ' + data.length + ' submissions from Google Sheets.';
+        msg.style.color = '#4ade80';
+      }
+    })
+    .catch(function() {
+      alert('Sync failed. Check your connection and URL.');
+    });
+}
+
+function mergeSheetData(sheetData) {
+  var local = JSON.parse(localStorage.getItem('sc_submissions') || '[]');
+  var existingDates = {};
+  local.forEach(function(s) { existingDates[s.date] = true; });
+  var added = 0;
+  sheetData.forEach(function(s) {
+    if (!existingDates[s.date]) {
+      local.push(s);
+      added++;
+    }
+  });
+  if (added > 0) {
+    localStorage.setItem('sc_submissions', JSON.stringify(local));
+    loadSubmissions();
+    loadOverview();
+  }
 }
 
 // === SUBMISSIONS ===
