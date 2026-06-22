@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>S. Castillo Construction — Compact Redesign Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#0D1117;--navy2:#161B24;--navy3:#1E2530;
+  --gold:#B8975A;--gold-light:#D4AF72;
+  --platinum:#E8E4DC;--white:#FFFFFF;--charcoal:#2C2C2C;
+  --gray:#6B6B6B;--light-bg:#F7F5F2;--line:rgba(184,151,90,.22);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--charcoal);line-height:1.55;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+:focus-visible{outline:2px solid var(--gold-light);outline-offset:3px;border-radius:2px;}
+.eyebrow{font-size:.62rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:600;}
+.display{font-family:'Cormorant Garamond',serif;font-weight:300;line-height:1.05;letter-spacing:.5px;}
+.display em{font-style:italic;color:var(--gold-light);}
+.container{max-width:1200px;margin:0 auto;padding:0 1.8rem;}
+section{scroll-margin-top:80px;}
+.sec-pad{padding:3.5rem 0;}            /* tighter vertical rhythm = less scrolling */
+.sec-head{margin-bottom:1.8rem;}
+.sec-head h2{font-size:clamp(1.8rem,3.6vw,2.8rem);margin-top:.4rem;}
+.rule{width:50px;height:2px;background:var(--gold);margin:.9rem 0;}
+
+/* MOCK BANNER */
+.mock-banner{background:var(--gold);color:var(--navy);text-align:center;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;padding:.45rem 1rem;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.97);backdrop-filter:blur(8px);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 1.8rem;border-bottom:1px solid var(--line);}
+.logo{display:flex;align-items:center;gap:11px;}
+.logo svg{width:36px;height:36px;}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--white);line-height:1;}
+.logo-sub{font-size:.5rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-top:3px;}
+.nav-right{display:flex;align-items:center;gap:1.2rem;}
+.nav-links{display:flex;gap:1.6rem;list-style:none;}
+.nav-links a{color:rgba(255,255,255,.78);font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.lang-toggle{background:none;border:1px solid var(--gold);color:var(--gold);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:.35rem .7rem;border-radius:4px;transition:.2s;}
+.lang-toggle:hover{background:var(--gold);color:var(--navy);}
+.nav-phone{display:flex;align-items:center;gap:7px;color:var(--gold);font-weight:600;font-size:.78rem;border:1px solid var(--gold);padding:.45rem 1rem;border-radius:4px;transition:.2s;}
+.nav-phone:hover{background:var(--gold);color:var(--navy);}
+.hamburger{display:none;background:none;border:none;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--gold);margin:5px 0;}
+@media(max-width:920px){.nav-links,.nav-phone{display:none;}.hamburger{display:block;}}
+
+/* HERO (shorter, stats merged in) */
+.hero{position:relative;min-height:76vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:3.5rem 1.5rem 0;}
+.hero-bg{position:absolute;inset:0;background:url('IMG_8173.jpg') center 30%/cover no-repeat;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(175deg,rgba(13,17,23,.78) 0%,rgba(13,17,23,.5) 40%,rgba(13,17,23,.92) 100%);}
+.hero-content{position:relative;z-index:2;max-width:820px;margin-bottom:auto;margin-top:auto;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:12px;margin-bottom:1.1rem;}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:30px;height:1px;background:var(--gold);opacity:.6;}
+.hero h1{font-size:clamp(2.6rem,6.5vw,5rem);color:var(--white);margin-bottom:.8rem;}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,1.8vw,1.25rem);font-style:italic;font-weight:300;color:rgba(232,228,220,.9);margin:0 auto 1.2rem;max-width:580px;}
+.hero-trust{display:flex;flex-wrap:wrap;gap:1.2rem;justify-content:center;margin-bottom:1.6rem;}
+.hero-trust span{display:inline-flex;align-items:center;gap:7px;color:var(--platinum);font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;}
+.hero-trust svg{width:15px;height:15px;stroke:var(--gold-light);}
+.hero-actions{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;}
+.btn-gold{background:var(--gold);color:var(--navy);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;padding:.9rem 2rem;border-radius:4px;transition:transform .15s,background .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:9px;border:none;}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 10px 28px rgba(184,151,90,.35);}
+.btn-ghost{background:rgba(255,255,255,.04);color:var(--white);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;padding:.9rem 2rem;border:1px solid rgba(255,255,255,.45);border-radius:4px;transition:.2s;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+/* stats merged into hero bottom */
+.hero-stats{position:relative;z-index:2;width:100%;max-width:1000px;margin:2rem auto 0;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);}
+.hero-stat{padding:1.2rem .5rem;text-align:center;border-right:1px solid rgba(184,151,90,.12);}
+.hero-stat:last-child{border-right:none;}
+.hero-stat .n{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold-light);line-height:1;}
+.hero-stat .l{font-size:.56rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(232,228,220,.7);margin-top:.35rem;}
+@media(max-width:600px){.hero-stats{grid-template-columns:repeat(2,1fr);}.hero-stat:nth-child(2){border-right:none;}}
+
+/* ABOUT (compact 2-col) */
+.about-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:2.5rem;align-items:center;}
+.about-img{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:4/5;}
+.about-img img{width:100%;height:100%;object-fit:cover;}
+.about-text p{color:var(--gray);margin-bottom:.8rem;font-size:.94rem;}
+.about-text strong{color:var(--charcoal);}
+@media(max-width:820px){.about-grid{grid-template-columns:1fr;}.about-img{aspect-ratio:16/10;}}
+
+/* SERVICES (3-col compact) */
+.services{background:var(--light-bg);}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.svc{background:var(--white);border:1px solid #ece8e1;border-radius:10px;padding:1.6rem 1.4rem;transition:transform .25s,box-shadow .25s,border-color .25s;position:relative;overflow:hidden;}
+.svc::before{content:'';position:absolute;left:0;top:0;height:3px;width:0;background:var(--gold);transition:width .3s;}
+.svc:hover{transform:translateY(-5px);box-shadow:0 16px 36px rgba(13,17,23,.1);border-color:var(--line);}
+.svc:hover::before{width:100%;}
+.svc-icon{width:46px;height:46px;border-radius:9px;background:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+.svc-icon svg{width:24px;height:24px;stroke:var(--gold-light);}
+.svc h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;margin-bottom:.4rem;}
+.svc p{font-size:.86rem;color:var(--gray);line-height:1.6;}
+@media(max-width:880px){.svc-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.svc-grid{grid-template-columns:1fr;}}
+
+/* GALLERY (dark, compact) */
+.gallery{background:var(--navy);}
+.gallery .sec-head h2,.gallery .sec-head{color:var(--white);}
+.gfilters{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.4rem;}
+.gfilter{background:transparent;border:1px solid var(--line);color:rgba(232,228,220,.8);font-size:.64rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;padding:.5rem 1rem;border-radius:30px;transition:.2s;}
+.gfilter.active,.gfilter:hover{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+.gmasonry{columns:4;column-gap:.8rem;}
+.gitem{break-inside:avoid;margin-bottom:.8rem;border-radius:8px;overflow:hidden;position:relative;cursor:pointer;}
+.gitem img{width:100%;transition:transform .4s;}
+.gitem:hover img{transform:scale(1.05);}
+.gitem .cap{position:absolute;inset:auto 0 0 0;padding:.7rem;background:linear-gradient(transparent,rgba(13,17,23,.85));color:var(--white);font-size:.7rem;opacity:0;transition:opacity .25s;}
+.gitem:hover .cap{opacity:1;}
+@media(max-width:900px){.gmasonry{columns:3;}}
+@media(max-width:640px){.gmasonry{columns:2;}}
+/* before/after slider */
+.ba-wrap{margin-bottom:1.6rem;}
+.ba-title{color:var(--gold);font-size:.66rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:.7rem;}
+.ba-slider{position:relative;max-width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;user-select:none;box-shadow:0 20px 40px rgba(0,0,0,.35);cursor:ew-resize;}
+.ba-slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;}
+.ba-after{clip-path:inset(0 0 0 50%);}
+.ba-handle{position:absolute;top:0;bottom:0;left:50%;width:3px;background:var(--gold);transform:translateX(-50%);pointer-events:none;}
+.ba-knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.4);}
+.ba-knob svg{width:20px;height:20px;stroke:var(--navy);}
+.ba-tag{position:absolute;top:12px;font-size:.56rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;padding:.3rem .7rem;border-radius:20px;color:var(--white);}
+.ba-tag.before{left:12px;background:rgba(13,17,23,.8);}
+.ba-tag.after{right:12px;background:var(--gold);color:var(--navy);}
+
+/* REVIEWS + SERVICE AREA combined band */
+.proof-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:2.5rem;}
+.reviews-col{display:grid;gap:1rem;}
+.review{background:var(--white);border:1px solid #ece8e1;border-left:3px solid var(--gold);border-radius:8px;padding:1.3rem 1.4rem;}
+.stars{color:var(--gold);letter-spacing:2px;font-size:.9rem;margin-bottom:.5rem;}
+.review p{font-size:.9rem;color:var(--charcoal);font-style:italic;margin-bottom:.6rem;}
+.review .who{font-weight:600;font-size:.85rem;}
+.review .where{font-size:.75rem;color:var(--gray);}
+.area-box{background:var(--navy);border-radius:10px;padding:1.6rem;align-self:start;position:sticky;top:80px;}
+.area-box h3{color:var(--white);font-family:'Cormorant Garamond',serif;font-size:1.35rem;margin-bottom:.3rem;}
+.area-box .sub{color:rgba(232,228,220,.6);font-size:.78rem;margin-bottom:1rem;}
+.area-tags{display:flex;flex-wrap:wrap;gap:.45rem;}
+.area-tag{background:rgba(184,151,90,.12);border:1px solid var(--line);color:var(--platinum);font-size:.68rem;padding:.3rem .7rem;border-radius:20px;}
+@media(max-width:820px){.proof-grid{grid-template-columns:1fr;}.area-box{position:static;}}
+
+/* PROCESS (horizontal compact strip) */
+.process{background:var(--light-bg);}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;}
+.step{text-align:center;position:relative;}
+.step-c{width:54px;height:54px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);font-style:italic;}
+.step h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;margin-bottom:.35rem;}
+.step p{font-size:.82rem;color:var(--gray);line-height:1.55;}
+@media(max-width:760px){.steps{grid-template-columns:repeat(2,1fr);}}
+
+/* QUOTE: tabbed Calculator + Contact (big scroll saver) */
+.quote{background:var(--navy);}
+.quote .sec-head,.quote .sec-head h2{color:var(--white);}
+.tabs{display:flex;gap:.5rem;margin-bottom:1.4rem;}
+.tab{flex:0 0 auto;background:transparent;border:1px solid var(--line);color:rgba(232,228,220,.85);font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;padding:.7rem 1.4rem;border-radius:6px;transition:.2s;}
+.tab.active{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+.panel{display:none;background:var(--white);border-radius:12px;padding:1.8rem;}
+.panel.active{display:block;}
+.quote-layout{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+@media(max-width:820px){.quote-layout{grid-template-columns:1fr;}}
+label{display:block;font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--charcoal);font-weight:600;margin-bottom:.4rem;}
+input,select,textarea{width:100%;padding:.7rem .8rem;border:1px solid #d8d2c8;border-radius:6px;font-family:inherit;font-size:.9rem;background:var(--white);margin-bottom:.9rem;}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);outline:none;}
+.field-hint{font-size:.72rem;color:var(--gray);margin:-.6rem 0 .9rem;}
+.calc-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.calc-btn,.btn-submit{width:100%;background:var(--gold);color:var(--navy);border:none;padding:.9rem;border-radius:6px;font-weight:700;font-size:.74rem;letter-spacing:2px;text-transform:uppercase;transition:.2s;}
+.calc-btn:hover,.btn-submit:hover{background:var(--gold-light);}
+.calc-result{display:none;margin-top:1.2rem;padding:1.2rem;background:var(--light-bg);border-radius:8px;text-align:center;}
+.calc-result.show{display:block;}
+.calc-result .lbl{font-size:.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--gray);}
+.calc-result .price{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--navy);margin:.3rem 0;}
+.calc-result .note{font-size:.74rem;color:var(--gray);margin-top:.5rem;}
+.team{margin-top:.5rem;}
+.team-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid #ece8e1;font-size:.9rem;}
+.team-row .nm{font-weight:600;}
+.team-row a{color:var(--gold);font-weight:600;}
+.contact-info{color:rgba(255,255,255,.85);}
+.contact-info p{margin-bottom:1rem;font-size:.92rem;color:rgba(232,228,220,.8);}
+.contact-info .panel{margin-top:0;}
+
+/* FAQ (2-col accordion) */
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem 1.6rem;}
+.faq-item{border-bottom:1px solid #e6e0d6;}
+.faq-q{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.9rem 0;font-weight:600;font-size:.92rem;}
+.faq-q .arrow{color:var(--gold);transition:transform .25s;flex-shrink:0;}
+.faq-item.open .arrow{transform:rotate(180deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.faq-a p{padding:0 0 .9rem;font-size:.86rem;color:var(--gray);line-height:1.6;}
+@media(max-width:760px){.faq-grid{grid-template-columns:1fr;}}
+
+/* FOOTER */
+footer{background:#070A0E;color:rgba(232,228,220,.5);text-align:center;padding:2.2rem 1rem;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;letter-spacing:3px;text-transform:uppercase;color:var(--white);margin-bottom:.4rem;}
+.footer-copy{font-size:.74rem;letter-spacing:1px;}
+
+/* FLOATING WIDGETS */
+.float-stack{position:fixed;right:1.2rem;bottom:1.2rem;z-index:95;display:flex;flex-direction:column;gap:.7rem;align-items:flex-end;}
+.fab{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:30px;padding:.7rem 1.1rem;font-size:.72rem;font-weight:600;letter-spacing:1px;box-shadow:0 6px 20px rgba(0,0,0,.25);}
+.fab svg{width:18px;height:18px;}
+.fab.callback{background:var(--navy);color:var(--gold);border:1px solid var(--gold);}
+.fab.chat{background:var(--gold);color:var(--navy);}
+.sticky-call{position:fixed;bottom:0;left:0;right:0;z-index:96;display:none;background:var(--gold);color:var(--navy);text-align:center;padding:.9rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:.76rem;align-items:center;justify-content:center;gap:9px;}
+.sticky-call svg{width:17px;height:17px;}
+@media(max-width:920px){.sticky-call{display:flex;}.float-stack{bottom:4.2rem;}}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important;}}
+</style>
+</head>
+<body>
+
+<div class="mock-banner">Compact Redesign Mockup — preview only · all sections included · less scrolling</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <svg viewBox="0 0 44 44" fill="none"><rect x="3" y="3" width="38" height="38" rx="2" stroke="#B8975A" stroke-width="1.5"/><path d="M14 30V14h6a4 4 0 0 1 0 8h-6m12 8V14" stroke="#D4AF72" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <span><span class="logo-name">S. Castillo</span><br><span class="logo-sub">Construction</span></span>
+  </a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#about" data-en="About" data-es="Nosotros">About</a></li>
+      <li><a href="#services" data-en="Services" data-es="Servicios">Services</a></li>
+      <li><a href="#gallery" data-en="Portfolio" data-es="Portafolio">Portfolio</a></li>
+      <li><a href="#proof" data-en="Reviews" data-es="Opiniones">Reviews</a></li>
+      <li><a href="#quote" data-en="Quote" data-es="Presupuesto">Quote</a></li>
+    </ul>
+    <button class="lang-toggle" id="langBtn">ES</button>
+    <a href="tel:8327819726" class="nav-phone">
+      <svg viewBox="0 0 24 24" width="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+      832-781-9726
+    </a>
+  </div>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO + STATS -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span class="eyebrow" data-en="Houston's Premier Stucco &amp; Stone" data-es="El Mejor Estuco y Piedra de Houston">Houston's Premier Stucco &amp; Stone</span></div>
+    <h1 class="display" data-en="Crafted for||Exceptional|| Homes" data-es="Creado para||Hogares|| Excepcionales">Crafted for<br><em>Exceptional</em> Homes</h1>
+    <p class="hero-sub" data-en="Fine stucco, stone, and remodeling for discerning homeowners across the greater Houston area since 2000." data-es="Estuco fino, piedra y remodelación para propietarios exigentes en el área de Houston desde el año 2000.">Fine stucco, stone, and remodeling for discerning homeowners across the greater Houston area since 2000.</p>
+    <div class="hero-trust">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg><span data-en="Licensed &amp; Insured" data-es="Con Licencia y Seguro">Licensed &amp; Insured</span></span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="5"/><path d="M8 13l-2 8 6-3 6 3-2-8"/></svg><span data-en="20+ Years Experience" data-es="20+ Años de Experiencia">20+ Years Experience</span></span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg><span data-en="Free Estimates" data-es="Presupuestos Gratis">Free Estimates</span></span>
+    </div>
+    <div class="hero-actions">
+      <a href="#quote" class="btn-gold" data-en="Request a Free Estimate" data-es="Solicite un Presupuesto Gratis">Request a Free Estimate
+        <svg viewBox="0 0 24 24" width="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="#gallery" class="btn-ghost" data-en="View Our Portfolio" data-es="Ver Nuestro Portafolio">View Our Portfolio</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="n">20+</div><div class="l" data-en="Years of Craft" data-es="Años de Oficio">Years of Craft</div></div>
+    <div class="hero-stat"><div class="n">500+</div><div class="l" data-en="Projects Completed" data-es="Proyectos Completados">Projects Completed</div></div>
+    <div class="hero-stat"><div class="n">$0</div><div class="l" data-en="Free Estimates" data-es="Presupuestos Gratis">Free Estimates</div></div>
+    <div class="hero-stat"><div class="n">R+C</div><div class="l" data-en="Residential &amp; Commercial" data-es="Residencial y Comercial">Residential &amp; Commercial</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="sec-pad" id="about">
+  <div class="container about-grid">
+    <div class="about-img"><img src="IMG_8178.jpg" alt="Luxury stucco home by S. Castillo"/></div>
+    <div class="about-text">
+      <span class="eyebrow" data-en="Our Story" data-es="Nuestra Historia">Our Story</span>
+      <h2 class="display" data-en="Built on||Precision.|| Trusted by Houston's Finest." data-es="Construido con||Precisión.|| La Confianza de lo Mejor de Houston.">Built on <em>Precision.</em> Trusted by Houston's Finest.</h2>
+      <div class="rule"></div>
+      <p data-en="S. Castillo Construction has spent over two decades perfecting the art of exterior finishing for Houston's most distinguished homes and commercial properties — one of the region's most respected names in stucco, stone, and architectural remodeling." data-es="S. Castillo Construction ha pasado más de dos décadas perfeccionando el arte del acabado exterior para las casas y propiedades comerciales más distinguidas de Houston — uno de los nombres más respetados en estuco, piedra y remodelación.">S. Castillo Construction has spent over two decades perfecting the art of exterior finishing for Houston's most distinguished homes and commercial properties — one of the region's most respected names in stucco, stone, and architectural remodeling.</p>
+      <p data-en="We work exclusively with premium materials and employ craftsmen who treat every surface as a signature. From intimate renovations to large-scale commercial facades, every project receives the same meticulous attention." data-es="Trabajamos exclusivamente con materiales premium y empleamos artesanos que tratan cada superficie como una firma. Desde renovaciones íntimas hasta fachadas comerciales, cada proyecto recibe la misma atención meticulosa.">We work exclusively with <strong>premium materials</strong> and employ craftsmen who treat every surface as a signature. From intimate renovations to large-scale commercial facades, every project receives the same meticulous attention.</p>
+      <a href="#quote" class="btn-gold" style="margin-top:.4rem" data-en="Start Your Project" data-es="Comience Su Proyecto">Start Your Project</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="sec-pad services" id="services">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow" data-en="What We Do" data-es="Lo Que Hacemos">What We Do</span>
+      <h2 class="display" data-en="Services Crafted for||Every Vision" data-es="Servicios para||Cada Visión">Services Crafted for <em>Every Vision</em></h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div><h3 data-en="Fine Stucco" data-es="Estuco Fino">Fine Stucco</h3><p data-en="Traditional and modern stucco — smooth, textured, or sculpted — engineered to endure Houston's climate." data-es="Estuco tradicional y moderno — liso, texturizado o esculpido — diseñado para resistir el clima de Houston.">Traditional and modern stucco — smooth, textured, or sculpted — engineered to endure Houston's climate.</p></div>
+      <div class="svc"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M4 8l4-4 4 4-4 4zM14 14l4-4 2 6-6 0zM4 16l5 0 0 4-5 0z"/></svg></div><h3 data-en="Natural Stone" data-es="Piedra Natural">Natural Stone</h3><p data-en="Handset stone for facades, columns, accent walls, and entryways that elevate curb appeal and value." data-es="Piedra colocada a mano para fachadas, columnas, paredes y entradas que elevan el valor de su hogar.">Handset stone for facades, columns, accent walls, and entryways that elevate curb appeal and value.</p></div>
+      <div class="svc"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M18 3l3 3-9 9-3 1 1-3 8-10zM4 20h10"/></svg></div><h3 data-en="Exterior Painting" data-es="Pintura Exterior">Exterior Painting</h3><p data-en="Premium coatings by experienced painters who understand prep, weather protection, and lasting quality." data-es="Recubrimientos premium por pintores que entienden la preparación, protección climática y calidad duradera.">Premium coatings by experienced painters who understand prep, weather protection, and lasting quality.</p></div>
+      <div class="svc"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M14 7l3 3M3 21l3-1 11-11-2-2L4 18l-1 3zM18 4l2 2"/></svg></div><h3 data-en="Full Remodeling" data-es="Remodelación">Full Remodeling</h3><p data-en="Complete interior and exterior remodels — kitchens, baths, living spaces — with the same craftsmanship." data-es="Remodelaciones interiores y exteriores completas — cocinas, baños, espacios — con la misma maestría.">Complete interior and exterior remodels — kitchens, baths, living spaces — with the same craftsmanship.</p></div>
+      <div class="svc"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 11l9-7 9 7M5 10v10h14V10M9 20v-6h6v6"/></svg></div><h3 data-en="Residential" data-es="Residencial">Residential</h3><p data-en="From custom new builds to estate renovations, the same level of care for every home, any size." data-es="Desde construcciones nuevas hasta renovaciones, el mismo cuidado para cada hogar, de cualquier tamaño.">From custom new builds to estate renovations, the same level of care for every home, any size.</p></div>
+      <div class="svc"><div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 21h18M5 21V5h9v16M14 21V9h5v12M8 9h.01M8 13h.01M8 17h.01"/></svg></div><h3 data-en="Commercial" data-es="Comercial">Commercial</h3><p data-en="Hotels, retail centers, and offices trust us to deliver commercial-grade finishing on schedule and to spec." data-es="Hoteles, centros comerciales y oficinas confían en nosotros para acabados de grado comercial a tiempo.">Hotels, retail centers, and offices trust us to deliver commercial-grade finishing on schedule and to spec.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="sec-pad gallery" id="gallery">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow" data-en="Our Portfolio" data-es="Nuestro Portafolio">Our Portfolio</span>
+      <h2 class="display" data-en="Work That||Speaks for Itself" data-es="Trabajo Que||Habla por Sí Mismo">Work That <em>Speaks for Itself</em></h2>
+    </div>
+    <div class="ba-wrap">
+      <div class="ba-title" data-en="Commercial Hotel — Drag to Compare Before &amp; After" data-es="Hotel Comercial — Arrastre para Comparar Antes y Después">Commercial Hotel — Drag to Compare Before &amp; After</div>
+      <div class="ba-slider" id="baSlider">
+        <img src="IMG_8180.jpg" alt="Before — stucco in progress"/>
+        <img src="IMG_8179.jpg" class="ba-after" id="baAfter" alt="After — completed finish"/>
+        <span class="ba-tag before" data-en="Before" data-es="Antes">Before</span>
+        <span class="ba-tag after" data-en="After" data-es="Después">After</span>
+        <div class="ba-handle" id="baHandle"><div class="ba-knob"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 6l-4 6 4 6M15 6l4 6-4 6"/></svg></div></div>
+      </div>
+    </div>
+    <div class="gfilters">
+      <button class="gfilter active" data-filter="all" data-en="All" data-es="Todos">All</button>
+      <button class="gfilter" data-filter="stucco" data-en="Stucco" data-es="Estuco">Stucco</button>
+      <button class="gfilter" data-filter="stone" data-en="Stone" data-es="Piedra">Stone</button>
+      <button class="gfilter" data-filter="commercial" data-en="Commercial" data-es="Comercial">Commercial</button>
+      <button class="gfilter" data-filter="residential" data-en="Residential" data-es="Residencial">Residential</button>
+    </div>
+    <div class="gmasonry" id="gmasonry">
+      <div class="gitem" data-cat="residential stucco stone"><img src="IMG_8173.jpg" alt="Residential estate stucco and stone"/><div class="cap">Residential Estate — Stucco &amp; Stone</div></div>
+      <div class="gitem" data-cat="commercial stucco"><img src="IMG_8176.jpg" alt="Commercial stucco"/><div class="cap">Commercial Facade</div></div>
+      <div class="gitem" data-cat="stone residential"><img src="project-1.jpg" alt="Stone veneer"/><div class="cap">Stone Veneer Entry</div></div>
+      <div class="gitem" data-cat="stucco residential"><img src="project-2.jpg" alt="Stucco home"/><div class="cap">Residential Stucco</div></div>
+      <div class="gitem" data-cat="commercial"><img src="IMG_8177.jpg" alt="Commercial project"/><div class="cap">Commercial Build</div></div>
+      <div class="gitem" data-cat="stone"><img src="project-3.jpg" alt="Stone work"/><div class="cap">Natural Stone</div></div>
+      <div class="gitem" data-cat="stucco"><img src="project-4.jpg" alt="Stucco texture"/><div class="cap">Textured Stucco</div></div>
+      <div class="gitem" data-cat="residential"><img src="project-5.jpg" alt="Residential remodel"/><div class="cap">Residential Remodel</div></div>
+      <div class="gitem" data-cat="stucco residential"><img src="project-6.jpg" alt="Stucco facade"/><div class="cap">Smooth Finish</div></div>
+      <div class="gitem" data-cat="stone commercial"><img src="project-7.jpg" alt="Commercial stone"/><div class="cap">Commercial Stone</div></div>
+      <div class="gitem" data-cat="residential stucco"><img src="project-8.jpg" alt="Home exterior"/><div class="cap">Estate Exterior</div></div>
+      <div class="gitem" data-cat="stucco"><img src="project-9.jpg" alt="Stucco detail"/><div class="cap">Architectural Detail</div></div>
+      <div class="gitem" data-cat="stone residential"><img src="project-10.jpg" alt="Stone accent"/><div class="cap">Stone Accent Wall</div></div>
+      <div class="gitem" data-cat="residential stucco stone"><img src="IMG_8181.jpg" alt="Luxury home"/><div class="cap">Luxury Residence</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS + SERVICE AREA -->
+<section class="sec-pad" id="proof">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow" data-en="Client Reviews" data-es="Opiniones de Clientes">Client Reviews</span>
+      <h2 class="display" data-en="What Our||Clients Say" data-es="Lo Que Dicen||Nuestros Clientes">What Our <em>Clients Say</em></h2>
+    </div>
+    <div class="proof-grid">
+      <div class="reviews-col">
+        <div class="review"><div class="stars">★★★★★</div><p data-en="&quot;S. Castillo transformed the exterior of our home completely. Every detail was handled with care and professionalism. Our home looks like a million dollars.&quot;" data-es="&quot;S. Castillo transformó el exterior de nuestra casa por completo. Cada detalle fue manejado con cuidado. Nuestra casa parece de un millón de dólares.&quot;">"S. Castillo transformed the exterior of our home completely. Every detail was handled with care and professionalism. Our home looks like a million dollars."</p><div class="who">The Martinez Family</div><div class="where">The Woodlands, TX</div></div>
+        <div class="review"><div class="stars">★★★★★</div><p data-en="&quot;We hired S. Castillo for our hotel renovation. Finished on time and on budget. The stucco work is flawless — guests always comment on how beautiful the building looks.&quot;" data-es="&quot;Contratamos a S. Castillo para la renovación de nuestro hotel. Terminaron a tiempo y dentro del presupuesto. El trabajo de estuco es impecable.&quot;">"We hired S. Castillo for our hotel renovation. Finished on time and on budget. The stucco work is flawless — guests always comment on how beautiful the building looks."</p><div class="who">David Chen</div><div class="where">Pearland, TX</div></div>
+        <div class="review"><div class="stars">★★★★★</div><p data-en="&quot;Santos and his team did an amazing job on our stone veneer. Professional, clean, and the quality speaks for itself. We've gotten so many compliments from neighbors.&quot;" data-es="&quot;Santos y su equipo hicieron un trabajo increíble en nuestra piedra. Profesionales, limpios, y la calidad habla por sí misma.&quot;">"Santos and his team did an amazing job on our stone veneer. Professional, clean, and the quality speaks for itself. We've gotten so many compliments from neighbors."</p><div class="who">The Johnson Family</div><div class="where">Sugar Land, TX</div></div>
+      </div>
+      <div class="area-box">
+        <h3 data-en="Proudly Serving Greater Houston" data-es="Sirviendo a Houston">Proudly Serving Greater Houston</h3>
+        <div class="sub" data-en="Service Area" data-es="Área de Servicio">Service Area</div>
+        <div class="area-tags">
+          <span class="area-tag">Houston</span><span class="area-tag">South Houston</span><span class="area-tag">Pasadena</span><span class="area-tag">Pearland</span><span class="area-tag">Sugar Land</span><span class="area-tag">The Woodlands</span><span class="area-tag">Katy</span><span class="area-tag">League City</span><span class="area-tag">Missouri City</span><span class="area-tag">Friendswood</span><span class="area-tag">Baytown</span><span class="area-tag">Deer Park</span><span class="area-tag">La Porte</span><span class="area-tag">Galveston</span><span class="area-tag">Conroe</span><span class="area-tag">Spring</span><span class="area-tag">Cypress</span><span class="area-tag">Richmond</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="sec-pad process" id="process">
+  <div class="container">
+    <div class="sec-head" style="text-align:center;max-width:600px;margin-left:auto;margin-right:auto;">
+      <span class="eyebrow" data-en="How It Works" data-es="Cómo Funciona">How It Works</span>
+      <h2 class="display" data-en="First Call to||Final Coat" data-es="Primera Llamada al||Último Acabado">First Call to <em>Final Coat</em></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-c">I</div><h3 data-en="Consultation" data-es="Consulta">Consultation</h3><p data-en="We visit your property, listen to your vision, and assess scope — at no cost." data-es="Visitamos su propiedad, escuchamos su visión y evaluamos el alcance — sin costo.">We visit your property, listen to your vision, and assess scope — at no cost.</p></div>
+      <div class="step"><div class="step-c">II</div><h3 data-en="Custom Quote" data-es="Cotización">Custom Quote</h3><p data-en="A detailed, transparent estimate with materials, timeline, and pricing — no surprises." data-es="Un presupuesto detallado y transparente con materiales, cronograma y precios.">A detailed, transparent estimate with materials, timeline, and pricing — no surprises.</p></div>
+      <div class="step"><div class="step-c">III</div><h3 data-en="Craftsmanship" data-es="Maestría">Craftsmanship</h3><p data-en="Our crew executes with precision, keeping you informed at every stage." data-es="Nuestro equipo ejecuta con precisión, manteniéndolo informado en cada etapa.">Our crew executes with precision, keeping you informed at every stage.</p></div>
+      <div class="step"><div class="step-c">IV</div><h3 data-en="Final Walkthrough" data-es="Recorrido Final">Final Walkthrough</h3><p data-en="We walk the project with you before it's complete. Your satisfaction is the standard." data-es="Recorremos el proyecto con usted antes de terminar. Su satisfacción es el estándar.">We walk the project with you before it's complete. Your satisfaction is the standard.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE: tabbed Calculator + Contact -->
+<section class="sec-pad quote" id="quote">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow" data-en="Get Your Quote" data-es="Obtenga Su Presupuesto">Get Your Quote</span>
+      <h2 class="display" data-en="Let's Build||Something Exceptional" data-es="Construyamos||Algo Excepcional">Let's Build <em>Something Exceptional</em></h2>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-panel="calc" data-en="Instant Calculator" data-es="Calculadora Instantánea">Instant Calculator</button>
+      <button class="tab" data-panel="contact" data-en="Request Estimate" data-es="Solicitar Presupuesto">Request Estimate</button>
+    </div>
+
+    <!-- CALCULATOR PANEL -->
+    <div class="panel active" id="panel-calc">
+      <div class="quote-layout">
+        <div>
+          <div class="calc-row">
+            <div><label data-en="Service Type" data-es="Tipo de Servicio">Service Type</label>
+              <select id="calcService">
+                <option value="stucco-new">New Stucco Application</option>
+                <option value="stucco-repair">Stucco Repair / Patch</option>
+                <option value="re-stucco">Re-Stucco (Remove &amp; Replace)</option>
+                <option value="eifs">Synthetic Stucco (EIFS)</option>
+                <option value="stone-natural">Natural Stone Veneer</option>
+                <option value="stone-manufactured">Manufactured Stone</option>
+                <option value="painting">Exterior Painting</option>
+              </select></div>
+            <div><label data-en="Square Footage" data-es="Pies Cuadrados">Square Footage</label>
+              <input type="number" id="calcSqft" placeholder="e.g. 1500" min="50" max="50000"/></div>
+          </div>
+          <div class="calc-row">
+            <div><label data-en="Stories" data-es="Pisos">Stories</label>
+              <select id="calcStories"><option value="1">1 Story</option><option value="2">2 Stories</option><option value="3">3+ Stories</option></select></div>
+            <div><label data-en="Finish" data-es="Acabado">Finish</label>
+              <select id="calcFinish"><option value="standard">Standard Texture</option><option value="smooth">Smooth / Santa Barbara</option><option value="dash">Dash / Roughcast</option><option value="lace">Lace / Skip Trowel</option><option value="venetian">Venetian / Polished</option></select></div>
+          </div>
+          <div class="calc-row">
+            <div><label data-en="Building" data-es="Edificio">Building</label>
+              <select id="calcBuilding"><option value="residential">Residential</option><option value="commercial">Commercial</option></select></div>
+            <div><label data-en="Condition" data-es="Condición">Condition</label>
+              <select id="calcCondition"><option value="new">New Construction</option><option value="good">Existing — Good</option><option value="damaged">Existing — Needs Prep</option></select></div>
+          </div>
+          <button class="calc-btn" id="calcBtn" data-en="Calculate My Estimate" data-es="Calcular Mi Presupuesto">Calculate My Estimate</button>
+        </div>
+        <div>
+          <div class="calc-result" id="calcResult">
+            <div class="lbl" data-en="Estimated Price Range" data-es="Rango Estimado">Estimated Price Range</div>
+            <div class="price" id="calcPrice"></div>
+            <div class="note" data-en="Estimate based on Houston-area averages. Actual pricing depends on site conditions. Get an exact quote with a free on-site visit." data-es="Estimado basado en promedios de Houston. El precio real depende de las condiciones del sitio.">Estimate based on Houston-area averages. Actual pricing depends on site conditions. Get an exact quote with a free on-site visit.</div>
+            <a href="#" class="btn-gold" style="margin-top:1rem" onclick="document.querySelector('[data-panel=contact]').click();return false;" data-en="Get Exact Quote" data-es="Obtener Presupuesto Exacto">Get Exact Quote</a>
+          </div>
+          <div id="calcPlaceholder" style="color:var(--gray);font-size:.9rem;padding:1rem;">
+            <p data-en="Fill in the details and get an instant Houston-area price range. Prices adjusted for local labor, materials, and climate." data-es="Complete los detalles para obtener un rango de precios instantáneo del área de Houston, ajustado a mano de obra, materiales y clima local.">Fill in the details and get an instant Houston-area price range. Prices adjusted for local labor, materials, and climate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT PANEL -->
+    <div class="panel" id="panel-contact">
+      <div class="quote-layout">
+        <div>
+          <p style="color:var(--gray);font-size:.92rem;margin-bottom:1rem;" data-en="Reach any member of our team directly — we respond promptly and always offer free on-site estimates." data-es="Comuníquese directamente con cualquier miembro de nuestro equipo — respondemos rápido y siempre ofrecemos presupuestos gratuitos.">Reach any member of our team directly — we respond promptly and always offer free on-site estimates.</p>
+          <div class="team">
+            <div class="team-row"><span class="nm">Santos Castillo</span><a href="tel:8327819726">832-781-9726</a></div>
+            <div class="team-row"><span class="nm">Adrian</span><a href="tel:8325525651">832-552-5651</a></div>
+            <div class="team-row"><span class="nm">Felix</span><a href="tel:8326186092">832-618-6092</a></div>
+            <div class="team-row"><span class="nm">Jose</span><a href="tel:8323303687">832-330-3687</a></div>
+          </div>
+          <div class="team-row"><span class="nm" data-en="Email" data-es="Correo">Email</span><a href="mailto:Josecas3311942@gmail.com">Josecas3311942@gmail.com</a></div>
+          <div class="team-row"><span class="nm" data-en="Hours" data-es="Horario">Hours</span><span style="color:var(--gray)" data-en="Mon–Sat, 7am–6pm" data-es="Lun–Sáb, 7am–6pm">Mon–Sat, 7am–6pm</span></div>
+        </div>
+        <form action="https://formsubmit.co/Josecas3311942@gmail.com" method="POST">
+          <div class="calc-row">
+            <div><label data-en="First Name" data-es="Nombre">First Name</label><input type="text" name="first_name" placeholder="James" required/></div>
+            <div><label data-en="Last Name" data-es="Apellido">Last Name</label><input type="text" name="last_name" placeholder="Anderson" required/></div>
+          </div>
+          <div class="calc-row">
+            <div><label data-en="Phone" data-es="Teléfono">Phone</label><input type="tel" name="phone" placeholder="(832) 000-0000" required/></div>
+            <div><label data-en="Email" data-es="Correo">Email</label><input type="email" name="email" placeholder="james@email.com" required/></div>
+          </div>
+          <label data-en="Service" data-es="Servicio">Service</label>
+          <select name="service"><option>Stucco Application</option><option>Natural Stone Work</option><option>Exterior Painting</option><option>Full Remodeling</option><option>Commercial Project</option><option>Other</option></select>
+          <label data-en="Project Details" data-es="Detalles">Project Details</label>
+          <textarea name="project_details" rows="3" placeholder="Tell us about your property, vision, and timeline…"></textarea>
+          <button type="submit" class="btn-submit" data-en="Send Request →" data-es="Enviar Solicitud →">Send Request →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec-pad" id="faq">
+  <div class="container">
+    <div class="sec-head" style="text-align:center;">
+      <span class="eyebrow" data-en="Common Questions" data-es="Preguntas Frecuentes">Common Questions</span>
+      <h2 class="display" data-en="Frequently Asked||Questions" data-es="Preguntas||Frecuentes">Frequently Asked <em>Questions</em></h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item"><div class="faq-q"><span data-en="How much does stucco cost per sq ft?" data-es="¿Cuánto cuesta el estuco por pie cuadrado?">How much does stucco cost per sq ft?</span><span class="arrow">▼</span></div><div class="faq-a"><p data-en="Costs vary by finish, surface condition, and size. We provide free on-site estimates with transparent pricing — no hidden fees. Call 832-781-9726." data-es="Los costos varían según el acabado, la condición y el tamaño. Ofrecemos presupuestos gratuitos con precios transparentes. Llame al 832-781-9726.">Costs vary by finish, surface condition, and size. We provide free on-site estimates with transparent pricing — no hidden fees. Call 832-781-9726.</p></div></div>
+      <div class="faq-item"><div class="faq-q"><span data-en="How long does a project take?" data-es="¿Cuánto tiempo toma un proyecto?">How long does a project take?</span><span class="arrow">▼</span></div><div class="faq-a"><p data-en="A typical residential project takes 1–3 weeks depending on size. Commercial may take longer. We provide a detailed timeline with every estimate." data-es="Un proyecto residencial típico toma de 1 a 3 semanas. Los comerciales pueden tomar más. Proporcionamos un cronograma detallado con cada presupuesto.">A typical residential project takes 1–3 weeks depending on size. Commercial may take longer. We provide a detailed timeline with every estimate.</p></div></div>
+      <div class="faq-item"><div class="faq-q"><span data-en="Do you offer warranties?" data-es="¿Ofrecen garantía?">Do you offer warranties?</span><span class="arrow">▼</span></div><div class="faq-a"><p data-en="Yes. Our work is backed by our craftsmanship guarantee, and materials come with manufacturer warranties. Your investment is protected." data-es="Sí. Nuestro trabajo está respaldado por nuestra garantía de calidad y los materiales incluyen garantías del fabricante.">Yes. Our work is backed by our craftsmanship guarantee, and materials come with manufacturer warranties. Your investment is protected.</p></div></div>
+      <div class="faq-item"><div class="faq-q"><span data-en="How long does stucco last in Houston?" data-es="¿Cuánto dura el estuco en Houston?">How long does stucco last in Houston?</span><span class="arrow">▼</span></div><div class="faq-a"><p data-en="Properly applied stucco lasts 50+ years here. The key is correct technique and quality materials — our specialty — plus moisture barriers for humidity." data-es="El estuco bien aplicado dura más de 50 años aquí. La clave es la técnica correcta y materiales de calidad — nuestra especialidad — más barreras de humedad.">Properly applied stucco lasts 50+ years here. The key is correct technique and quality materials — our specialty — plus moisture barriers for humidity.</p></div></div>
+      <div class="faq-item"><div class="faq-q"><span data-en="Residential and commercial?" data-es="¿Residencial y comercial?">Residential and commercial?</span><span class="arrow">▼</span></div><div class="faq-a"><p data-en="Both. From single-family homes to hotels and retail centers. Our team is experienced, licensed, and insured for projects of any scale." data-es="Ambos. Desde casas unifamiliares hasta hoteles y centros comerciales. Nuestro equipo tiene experiencia, licencia y seguro para cualquier escala.">Both. From single-family homes to hotels and retail centers. Our team is experienced, licensed, and insured for projects of any scale.</p></div></div>
+      <div class="faq-item"><div class="faq-q"><span data-en="Are estimates really free?" data-es="¿Los presupuestos son gratis?">Are estimates really free?</span><span class="arrow">▼</span></div><div class="faq-a"><p data-en="100% free, no obligation. We visit, assess scope, and provide a detailed written estimate. There's never any pressure." data-es="100% gratis, sin compromiso. Visitamos, evaluamos y proporcionamos un presupuesto detallado por escrito. Nunca hay presión.">100% free, no obligation. We visit, assess scope, and provide a detailed written estimate. There's never any pressure.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">S. Castillo Construction</div>
+  <div class="footer-copy" data-en="© 2026 · Houston, TX · All Rights Reserved" data-es="© 2026 · Houston, TX · Todos los Derechos Reservados">© 2026 · Houston, TX · All Rights Reserved</div>
+</footer>
+
+<!-- FLOATING WIDGETS -->
+<div class="float-stack">
+  <button class="fab callback" id="callbackToggle"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span data-en="Call Me Back" data-es="Devuélvanme la Llamada">Call Me Back</span></button>
+  <button class="fab chat" id="chatToggle"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span data-en="Chat" data-es="Chat">Chat</span></button>
+</div>
+
+<a href="tel:8327819726" class="sticky-call">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+  <span data-en="Tap to Call — Free Estimate" data-es="Toque para Llamar — Gratis">Tap to Call — Free Estimate</span>
+</a>
+
+<script>
+// Language toggle (EN/ES) — swaps any [data-en]/[data-es]; '||' marks <em> emphasis & line breaks kept simple
+(function(){
+  var btn=document.getElementById('langBtn'),lang='en';
+  btn.addEventListener('click',function(){
+    lang=lang==='en'?'es':'en';btn.textContent=lang==='en'?'ES':'EN';
+    document.querySelectorAll('[data-en]').forEach(function(el){
+      var v=el.getAttribute('data-'+lang);if(v==null)return;
+      // render || segments: 2nd segment becomes <em>
+      if(v.indexOf('||')>-1){var p=v.split('||');el.innerHTML=p[0]+'<em>'+(p[1]||'')+'</em>'+(p[2]||'');}
+      else{el.innerHTML=v;}
+    });
+  });
+})();
+
+// Before/After slider
+(function(){
+  var s=document.getElementById('baSlider'),a=document.getElementById('baAfter'),h=document.getElementById('baHandle'),d=false;
+  function set(x){var r=s.getBoundingClientRect();var p=Math.max(0,Math.min(1,(x-r.left)/r.width));a.style.clipPath='inset(0 0 0 '+(p*100)+'%)';h.style.left=(p*100)+'%';}
+  s.addEventListener('mousedown',function(e){d=true;set(e.clientX);});
+  window.addEventListener('mousemove',function(e){if(d)set(e.clientX);});
+  window.addEventListener('mouseup',function(){d=false;});
+  s.addEventListener('touchstart',function(e){d=true;set(e.touches[0].clientX);},{passive:true});
+  window.addEventListener('touchmove',function(e){if(d)set(e.touches[0].clientX);},{passive:true});
+  window.addEventListener('touchend',function(){d=false;});
+})();
+
+// Gallery filters
+document.querySelectorAll('.gfilter').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.gfilter').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');var f=b.dataset.filter;
+    document.querySelectorAll('.gitem').forEach(function(it){
+      it.style.display=(f==='all'||it.dataset.cat.indexOf(f)>-1)?'':'none';
+    });
+  });
+});
+
+// Quote tabs
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});
+    document.querySelectorAll('.panel').forEach(function(x){x.classList.remove('active');});
+    t.classList.add('active');document.getElementById('panel-'+t.dataset.panel).classList.add('active');
+  });
+});
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(function(q){
+  q.addEventListener('click',function(){
+    var it=q.parentElement,a=it.querySelector('.faq-a');
+    var open=it.classList.toggle('open');
+    a.style.maxHeight=open?a.scrollHeight+'px':null;
+  });
+});
+
+// Calculator (simplified Houston-area model)
+document.getElementById('calcBtn').addEventListener('click',function(){
+  var base={'stucco-new':9,'stucco-repair':7,'re-stucco':12,'eifs':11,'stone-natural':28,'stone-manufactured':18,'painting':3.5};
+  var sqft=parseFloat(document.getElementById('calcSqft').value);
+  if(!sqft||sqft<50){alert('Enter a square footage (50+).');return;}
+  var rate=base[document.getElementById('calcService').value];
+  var fin={standard:1,smooth:1.15,dash:1.1,lace:1.05,venetian:1.4}[document.getElementById('calcFinish').value];
+  var st={1:1,2:1.12,3:1.25}[document.getElementById('calcStories').value];
+  var cond={new:1,good:1.05,damaged:1.2}[document.getElementById('calcCondition').value];
+  var bld={residential:1,commercial:1.15}[document.getElementById('calcBuilding').value];
+  var mid=sqft*rate*fin*st*cond*bld;
+  var lo=Math.round(mid*0.85/50)*50,hi=Math.round(mid*1.15/50)*50;
+  document.getElementById('calcPrice').textContent='$'+lo.toLocaleString()+' – $'+hi.toLocaleString();
+  document.getElementById('calcResult').classList.add('show');
+  document.getElementById('calcPlaceholder').style.display='none';
+});
+</script>
+</body>
+</html>
