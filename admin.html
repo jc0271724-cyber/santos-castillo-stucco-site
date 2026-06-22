@@ -99,7 +99,26 @@
     .gallery-admin-item .ga-info{padding:.8rem;font-size:.7rem;color:oklch(0.93 0.008 80 / .5);}
     .gallery-admin-item .ga-toggle{position:absolute;top:8px;right:8px;background:var(--green);color:#fff;border:none;font-size:.55rem;padding:.3rem .6rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-weight:600;}
     .gallery-admin-item .ga-toggle.hidden{background:var(--red);}
-    .gallery-admin-item.disabled{opacity:.4;}
+    .gallery-admin-item.disabled{opacity:.45;}
+    .gallery-admin-item img{width:100%;height:150px;object-fit:cover;display:block;}
+    .ga-controls{padding:.7rem;display:flex;flex-direction:column;gap:.5rem;}
+    .ga-label-input,.ga-cat-input{width:100%;background:var(--navy3);border:1px solid oklch(0.58 0.13 45 / .25);color:var(--platinum);font-family:'Hanken Grotesk',sans-serif;font-size:.82rem;padding:.45rem .55rem;border-radius:5px;outline:none;}
+    .ga-label-input:focus,.ga-cat-input:focus{border-color:var(--gold);}
+    .ga-row{display:flex;gap:.3rem;flex-wrap:wrap;}
+    .ga-mini{flex:1;min-width:42px;background:var(--navy3);border:1px solid oklch(0.58 0.13 45 / .25);color:var(--platinum);font-family:'Hanken Grotesk',sans-serif;font-size:.72rem;font-weight:600;padding:.4rem .3rem;border-radius:5px;cursor:pointer;transition:background .15s,border-color .15s;}
+    .ga-mini:hover{border-color:var(--gold);}
+    .ga-mini.off{color:oklch(0.93 0.008 80 / .5);}
+    .ga-mini.danger:hover{background:var(--red);border-color:var(--red);color:#fff;}
+    .ga-tag{position:absolute;top:8px;left:8px;background:oklch(0.20 0.014 48 / .8);color:var(--gold-light);font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:700;padding:.22rem .5rem;border-radius:4px;}
+    .gallery-toolbar{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
+    .gal-upload-btn,.gal-export-btn{background:var(--gold);color:#fff;font-family:'Hanken Grotesk',sans-serif;font-size:.85rem;font-weight:600;padding:.65rem 1.3rem;border:none;border-radius:6px;cursor:pointer;transition:background .2s;display:inline-flex;align-items:center;gap:.4rem;}
+    .gal-upload-btn:hover,.gal-export-btn:hover{background:oklch(0.52 0.13 43);}
+    .gal-export-btn{background:transparent;border:1px solid var(--gold-light);color:var(--gold-light);}
+    .gal-export-btn:hover{background:var(--gold);border-color:var(--gold);color:#fff;}
+    .gal-upload-btn input{display:none;}
+    .gal-hint{font-size:.8rem;color:oklch(0.93 0.008 80 / .55);}
+    .gal-dropzone{border:1.5px dashed oklch(0.58 0.13 45 / .4);border-radius:10px;padding:1.6rem;text-align:center;color:oklch(0.93 0.008 80 / .5);font-size:.85rem;margin-bottom:1.5rem;transition:background .2s,border-color .2s;}
+    .gal-dropzone.over{background:oklch(0.58 0.13 45 / .12);border-color:var(--gold);color:var(--gold-light);}
 
     /* ANALYTICS */
     .analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:2rem;}
@@ -258,7 +277,15 @@
       <!-- GALLERY MANAGER -->
       <div class="tab-panel" id="tab-gallery">
         <h2 class="panel-title">Gallery Manager</h2>
-        <p class="panel-subtitle">Click images to show/hide them on your website.</p>
+        <p class="panel-subtitle">Add photos, set labels, show/hide, and reorder. Uploaded photos are embedded into one file &mdash; no separate image files. When done, click Export and commit the downloaded gallery-data.js.</p>
+        <div class="gallery-toolbar">
+          <label class="gal-upload-btn">+ Add Photos
+            <input type="file" id="galFile" accept="image/*" multiple onchange="galAddFiles(this.files); this.value='';"/>
+          </label>
+          <button class="gal-export-btn" onclick="galExport()">&#8595; Export gallery-data.js</button>
+          <span class="gal-hint" id="galCount"></span>
+        </div>
+        <div id="galDrop" class="gal-dropzone">Drag &amp; drop photos here, or use &ldquo;Add Photos&rdquo;</div>
         <div class="gallery-admin-grid" id="galleryGrid"></div>
       </div>
 
@@ -321,6 +348,7 @@
   </div>
 </div>
 
+<script src="gallery-data.js"></script>
 <!-- SUBMISSION DETAIL MODAL -->
 <div class="modal-overlay" id="subModal" onclick="if(event.target===this)closeModal()">
   <div class="modal-box">
@@ -334,6 +362,10 @@
 </div>
 
 <script>
+// Gallery state declared early — showDashboard() runs on load and reads these.
+var GAL = [];
+var GAL_DRAFT_KEY = 'sc_gallery_data';
+var GAL_CATS = ['residential', 'commercial', 'stucco', 'stone'];
 // === AUTH ===
 var DEFAULT_USER = 'admin';
 var DEFAULT_PASS = 'castillo2024';
@@ -540,9 +572,8 @@ function closeModal() {
 function loadOverview() {
   var subs = getSubmissions();
   var visits = JSON.parse(localStorage.getItem('sc_visits') || '[]');
-  var gallery = getGalleryState();
-  var visible = 0;
-  for (var k in gallery) { if (gallery[k]) visible++; }
+  var gv = (typeof GAL !== 'undefined' && GAL && GAL.length) ? GAL : galSeed();
+  var visible = gv.filter(function (i) { return i.visible !== false; }).length;
 
   document.getElementById('ov-submissions').textContent = subs.length;
   document.getElementById('ov-new').textContent = subs.filter(function(s){ return !s.read; }).length;
@@ -607,57 +638,126 @@ function loadContent() {
 }
 loadContent();
 
-// === GALLERY MANAGER ===
-var ALL_IMAGES = [
-  { file: 'IMG_8173.jpg', label: 'Residential Estate · Stucco & Stone' },
-  { file: 'IMG_8175.jpg', label: 'Commercial · Stone Base' },
-  { file: 'IMG_8176.jpg', label: 'Custom Residence · Stucco Finish' },
-  { file: 'IMG_8177.jpg', label: 'Estate · Stucco & Natural Stone' },
-  { file: 'IMG_8178.jpg', label: 'Modern Residence · White Stucco' },
-  { file: 'IMG_8179.jpg', label: 'Completed Commercial Finish' },
-  { file: 'IMG_8180.jpg', label: 'Hotel Stucco In Progress' },
-  { file: 'IMG_8181.jpg', label: 'Stone Facade · Detail Work' },
-  { file: 'project-1.jpg', label: 'Mediterranean Estate · Stucco & Stone' },
-  { file: 'project-2.jpg', label: 'Estate · Stucco Restoration' },
-  { file: 'project-3.jpg', label: 'Scratch Coat Application' },
-  { file: 'project-4.jpg', label: 'Commercial · Stucco Application' },
-  { file: 'project-5.jpg', label: 'Completed · Stucco & Stone Finish' },
-  { file: 'project-6.jpg', label: 'Modern Residence · Stucco In Progress' },
-  { file: 'project-7.jpg', label: 'Commercial · Natural Stone Wall' },
-  { file: 'project-8.jpg', label: 'Custom Home · Stucco & Columns' },
-  { file: 'project-9.jpg', label: 'Stone & Stucco · Finished Home' },
-  { file: 'project-10.jpg', label: 'Luxury Estate · Stucco & Tile Roof' }
-];
+// === GALLERY MANAGER (single bundled file: gallery-data.js) ===
+// Working list: an in-progress draft (localStorage) wins, else the committed gallery-data.js.
+function galSeed() {
+  try {
+    var draft = JSON.parse(localStorage.getItem(GAL_DRAFT_KEY) || 'null');
+    if (draft && draft.length) return draft;
+  } catch (e) {}
+  if (window.SC_GALLERY) return JSON.parse(JSON.stringify(window.SC_GALLERY));
+  return [];
+}
+function galSaveDraft() { localStorage.setItem(GAL_DRAFT_KEY, JSON.stringify(GAL)); loadOverview(); }
+function galId() { return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 
-function getGalleryState() {
-  var state = JSON.parse(localStorage.getItem('sc_gallery') || '{}');
-  ALL_IMAGES.forEach(function(img) {
-    if (state[img.file] === undefined) state[img.file] = true;
-  });
-  return state;
+// Resize (longest edge <= 1600px) and compress to a JPEG data URI so the bundle stays reasonable.
+function galProcess(file, cb) {
+  var MAX = 1600, Q = 0.82;
+  var reader = new FileReader();
+  reader.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var w = img.width, h = img.height;
+      if (Math.max(w, h) > MAX) {
+        if (w >= h) { h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      var c = document.createElement('canvas'); c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      cb(c.toDataURL('image/jpeg', Q));
+    };
+    img.onerror = function () { cb(null); };
+    img.src = reader.result;
+  };
+  reader.onerror = function () { cb(null); };
+  reader.readAsDataURL(file);
 }
 
-function toggleImage(file) {
-  var state = getGalleryState();
-  state[file] = !state[file];
-  localStorage.setItem('sc_gallery', JSON.stringify(state));
-  loadGallery();
-  loadOverview();
+function galAddFiles(files) {
+  var arr = Array.prototype.slice.call(files).filter(function (f) { return /^image\//.test(f.type); });
+  if (!arr.length) return;
+  if (!GAL.length) GAL = galSeed();
+  var pending = arr.length;
+  arr.forEach(function (f) {
+    galProcess(f, function (dataUrl) {
+      if (dataUrl) {
+        var name = (f.name || '').replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ').trim();
+        GAL.push({ id: galId(), src: dataUrl, label: name || 'New Project Photo', cat: 'residential', visible: true });
+      }
+      if (--pending === 0) { galSaveDraft(); loadGallery(); }
+    });
+  });
+}
+
+function galMove(i, dir) { var j = i + dir; if (j < 0 || j >= GAL.length) return; var t = GAL[i]; GAL[i] = GAL[j]; GAL[j] = t; galSaveDraft(); loadGallery(); }
+function galDelete(i) { if (!confirm('Remove this photo from the gallery?')) return; GAL.splice(i, 1); galSaveDraft(); loadGallery(); }
+function galToggle(i) { GAL[i].visible = !GAL[i].visible; galSaveDraft(); loadGallery(); }
+function galSetLabel(i, v) { GAL[i].label = v; galSaveDraft(); }
+function galSetCat(i, v) { GAL[i].cat = v; galSaveDraft(); }
+
+function galCatOptions(cur) {
+  var primary = (cur || '').split(/\s+/)[0] || 'residential';
+  return GAL_CATS.map(function (c) {
+    return '<option value="' + c + '"' + (primary === c ? ' selected' : '') + '>' + c.charAt(0).toUpperCase() + c.slice(1) + '</option>';
+  }).join('');
+}
+
+function galInitDrop() {
+  var dz = document.getElementById('galDrop');
+  if (!dz || dz.dataset.wired) return;
+  dz.dataset.wired = '1';
+  ['dragenter', 'dragover'].forEach(function (ev) { dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove('over'); }); });
+  dz.addEventListener('drop', function (e) { if (e.dataTransfer && e.dataTransfer.files) galAddFiles(e.dataTransfer.files); });
 }
 
 function loadGallery() {
-  var state = getGalleryState();
+  galInitDrop();
+  if (!GAL.length) GAL = galSeed();
   var grid = document.getElementById('galleryGrid');
+  var count = document.getElementById('galCount');
+  if (!GAL.length) {
+    grid.innerHTML = '<p class="panel-subtitle" style="margin:0;">No photos yet. Add some above.</p>';
+    if (count) count.textContent = '';
+    return;
+  }
+  var embedded = GAL.filter(function (i) { return /^data:/.test(i.src); }).length;
+  var visible = GAL.filter(function (i) { return i.visible !== false; }).length;
+  if (count) count.textContent = GAL.length + ' photos · ' + visible + ' visible · ' + embedded + ' embedded';
   var html = '';
-  ALL_IMAGES.forEach(function(img) {
-    var visible = state[img.file];
-    html += '<div class="gallery-admin-item' + (visible ? '' : ' disabled') + '">';
-    html += '<img src="' + img.file + '" alt="' + esc(img.label) + '"/>';
-    html += '<button class="ga-toggle' + (visible ? '' : ' hidden') + '" onclick="toggleImage(\'' + img.file + '\')">' + (visible ? 'Visible' : 'Hidden') + '</button>';
-    html += '<div class="ga-info">' + esc(img.label) + '</div>';
-    html += '</div>';
+  GAL.forEach(function (it, i) {
+    var isEmbedded = /^data:/.test(it.src);
+    html += '<div class="gallery-admin-item' + (it.visible !== false ? '' : ' disabled') + '">';
+    html += '<span class="ga-tag">' + (isEmbedded ? 'embedded' : 'file') + '</span>';
+    html += '<img src="' + it.src + '" alt="' + esc(it.label || '') + '"/>';
+    html += '<div class="ga-controls">';
+    html += '<input class="ga-label-input" value="' + esc(it.label || '') + '" placeholder="Caption" oninput="galSetLabel(' + i + ',this.value)"/>';
+    html += '<select class="ga-cat-input" onchange="galSetCat(' + i + ',this.value)">' + galCatOptions(it.cat) + '</select>';
+    html += '<div class="ga-row">';
+    html += '<button class="ga-mini" onclick="galMove(' + i + ',-1)" title="Move up">&#8593;</button>';
+    html += '<button class="ga-mini" onclick="galMove(' + i + ',1)" title="Move down">&#8595;</button>';
+    html += '<button class="ga-mini' + (it.visible !== false ? '' : ' off') + '" onclick="galToggle(' + i + ')">' + (it.visible !== false ? 'Visible' : 'Hidden') + '</button>';
+    html += '<button class="ga-mini danger" onclick="galDelete(' + i + ')">Delete</button>';
+    html += '</div></div></div>';
   });
   grid.innerHTML = html;
+}
+
+function galExport() {
+  if (!GAL.length) GAL = galSeed();
+  if (!GAL.length) { alert('No photos to export yet.'); return; }
+  var header = '/* gallery-data.js — generated by the S. Castillo admin Gallery Manager.\n'
+    + ' * Replace gallery-data.js in your repo with this download, then commit it.\n'
+    + ' * Each item: { id, src, label, cat, visible }  (src = filename or embedded data URI)\n'
+    + ' */\n';
+  var body = 'window.SC_GALLERY = ' + JSON.stringify(GAL, null, 2) + ';\n';
+  var blob = new Blob([header + body], { type: 'application/javascript' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'gallery-data.js';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
 }
 
 // === ANALYTICS ===
