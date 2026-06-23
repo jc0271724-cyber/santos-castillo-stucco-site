@@ -215,6 +215,38 @@
       .gitem-label{opacity:1;transform:translateY(0);font-size:.95rem;}
     }
 
+    /* FEATURED PROJECTS */
+    #featured-projects{background:var(--light-bg);padding:7rem 0;}
+    #featured-projects .container{padding:0 3rem;}
+    @media(max-width:768px){#featured-projects .container{padding:0 1.5rem;}}
+    .fp-intro{text-align:center;max-width:620px;margin:0 auto 4.5rem;display:flex;flex-direction:column;align-items:center;}
+    .fp-intro p{font-size:.95rem;line-height:1.9;color:var(--gray);font-weight:300;margin-top:1.2rem;}
+    .fp-row{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-bottom:6rem;}
+    .fp-row:last-child{margin-bottom:0;}
+    .fp-row.reverse .fp-media{order:2;}
+    .fp-media{position:relative;cursor:pointer;overflow:hidden;border-radius:14px;box-shadow:0 20px 50px rgba(13,17,23,0.18);}
+    .fp-media img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .7s ease;background:linear-gradient(135deg,#1a1a2e,#0D1117);}
+    .fp-media:hover img{transform:scale(1.05);}
+    .fp-media-tag{position:absolute;top:1rem;left:1rem;background:rgba(13,17,23,0.85);color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:.45rem .9rem;border-radius:20px;}
+    .fp-num{font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:.9rem;}
+    .fp-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,3vw,2.4rem);font-weight:300;color:var(--charcoal);line-height:1.12;margin-bottom:.7rem;}
+    .fp-title em{font-style:italic;color:var(--gold);}
+    .fp-location{display:inline-flex;align-items:center;gap:.45rem;font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);font-weight:500;margin-bottom:1.5rem;}
+    .fp-desc{font-size:.92rem;line-height:1.9;color:var(--gray);font-weight:300;margin-bottom:1.8rem;}
+    .fp-specs{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;border-top:1px solid rgba(0,0,0,0.1);border-bottom:1px solid rgba(0,0,0,0.1);padding:1.4rem 0;margin-bottom:1.6rem;}
+    .fp-spec-label{font-size:.55rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:.4rem;}
+    .fp-spec-val{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--charcoal);font-weight:400;line-height:1.1;}
+    .fp-scope{list-style:none;}
+    .fp-scope li{position:relative;padding-left:1.4rem;font-size:.85rem;line-height:1.7;color:var(--gray);font-weight:300;margin-bottom:.55rem;}
+    .fp-scope li:last-child{margin-bottom:0;}
+    .fp-scope li::before{content:'';position:absolute;left:0;top:.55rem;width:7px;height:7px;background:var(--gold);transform:rotate(45deg);}
+    @media(max-width:768px){
+      .fp-row{grid-template-columns:1fr;gap:1.8rem;margin-bottom:4rem;}
+      .fp-row.reverse .fp-media{order:0;}
+      .fp-specs{gap:.5rem;}
+      .fp-spec-val{font-size:1.05rem;}
+    }
+
     /* LIGHTBOX */
     .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:999;align-items:center;justify-content:center;}
     .lightbox.active{display:flex;}
@@ -635,6 +667,161 @@
       <div class="gitem" data-cat="residential stucco stone" onclick="openLb('project-9.jpg')">
         <img src="project-9.jpg" alt="Completed stone and stucco home" loading="lazy"/>
         <div class="gitem-overlay"><span class="gitem-label">Stone &amp; Stucco — Finished Home</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PROJECTS -->
+<section id="featured-projects">
+  <div class="container">
+    <div class="fp-intro reveal">
+      <div class="eyebrow" data-en="Featured Projects" data-es="Proyectos Destacados">Featured Projects</div>
+      <h2 class="display-title" data-en="A Closer Look at Our Craft" data-es="Una Mirada M&aacute;s Cercana a Nuestro Oficio">A Closer Look<br>at <em>Our Craft</em></h2>
+      <p data-en="Four signature homes across greater Houston — each a study in stucco, stone, and the details that set S. Castillo apart." data-es="Cuatro hogares emblem&aacute;ticos en el &aacute;rea de Houston — cada uno un estudio en estuco, piedra y los detalles que distinguen a S. Castillo.">Four signature homes across greater Houston — each a study in stucco, stone, and the details that set S. Castillo apart.</p>
+    </div>
+
+    <!-- 01 -->
+    <div class="fp-row reveal">
+      <div class="fp-media" onclick="openLb('project-9.jpg')">
+        <img src="project-9.jpg" alt="Hand-cut natural limestone estate by S. Castillo" loading="lazy"/>
+        <span class="fp-media-tag" data-en="Natural Stone" data-es="Piedra Natural">Natural Stone</span>
+      </div>
+      <div class="fp-info">
+        <div class="fp-num" data-en="Project 01" data-es="Proyecto 01">Project 01</div>
+        <h3 class="fp-title" data-en="The Limestone Manor" data-es="La Mansi&oacute;n de Piedra Caliza">The Limestone <em>Manor</em></h3>
+        <div class="fp-location">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold)" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+          <span data-en="The Woodlands, TX" data-es="The Woodlands, TX">The Woodlands, TX</span>
+        </div>
+        <p class="fp-desc" data-en="A commanding European-inspired estate wrapped entirely in hand-cut natural limestone. Our crews set every block by hand and carved the arched window surrounds and steep gabled bays that give the fa&ccedil;ade its old-world depth and symmetry." data-es="Una imponente finca de inspiraci&oacute;n europea revestida completamente en piedra caliza natural cortada a mano. Nuestro equipo coloc&oacute; cada bloque a mano y tall&oacute; los marcos de ventanas en arco y los frontones que dan a la fachada su profundidad y simetr&iacute;a cl&aacute;sicas.">A commanding European-inspired estate wrapped entirely in hand-cut natural limestone. Our crews set every block by hand and carved the arched window surrounds and steep gabled bays that give the fa&ccedil;ade its old-world depth and symmetry.</p>
+        <div class="fp-specs">
+          <div>
+            <div class="fp-spec-label" data-en="Style" data-es="Estilo">Style</div>
+            <div class="fp-spec-val" data-en="French Ch&acirc;teau" data-es="Castillo Franc&eacute;s">French Ch&acirc;teau</div>
+          </div>
+          <div>
+            <div class="fp-spec-label" data-en="Size" data-es="Tama&ntilde;o">Size</div>
+            <div class="fp-spec-val">~6,800 sq ft</div>
+          </div>
+          <div>
+            <div class="fp-spec-label" data-en="Stories" data-es="Pisos">Stories</div>
+            <div class="fp-spec-val" data-en="Two" data-es="Dos">Two</div>
+          </div>
+        </div>
+        <ul class="fp-scope">
+          <li data-en="Full natural limestone veneer fa&ccedil;ade" data-es="Fachada completa con revestimiento de piedra caliza natural">Full natural limestone veneer fa&ccedil;ade</li>
+          <li data-en="Hand-carved arched window surrounds" data-es="Marcos de ventanas en arco tallados a mano">Hand-carved arched window surrounds</li>
+          <li data-en="Custom quoin and cornice detailing" data-es="Detalles personalizados de esquinas y cornisas">Custom quoin and cornice detailing</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="fp-row reverse reveal">
+      <div class="fp-media" onclick="openLb('project-10.jpg')">
+        <img src="project-10.jpg" alt="Single-story Mediterranean villa with mocha stucco finish" loading="lazy"/>
+        <span class="fp-media-tag" data-en="Stucco &amp; Stone" data-es="Estuco y Piedra">Stucco &amp; Stone</span>
+      </div>
+      <div class="fp-info">
+        <div class="fp-num" data-en="Project 02" data-es="Proyecto 02">Project 02</div>
+        <h3 class="fp-title" data-en="The Tuscan Villa" data-es="La Villa Toscana">The Tuscan <em>Villa</em></h3>
+        <div class="fp-location">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold)" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+          <span data-en="Spring, TX" data-es="Spring, TX">Spring, TX</span>
+        </div>
+        <p class="fp-desc" data-en="A sprawling single-story Mediterranean villa finished in a warm, hand-troweled mocha stucco. We shaped the sweeping arched loggia and stone column bases, then crowned the elevation with a decorative cornice beneath the clay barrel-tile roof." data-es="Una extensa villa mediterr&aacute;nea de una planta acabada en un c&aacute;lido estuco color moca aplicado a mano. Dimos forma a la galer&iacute;a de arcos y a las bases de columnas en piedra, y coronamos la fachada con una cornisa decorativa bajo el techo de teja de barril.">A sprawling single-story Mediterranean villa finished in a warm, hand-troweled mocha stucco. We shaped the sweeping arched loggia and stone column bases, then crowned the elevation with a decorative cornice beneath the clay barrel-tile roof.</p>
+        <div class="fp-specs">
+          <div>
+            <div class="fp-spec-label" data-en="Style" data-es="Estilo">Style</div>
+            <div class="fp-spec-val" data-en="Mediterranean" data-es="Mediterr&aacute;neo">Mediterranean</div>
+          </div>
+          <div>
+            <div class="fp-spec-label" data-en="Size" data-es="Tama&ntilde;o">Size</div>
+            <div class="fp-spec-val">~4,500 sq ft</div>
+          </div>
+          <div>
+            <div class="fp-spec-label" data-en="Stories" data-es="Pisos">Stories</div>
+            <div class="fp-spec-val" data-en="One" data-es="Uno">One</div>
+          </div>
+        </div>
+        <ul class="fp-scope">
+          <li data-en="Smooth hand-troweled stucco in custom mocha" data-es="Estuco liso aplicado a mano en color moca personalizado">Smooth hand-troweled stucco in custom mocha</li>
+          <li data-en="Arched loggia and stone column bases" data-es="Galer&iacute;a de arcos y bases de columnas en piedra">Arched loggia and stone column bases</li>
+          <li data-en="Decorative cornice and tile-roof transitions" data-es="Cornisa decorativa y transiciones del techo de teja">Decorative cornice and tile-roof transitions</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="fp-row reveal">
+      <div class="fp-media" onclick="openLb('IMG_8177.jpg')">
+        <img src="IMG_8177.jpg" alt="Two-story Mediterranean home with stucco and stone accents" loading="lazy"/>
+        <span class="fp-media-tag" data-en="Stucco &amp; Stone" data-es="Estuco y Piedra">Stucco &amp; Stone</span>
+      </div>
+      <div class="fp-info">
+        <div class="fp-num" data-en="Project 03" data-es="Proyecto 03">Project 03</div>
+        <h3 class="fp-title" data-en="The Mediterranean Revival" data-es="El Renacimiento Mediterr&aacute;neo">The Mediterranean <em>Revival</em></h3>
+        <div class="fp-location">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold)" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+          <span data-en="Sugar Land, TX" data-es="Sugar Land, TX">Sugar Land, TX</span>
+        </div>
+        <p class="fp-desc" data-en="A two-story residence blending soft taupe stucco with cream cut-stone accents. We wrapped the arched entry and second-floor windows in natural stone, then finished the body in a fine sand-float stucco for a seamless, weather-tight envelope." data-es="Una residencia de dos plantas que combina estuco color taupe con acentos de piedra cortada color crema. Revestimos la entrada en arco y las ventanas del segundo piso con piedra natural, y acabamos el cuerpo con un estuco de textura fina para una envolvente sellada contra el clima.">A two-story residence blending soft taupe stucco with cream cut-stone accents. We wrapped the arched entry and second-floor windows in natural stone, then finished the body in a fine sand-float stucco for a seamless, weather-tight envelope.</p>
+        <div class="fp-specs">
+          <div>
+            <div class="fp-spec-label" data-en="Style" data-es="Estilo">Style</div>
+            <div class="fp-spec-val" data-en="Med. Revival" data-es="Renacimiento">Med. Revival</div>
+          </div>
+          <div>
+            <div class="fp-spec-label" data-en="Size" data-es="Tama&ntilde;o">Size</div>
+            <div class="fp-spec-val">~5,200 sq ft</div>
+          </div>
+          <div>
+            <div class="fp-spec-label" data-en="Stories" data-es="Pisos">Stories</div>
+            <div class="fp-spec-val" data-en="Two" data-es="Dos">Two</div>
+          </div>
+        </div>
+        <ul class="fp-scope">
+          <li data-en="Sand-float stucco body in custom taupe" data-es="Cuerpo de estuco de textura fina en taupe personalizado">Sand-float stucco body in custom taupe</li>
+          <li data-en="Natural stone entry and window accents" data-es="Acentos de piedra natural en entrada y ventanas">Natural stone entry and window accents</li>
+          <li data-en="Arched stone surrounds and balcony trim" data-es="Marcos de piedra en arco y detalles de balcones">Arched stone surrounds and balcony trim</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="fp-row reverse reveal">
+      <div class="fp-media" onclick="openLb('IMG_8173.jpg')">
+        <img src="IMG_8173.jpg" alt="Two-story stucco estate with grand columned portico" loading="lazy"/>
+        <span class="fp-media-tag" data-en="Full Stucco System" data-es="Sistema de Estuco">Full Stucco System</span>
+      </div>
+      <div class="fp-info">
+        <div class="fp-num" data-en="Project 04" data-es="Proyecto 04">Project 04</div>
+        <h3 class="fp-title" data-en="The Grand Portico" data-es="El Gran P&oacute;rtico">The Grand <em>Portico</em></h3>
+        <div class="fp-location">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold)" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+          <span data-en="Katy, TX" data-es="Katy, TX">Katy, TX</span>
+        </div>
+        <p class="fp-desc" data-en="A stately elevation defined by a two-story portico and four hand-formed columns. We applied a full stucco system in a custom greige, molding the column casings, decorative banding, and arched window surrounds that give the home its formal, balanced presence." data-es="Una fachada se&ntilde;orial definida por un p&oacute;rtico de dos pisos y cuatro columnas formadas a mano. Aplicamos un sistema completo de estuco en un color greige personalizado, moldeando las columnas, las molduras decorativas y los marcos de ventanas en arco que dan al hogar su presencia formal y equilibrada.">A stately elevation defined by a two-story portico and four hand-formed columns. We applied a full stucco system in a custom greige, molding the column casings, decorative banding, and arched window surrounds that give the home its formal, balanced presence.</p>
+        <div class="fp-specs">
+          <div>
+            <div class="fp-spec-label" data-en="Style" data-es="Estilo">Style</div>
+            <div class="fp-spec-val" data-en="Classical" data-es="Cl&aacute;sico">Classical</div>
+          </div>
+          <div>
+            <div class="fp-spec-label" data-en="Size" data-es="Tama&ntilde;o">Size</div>
+            <div class="fp-spec-val">~6,000 sq ft</div>
+          </div>
+          <div>
+            <div class="fp-spec-label" data-en="Stories" data-es="Pisos">Stories</div>
+            <div class="fp-spec-val" data-en="Two" data-es="Dos">Two</div>
+          </div>
+        </div>
+        <ul class="fp-scope">
+          <li data-en="Full stucco system in custom greige" data-es="Sistema completo de estuco en greige personalizado">Full stucco system in custom greige</li>
+          <li data-en="Hand-formed columns and capitals" data-es="Columnas y capiteles formados a mano">Hand-formed columns and capitals</li>
+          <li data-en="Decorative banding and arched surrounds" data-es="Molduras decorativas y marcos en arco">Decorative banding and arched surrounds</li>
+        </ul>
       </div>
     </div>
   </div>
