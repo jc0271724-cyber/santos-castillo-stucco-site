@@ -2,380 +2,488 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3D Stucco Viewer — S. Castillo Construction</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Stucco Viewer - S. Castillo Construction | Houston TX</title>
+<meta name="description" content="Explore stucco finishes in real-time 3D. Choose texture, color, and lighting then request a free estimate from S. Castillo Construction, Houston TX.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+:root{
+  --navy:#0D1117;--navy2:#161B24;--gold:#B8975A;--gold-light:#D4AF72;
+  --platinum:#E8E4DC;--panel-bg:rgba(13,17,23,0.88);
+  --panel-border:rgba(184,151,90,0.18);--section-bg:rgba(255,255,255,0.03);
+  --text-muted:rgba(232,228,220,0.45);--text-dim:rgba(232,228,220,0.7);
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{overflow:hidden;background:#0D1117;font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
-#p{position:fixed;right:16px;top:16px;bottom:16px;width:252px;background:rgba(13,17,23,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(184,151,90,.15);border-radius:18px;padding:20px 16px;color:#fff;overflow-y:auto;z-index:10;display:flex;flex-direction:column;gap:14px}
-#p::-webkit-scrollbar{width:3px}
-#p::-webkit-scrollbar-thumb{background:rgba(184,151,90,.25);border-radius:2px}
-#ph{font-size:10px;font-weight:700;letter-spacing:3.5px;color:#B8975A;text-align:center;padding-bottom:8px;border-bottom:1px solid rgba(184,151,90,.15)}
-.lbl{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px}
-.tg{display:grid;grid-template-columns:1fr 1fr;gap:4px}
-.tb{padding:9px 4px;text-align:center;font-size:11px;font-weight:500;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:8px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s;line-height:1.2;font-family:inherit}
-.tb:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8)}
-.tb.a{background:rgba(184,151,90,.15);border-color:rgba(184,151,90,.45);color:#D4AF72}
-.tb span{display:block;font-size:8px;color:rgba(255,255,255,.25);margin-top:2px;font-weight:400}
-.tb.a span{color:rgba(184,151,90,.5)}
-.cg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.cs{aspect-ratio:1;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .15s}
-.cs:hover{transform:scale(1.15)}
-.cs.a{border-color:#B8975A;box-shadow:0 0 0 2px rgba(184,151,90,.3)}
-.cp{grid-column:span 5;display:flex;align-items:center;gap:8px;margin-top:2px}
-.cp input{-webkit-appearance:none;width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;background:none;padding:0}
-.cp input::-webkit-color-swatch-wrapper{padding:0}
-.cp input::-webkit-color-swatch{border:1px solid rgba(255,255,255,.12);border-radius:6px}
-.cp span{font-size:11px;font-family:'SF Mono','Cascadia Code',monospace;color:rgba(255,255,255,.45)}
-.sr{margin-bottom:10px}
-.sr:last-child{margin-bottom:0}
-.sr label{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.35);margin-bottom:5px;letter-spacing:.5px}
-.sr label b{color:rgba(255,255,255,.65);font-weight:500}
-input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:rgba(255,255,255,.1);border-radius:2px;outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:#B8975A;border-radius:50%;cursor:grab;box-shadow:0 1px 6px rgba(0,0,0,.4)}
-input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#B8975A;border-radius:50%;cursor:grab;border:none}
-.td{text-align:center;font-size:10px;color:rgba(255,255,255,.3);margin-top:4px;letter-spacing:.5px}
-.td b{color:rgba(255,255,255,.6);font-weight:500;font-size:12px}
-.ft{text-align:center;font-size:8px;color:rgba(184,151,90,.3);letter-spacing:2px;margin-top:auto;padding-top:8px}
-@media(max-width:700px){#p{right:8px;top:8px;bottom:8px;width:220px;padding:14px 12px;gap:10px;font-size:10px}}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0c10;font-family:'Inter',system-ui,sans-serif}
+#viewport{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
+#topbar{position:fixed;top:0;left:0;right:0;height:56px;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(13,17,23,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--panel-border);}
+.topbar-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-emblem{width:32px;height:32px;flex-shrink:0}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#fff}
+.brand-sub{font-size:.55rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-badge{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(184,151,90,0.35);padding:.3rem .8rem;font-weight:500}
+.topbar-cta{background:var(--gold);color:var(--navy);font-family:'Inter',sans-serif;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:.5rem 1.2rem;text-decoration:none;transition:background .2s;white-space:nowrap;}
+.topbar-cta:hover{background:var(--gold-light)}
+.back-link{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);text-decoration:none;font-weight:500;transition:color .2s;display:flex;align-items:center;gap:6px}
+.back-link:hover{color:var(--gold)}
+.back-link svg{width:14px;height:14px;fill:currentColor}
+#sidebar{position:fixed;left:16px;top:72px;bottom:16px;width:296px;background:var(--panel-bg);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);border:1px solid var(--panel-border);border-radius:18px;padding:0;color:#fff;overflow:hidden;z-index:10;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,0.55);}
+#sidebar-scroll{overflow-y:auto;flex:1;padding:20px 18px 16px;display:flex;flex-direction:column;gap:16px;}
+#sidebar-scroll::-webkit-scrollbar{width:3px}
+#sidebar-scroll::-webkit-scrollbar-thumb{background:rgba(184,151,90,0.25);border-radius:2px}
+.sidebar-heading{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;color:var(--platinum);letter-spacing:.5px;padding-bottom:12px;border-bottom:1px solid var(--panel-border);}
+.sidebar-heading em{font-style:italic;color:var(--gold-light)}
+.panel{background:var(--section-bg);border-radius:12px;padding:14px 13px}
+.panel h3{font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:11px;display:flex;align-items:center;gap:8px;}
+.panel h3::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06)}
+.type-grid{display:flex;flex-direction:column;gap:5px}
+.type-btn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);border-radius:10px;color:#fff;cursor:pointer;transition:all .2s;text-align:left;font-family:'Inter',inherit;}
+.type-btn:hover{background:rgba(255,255,255,0.06);border-color:rgba(184,151,90,0.2)}
+.type-btn.active{background:rgba(184,151,90,0.1);border-color:rgba(184,151,90,0.45);}
+.type-preview{width:38px;height:38px;border-radius:7px;flex-shrink:0;border:1px solid rgba(255,255,255,0.08)}
+.type-name{font-size:.78rem;font-weight:500;display:block;color:var(--platinum)}
+.type-desc{font-size:.65rem;color:var(--text-muted);display:block;margin-top:1px}
+.active .type-name{color:#fff}
+.color-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+#colorPicker{-webkit-appearance:none;width:42px;height:42px;border:none;border-radius:10px;cursor:pointer;background:none;padding:0;flex-shrink:0;}
+#colorPicker::-webkit-color-swatch-wrapper{padding:0}
+#colorPicker::-webkit-color-swatch{border:2px solid rgba(255,255,255,0.15);border-radius:8px}
+.hex-info{display:flex;flex-direction:column}
+#hexLabel{font-size:.8rem;font-weight:500;font-family:'SF Mono',monospace;color:var(--text-dim)}
+.hex-hint{font-size:.6rem;color:var(--text-muted);margin-top:2px}
+.preset-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.preset-swatch{width:100%;aspect-ratio:1;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s;position:relative;}
+.preset-swatch:hover{transform:scale(1.15)}
+.preset-swatch.active{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,0.2)}
+.preset-swatch::after{content:attr(data-name);position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.55rem;white-space:nowrap;color:var(--text-muted);opacity:0;transition:opacity .2s;pointer-events:none;}
+.preset-swatch:hover::after{opacity:1}
+.slider-group{margin-bottom:12px}
+.slider-group:last-child{margin-bottom:0}
+.slider-label{display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-muted);margin-bottom:7px}
+.slider-label span{color:rgba(255,255,255,0.85);font-weight:500}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;background:#fff;border-radius:50%;cursor:grab;box-shadow:0 2px 8px rgba(0,0,0,0.4);}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;background:#fff;border-radius:50%;cursor:grab;border:none;}
+.time-display{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+#timeLabel{font-size:1.1rem;font-weight:600;font-family:'Cormorant Garamond',serif;color:var(--platinum)}
+#timeName{font-size:.65rem;color:var(--gold);font-weight:500;letter-spacing:1px;text-transform:uppercase}
+.time-marks{display:flex;justify-content:space-between;margin-top:5px;font-size:.55rem;color:var(--text-muted)}
+.time-presets{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap}
+.time-preset-btn{font-size:.55rem;letter-spacing:1px;text-transform:uppercase;font-weight:500;padding:.3rem .7rem;border-radius:20px;cursor:pointer;transition:all .2s;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:var(--text-muted);font-family:'Inter',inherit;}
+.time-preset-btn:hover,.time-preset-btn.active{background:rgba(184,151,90,0.15);border-color:rgba(184,151,90,0.4);color:var(--gold)}
+.compare-toggle-row{display:flex;align-items:center;justify-content:space-between}
+.compare-label{font-size:.75rem;color:var(--text-dim);font-weight:500}
+.toggle-switch{position:relative;width:40px;height:22px;cursor:pointer}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-track{position:absolute;inset:0;border-radius:11px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);transition:background .2s;}
+.toggle-switch input:checked~.toggle-track{background:rgba(184,151,90,0.35);border-color:rgba(184,151,90,0.5)}
+.toggle-knob{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,0.3);}
+.toggle-switch input:checked~.toggle-track .toggle-knob{transform:translateX(18px)}
+.compare-b-panel{display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
+.compare-b-panel.visible{display:block}
+.compare-note{font-size:.65rem;color:var(--text-muted);margin-bottom:10px;line-height:1.5}
+.sidebar-footer{padding:14px 18px;border-top:1px solid var(--panel-border);background:rgba(13,17,23,0.6);}
+.sidebar-cta{display:block;width:100%;background:var(--gold);color:var(--navy);font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:.75rem 0;text-align:center;text-decoration:none;border-radius:8px;transition:background .2s;border:none;cursor:pointer;}
+.sidebar-cta:hover{background:var(--gold-light)}
+.sidebar-cta-sub{font-size:.6rem;color:var(--text-muted);text-align:center;margin-top:8px;letter-spacing:.5px}
+#compareSlider{position:fixed;top:56px;bottom:0;width:3px;background:rgba(184,151,90,0.8);z-index:15;cursor:ew-resize;display:none;user-select:none;transform:translateX(-50%);left:50%;}
+#compareSlider::before{content:'drag';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--gold);color:var(--navy);padding:.4rem .8rem;border-radius:20px;font-size:.62rem;font-weight:700;white-space:nowrap;font-family:'Inter',sans-serif;}
+@media(max-width:768px){
+  #sidebar{left:8px;right:8px;top:auto;bottom:8px;width:auto;height:auto;max-height:52vh;border-radius:14px}
+  .topbar-badge{display:none}
+}
 </style>
 </head>
 <body>
-<canvas id="c"></canvas>
-<div id="p">
-  <div id="ph">STUCCO VIEWER</div>
-  <div><div class="lbl">Finish</div><div class="tg" id="tg"></div></div>
-  <div><div class="lbl">Color</div><div class="cg" id="cg"></div></div>
-  <div>
-    <div class="lbl">Texture</div>
-    <div class="sr"><label>Grain Scale <b id="vs">40</b></label><input type="range" id="rs" min="10" max="100" value="40"></div>
-    <div class="sr"><label>Normal Depth <b id="vi">50</b></label><input type="range" id="ri" min="5" max="100" value="50"></div>
+
+<div id="topbar">
+  <a href="index.html" class="topbar-brand">
+    <svg class="brand-emblem" viewBox="0 0 32 32" fill="none">
+      <rect x=".5" y=".5" width="31" height="31" stroke="#B8975A" stroke-width="1"/>
+      <text x="16" y="22" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="14" fill="#B8975A">SC</text>
+    </svg>
+    <div>
+      <div class="brand-name">S. Castillo</div>
+      <div class="brand-sub">Construction</div>
+    </div>
+  </a>
+  <div class="topbar-right">
+    <span class="topbar-badge">3D Finish Visualizer</span>
+    <a href="index.html#contact" class="topbar-cta">Free Estimate</a>
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      Back
+    </a>
   </div>
-  <div>
-    <div class="lbl">Daylight</div>
-    <div class="sr"><input type="range" id="rt" min="0" max="100" value="65"></div>
-    <div class="td"><b id="tl">3:45 PM</b> · <span id="tn">Golden Hour</span></div>
-  </div>
-  <div class="ft">S. CASTILLO CONSTRUCTION</div>
 </div>
+
+<div id="sidebar">
+  <div id="sidebar-scroll">
+    <div class="sidebar-heading">Stucco <em>Finish Studio</em></div>
+    <div class="panel">
+      <h3>Finish Type</h3>
+      <div class="type-grid" id="typeGrid"></div>
+    </div>
+    <div class="panel">
+      <h3>Color</h3>
+      <div class="color-row">
+        <input type="color" id="colorPicker" value="#E8D4B8">
+        <div class="hex-info">
+          <span id="hexLabel">#E8D4B8</span>
+          <span class="hex-hint">Custom color</span>
+        </div>
+      </div>
+      <div class="preset-grid" id="presetGrid"></div>
+    </div>
+    <div class="panel">
+      <h3>Texture Controls</h3>
+      <div class="slider-group">
+        <div class="slider-label">Grain Scale <span id="scaleVal">50</span></div>
+        <input type="range" id="scaleSlider" min="10" max="100" value="50">
+      </div>
+      <div class="slider-group">
+        <div class="slider-label">Relief Depth <span id="intensityVal">60</span></div>
+        <input type="range" id="intensitySlider" min="5" max="100" value="60">
+      </div>
+      <div class="slider-group">
+        <div class="slider-label">Roughness <span id="roughVal">75</span></div>
+        <input type="range" id="roughSlider" min="10" max="100" value="75">
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Time of Day</h3>
+      <div class="time-display">
+        <span id="timeLabel">12:00 PM</span>
+        <span id="timeName">Noon</span>
+      </div>
+      <input type="range" id="timeSlider" min="0" max="100" value="50">
+      <div class="time-marks"><span>Dawn</span><span>Noon</span><span>Dusk</span></div>
+      <div class="time-presets">
+        <button class="time-preset-btn" data-val="8">Dawn</button>
+        <button class="time-preset-btn active" data-val="50">Noon</button>
+        <button class="time-preset-btn" data-val="75">Golden</button>
+        <button class="time-preset-btn" data-val="90">Dusk</button>
+        <button class="time-preset-btn" data-val="98">Night</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Split Compare</h3>
+      <div class="compare-toggle-row">
+        <span class="compare-label">Compare two finishes</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="compareToggle">
+          <div class="toggle-track"><div class="toggle-knob"></div></div>
+        </label>
+      </div>
+      <div class="compare-b-panel" id="compareBPanel">
+        <p class="compare-note">Drag center divider. Right side uses settings below.</p>
+        <div style="margin-bottom:8px">
+          <div class="slider-label">B Color</div>
+          <input type="color" id="colorPickerB" value="#A87050" style="width:100%;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,.1);cursor:pointer;background:none;padding:0;margin-top:6px">
+        </div>
+        <div class="type-grid" id="typeGridB"></div>
+      </div>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <a href="index.html#contact" class="sidebar-cta">Request Free On-Site Estimate</a>
+    <div class="sidebar-cta-sub">S. Castillo Construction &middot; Houston TX &middot; 832-781-9726</div>
+  </div>
+</div>
+
+<div id="compareSlider"></div>
+<canvas id="viewport"></canvas>
+
 <script type="importmap">
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.171.0/examples/jsm/"}}
 </script>
 <script type="module">
-import*as T from'three';
-import{OrbitControls}from'three/addons/controls/OrbitControls.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+const TEX=512;
 const TYPES=[
-  {id:'santa-barbara',name:'Santa Barbara',sub:'Smooth',r:.72},
-  {id:'sand',name:'Float / Sand',sub:'Fine grain',r:.86},
-  {id:'dash',name:'Dash',sub:'Rough thrown',r:.94},
-  {id:'lace',name:'Lace & Skip',sub:'Layered',r:.87},
-  {id:'cat',name:'Cat Face',sub:'Patched',r:.80}
+  {id:'smooth',       name:'Smooth Plaster', desc:'Fine hand-troweled finish',  rough:0.65,scale:0.7},
+  {id:'santa-barbara',name:'Santa Barbara',  desc:'Classic California texture',  rough:0.72,scale:1.0},
+  {id:'sand',         name:'Float / Sand',   desc:'Fine sandy grain coat',       rough:0.85,scale:1.0},
+  {id:'dash',         name:'Dash / Splatter',desc:'Bold rough thrown texture',   rough:0.93,scale:1.0},
+  {id:'lace-skip',    name:'Lace & Skip',    desc:'Layered skip-trowel relief',  rough:0.88,scale:1.0},
+  {id:'cat-face',     name:'Cat Face',       desc:'Smooth with rough patches',   rough:0.80,scale:1.0},
+  {id:'pebble',       name:'Pebble Dash',    desc:'Exposed aggregate texture',   rough:0.95,scale:1.2},
 ];
-const COLORS=[
-  {h:'#F5F0E8',n:'Warm White'},{h:'#EDE3D2',n:'Swiss Coffee'},{h:'#E8D4B8',n:'Navajo'},
-  {h:'#D4C5A9',n:'Desert Sand'},{h:'#C8B89A',n:'Sandstone'},{h:'#B8956A',n:'Adobe'},
-  {h:'#A87050',n:'Terracotta'},{h:'#8B7260',n:'Mocha'},{h:'#A8B8A0',n:'Sage'},
-  {h:'#B0B0B0',n:'Pewter'}
+const PRESETS=[
+  {h:'#F5F0E8',n:'Warm White'},{h:'#F0E6D6',n:'Swiss Coffee'},
+  {h:'#E8D4B8',n:'Navajo'},{h:'#D4C5A9',n:'Desert Sand'},
+  {h:'#C8B89A',n:'Sandstone'},{h:'#B8956A',n:'Adobe'},
+  {h:'#A87050',n:'Terracotta'},{h:'#8B7260',n:'Mocha'},
+  {h:'#A8B8A0',n:'Sage'},{h:'#B0B0B0',n:'Pewter'},
 ];
-const S={type:'santa-barbara',color:'#E8D4B8',scale:40,intensity:50,time:65};
+const S={type:'santa-barbara',color:'#E8D4B8',scale:50,intensity:60,rough:75,time:50,compareOn:false,typeB:'sand',colorB:'#A87050'};
+let compareX=window.innerWidth*0.5;
 
-// ── Noise ──
-const H=(x,y)=>{const n=Math.sin(x*127.1+y*311.7)*43758.5453;return n-Math.floor(n)};
-function N(x,y){
-  const ix=x|0,iy=y|0,fx=x-ix,fy=y-iy;
+function hash(x,y){const n=Math.sin(x*127.1+y*311.7)*43758.5453;return n-Math.floor(n)}
+function noise(x,y){
+  const ix=Math.floor(x),iy=Math.floor(y),fx=x-ix,fy=y-iy;
   const ux=fx*fx*(3-2*fx),uy=fy*fy*(3-2*fy);
-  const a=H(ix,iy),b=H(ix+1,iy),c=H(ix,iy+1),d=H(ix+1,iy+1);
+  const a=hash(ix,iy),b=hash(ix+1,iy),c=hash(ix,iy+1),d=hash(ix+1,iy+1);
   return a+(b-a)*ux+(c-a)*uy+(a-b-c+d)*ux*uy;
 }
-function F(x,y,o){let v=0,a=.5,f=1;for(let i=0;i<o;i++){v+=a*N(x*f,y*f);a*=.5;f*=2}return v}
+function fbm(x,y,oct){let v=0,a=.5,f=1;for(let i=0;i<oct;i++){v+=a*noise(x*f,y*f);a*=.5;f*=2}return v}
 
-// ── Texture gen ──
-const SZ=256,cache=new Map();
 function genHeight(type,scale){
-  const d=new Float32Array(SZ*SZ),s=scale/35;
-  for(let y=0;y<SZ;y++)for(let x=0;x<SZ;x++){
-    const nx=x/SZ*10*s,ny=y/SZ*10*s;let h;
+  const data=new Float32Array(TEX*TEX);
+  const s=(scale/40)*(TYPES.find(t=>t.id===type)?.scale||1);
+  for(let y=0;y<TEX;y++) for(let x=0;x<TEX;x++){
+    const nx=x/TEX*10*s,ny=y/TEX*10*s;let h;
     switch(type){
-      case'santa-barbara':{const wx=nx+.25*F(nx*2,ny*2,3),wy=ny+.25*F(nx*2+5,ny*2+5,3);h=F(wx,wy,3)*.25+.5}break;
-      case'sand':h=F(nx*3,ny*3,5)*.45+.28;break;
-      case'dash':h=F(nx,ny,2)*.15+Math.pow(Math.max(0,N(nx*4,ny*4)),.4)*.65;break;
-      case'lace':{const sm=F(nx,ny,2)*.12,m=N(nx*.7,ny*.7)>.42?1:0;h=sm+F(nx*3,ny*3,4)*m*.4+.3}break;
-      case'cat':{const sb=F(nx,ny,2)*.08+.5;h=sb+(N(nx*.8,ny*.8)>.52?F(nx*4,ny*4,4)*.45:0)}break;
+      case 'smooth':{const wx=nx+.15*fbm(nx*1.5,ny*1.5,2);h=fbm(wx,ny,2)*.15+.5;}break;
+      case 'santa-barbara':{const wx=nx+.3*fbm(nx*2,ny*2,3),wy=ny+.3*fbm(nx*2+5,ny*2+5,3);h=fbm(wx,wy,3)*.3+.5;}break;
+      case 'sand':h=fbm(nx*3,ny*3,5)*.5+.25;break;
+      case 'dash':h=fbm(nx,ny,2)*.2+Math.pow(Math.max(0,noise(nx*4,ny*4)),.5)*.65;break;
+      case 'lace-skip':{const sm=fbm(nx,ny,2)*.15,patch=fbm(nx*3,ny*3,4),mask=noise(nx*.7,ny*.7)>.45?1:0;h=sm+patch*mask*.45+.3;}break;
+      case 'cat-face':{const sb=fbm(nx,ny,2)*.1+.5,cell=noise(nx*.8,ny*.8),rr=cell>.55?fbm(nx*4,ny*4,4)*.5:0;h=sb+rr;}break;
+      case 'pebble':h=fbm(nx*.5,ny*.5,2)*.1+.3+Math.pow(noise(nx*5,ny*5),.3)*.7+fbm(nx*2,ny*2,3)*.2;break;
       default:h=.5;
     }
-    d[y*SZ+x]=h;
+    data[y*TEX+x]=h;
   }
-  return d;
+  return data;
 }
 function toNormal(hd,intensity){
-  const cv=document.createElement('canvas');cv.width=cv.height=SZ;
-  const cx=cv.getContext('2d'),im=cx.createImageData(SZ,SZ),str=intensity/25;
-  const g=(px,py)=>hd[((py%SZ+SZ)%SZ)*SZ+((px%SZ+SZ)%SZ)];
-  for(let y=0;y<SZ;y++)for(let x=0;x<SZ;x++){
+  const c=document.createElement('canvas');c.width=c.height=TEX;
+  const ctx=c.getContext('2d'),img=ctx.createImageData(TEX,TEX),str=intensity/28;
+  const g=(px,py)=>hd[((py%TEX+TEX)%TEX)*TEX+((px%TEX+TEX)%TEX)];
+  for(let y=0;y<TEX;y++) for(let x=0;x<TEX;x++){
     const tl=g(x-1,y-1),t=g(x,y-1),tr=g(x+1,y-1),l=g(x-1,y),r=g(x+1,y),bl=g(x-1,y+1),b=g(x,y+1),br=g(x+1,y+1);
     let dx=(tr+2*r+br-tl-2*l-bl)*str,dy=(bl+2*b+br-tl-2*t-tr)*str,dz=1;
-    const ln=Math.sqrt(dx*dx+dy*dy+dz*dz);
-    const i=(y*SZ+x)*4;
-    im.data[i]=(dx/ln*.5+.5)*255;im.data[i+1]=(-dy/ln*.5+.5)*255;im.data[i+2]=(dz/ln*.5+.5)*255;im.data[i+3]=255;
+    const len=Math.sqrt(dx*dx+dy*dy+dz*dz);dx/=len;dy/=len;dz/=len;
+    const i=(y*TEX+x)*4;img.data[i]=(dx*.5+.5)*255;img.data[i+1]=(-dy*.5+.5)*255;img.data[i+2]=(dz*.5+.5)*255;img.data[i+3]=255;
   }
-  cx.putImageData(im,0,0);return cv;
+  ctx.putImageData(img,0,0);return c;
 }
-function getTexture(type,scale,intensity){
-  const key=type+'_'+scale+'_'+intensity;
-  if(cache.has(key))return cache.get(key);
-  const cv=toNormal(genHeight(type,scale),intensity);
-  cache.set(key,cv);return cv;
-}
-
-// Pre-cache all types at default settings
-TYPES.forEach(t=>getTexture(t.id,S.scale,S.intensity));
-
-// ── Three.js ──
-const canvas=document.getElementById('c');
-const renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
-renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
-renderer.shadowMap.enabled=true;
-renderer.shadowMap.type=T.PCFSoftShadowMap;
-renderer.toneMapping=T.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.1;
-
-const scene=new T.Scene();
-scene.background=new T.Color(0x87CEEB);
-
-const camera=new T.PerspectiveCamera(42,innerWidth/innerHeight,.1,200);
-camera.position.set(18,10,22);
-
-const ctrl=new OrbitControls(camera,canvas);
-ctrl.target.set(0,3,0);
-ctrl.enableDamping=true;ctrl.dampingFactor=.06;
-ctrl.maxPolarAngle=Math.PI/2-.04;
-ctrl.minDistance=10;ctrl.maxDistance=50;
-ctrl.autoRotate=true;ctrl.autoRotateSpeed=.4;
-ctrl.update();
-
-// ── Lighting ──
-const sun=new T.DirectionalLight(0xffffff,3.5);
-sun.castShadow=true;
-sun.shadow.mapSize.set(1024,1024);
-sun.shadow.camera.left=-22;sun.shadow.camera.right=22;
-sun.shadow.camera.top=22;sun.shadow.camera.bottom=-22;
-sun.shadow.camera.near=.5;sun.shadow.camera.far=80;
-sun.shadow.bias=-.0004;sun.shadow.normalBias=.02;
-scene.add(sun);
-const amb=new T.AmbientLight(0xc0cce0,.3);scene.add(amb);
-const hemi=new T.HemisphereLight(0x87CEEB,0x3a5a2a,.22);scene.add(hemi);
-
-// ── Materials ──
-let nCv=getTexture(S.type,S.scale,S.intensity);
-let nTex=new T.CanvasTexture(nCv);
-nTex.wrapS=nTex.wrapT=T.RepeatWrapping;
-
-const stuccoMat=new T.MeshStandardMaterial({color:new T.Color(S.color),roughness:.72,metalness:0,normalMap:nTex,normalScale:new T.Vector2(1,1)});
-const roofMat=new T.MeshStandardMaterial({color:0x1a1a1a,roughness:.5,metalness:.05});
-const trimMat=new T.MeshStandardMaterial({color:0xd8d0c4,roughness:.6,metalness:0});
-const winMat=new T.MeshStandardMaterial({color:0x08141e,roughness:.05,metalness:.7});
-const stoneMat=new T.MeshStandardMaterial({color:0x8a7d6b,roughness:.92,metalness:0});
-const deckMat=new T.MeshStandardMaterial({color:0xb8a890,roughness:.82});
-const poolMat=new T.MeshStandardMaterial({color:0x0a3550,roughness:.9});
-const waterMat=new T.MeshStandardMaterial({color:0x1a90b8,roughness:.08,metalness:.12,transparent:true,opacity:.72});
-const colMat=new T.MeshStandardMaterial({color:0xe8e0d4,roughness:.55,metalness:0});
-const grassMat=new T.MeshStandardMaterial({color:0x3a6a28,roughness:.95});
-const hedgeMat=new T.MeshStandardMaterial({color:0x2a5a1e,roughness:.9});
-const driveMat=new T.MeshStandardMaterial({color:0x9a9080,roughness:.88});
-
-// ── Helpers ──
-function bx(w,h,d,m,x,y,z,cs=true){const o=new T.Mesh(new T.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=cs;o.receiveShadow=true;return o}
-function cy(r,h,m,x,y,z){const o=new T.Mesh(new T.CylinderGeometry(r,r+.02,h,14),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;return o}
-
-// ── House ──
-const house=new T.Group();
-
-// Main lower floor
-house.add(bx(14,4,10,stuccoMat,0,2,0));
-// Upper floor (offset left)
-house.add(bx(9,3.5,9,stuccoMat,-2.5,5.75,-.5));
-// Right wing
-house.add(bx(5.5,4,8,stuccoMat,8.75,2,-1));
-
-// Stone accent base
-house.add(bx(14.06,1.2,10.06,stoneMat,0,.6,0));
-house.add(bx(5.56,1.2,8.06,stoneMat,8.75,.6,-1));
-
-// Floor line trim
-house.add(bx(14.3,.12,10.3,trimMat,0,4.06,0,false));
-house.add(bx(5.7,.12,8.3,trimMat,8.75,4.06,-1,false));
-
-// Roof parapets (front edge)
-house.add(bx(14.4,.35,.18,roofMat,0,4.18,5.1,false));
-house.add(bx(9.4,.35,.18,roofMat,-2.5,7.6,4.1,false));
-house.add(bx(5.7,.35,.18,roofMat,8.75,4.18,3.1,false));
-// Roof caps
-house.add(bx(14.4,.08,10.4,roofMat,0,4.04,0,false));
-house.add(bx(9.4,.08,9.4,roofMat,-2.5,7.54,-.5,false));
-house.add(bx(5.7,.08,8.4,roofMat,8.75,4.04,-1,false));
-
-// Front windows (lower)
-for(const wx of[-4.5,-1,2.5])house.add(bx(2.2,2.2,.06,winMat,wx,2.2,5.04,false));
-// Window sills
-for(const wx of[-4.5,-1,2.5])house.add(bx(2.5,.08,.2,trimMat,wx,1.06,5.12,false));
-// Window headers
-for(const wx of[-4.5,-1,2.5])house.add(bx(2.5,.1,.15,trimMat,wx,3.35,5.1,false));
-// Upper windows
-for(const wx of[-4,-1])house.add(bx(1.8,1.8,.06,winMat,wx,5.8,4.04,false));
-for(const wx of[-4,-1])house.add(bx(2.1,.08,.18,trimMat,wx,4.88,4.1,false));
-// Side windows
-house.add(bx(.06,2.2,2,winMat,-7.04,2.2,1,false));
-house.add(bx(.06,1.8,1.6,winMat,-7.04,5.8,.5,false));
-// Right wing windows
-house.add(bx(2.4,2.2,.06,winMat,8.75,2.2,3.04,false));
-// Garage door
-house.add(bx(3.2,3,.06,winMat,8.75,1.5,-5.04,false));
-house.add(bx(3.5,.12,.15,trimMat,8.75,3.05,-5.08,false));
-// Front door
-house.add(bx(1.4,2.8,.06,winMat,.7,1.4,5.04,false));
-house.add(bx(1.7,.1,.15,trimMat,.7,2.85,5.1,false));
-
-// Entry columns
-house.add(cy(.18,4,colMat,-.5,2,5.6));
-house.add(cy(.18,4,colMat,1.9,2,5.6));
-// Column bases
-house.add(bx(.6,.3,.6,trimMat,-.5,.15,5.6,false));
-house.add(bx(.6,.3,.6,trimMat,1.9,.15,5.6,false));
-// Entry canopy
-house.add(bx(3.8,.1,1.6,roofMat,.7,4.02,5.8,false));
-house.add(bx(3.8,.08,.12,trimMat,.7,4.08,6.55,false));
-
-// Entry steps
-for(let i=0;i<3;i++)house.add(bx(3,.12,.5,deckMat,.7,.06+i*.12,5.6+(2-i)*.5,false));
-
-// Deck & pool area
-house.add(bx(18,.06,6,deckMat,0,.03,8.5));
-house.add(bx(8,1,3.2,poolMat,0,-.5,10.2));
-const water=new T.Mesh(new T.PlaneGeometry(7.7,2.9),waterMat);
-water.rotation.x=-Math.PI/2;water.position.set(0,.02,10.2);water.receiveShadow=true;
-house.add(water);
-house.add(bx(8.3,.06,3.5,trimMat,0,.04,10.2,false));
-
-// Hedges
-for(const[hx,hz]of[[-5.5,7],[5,7],[-6,3],[10,3]]){
-  house.add(bx(1.6,1.2,1.6,hedgeMat,hx,.6,hz));
+function miniPreview(type){
+  const sz=40,c=document.createElement('canvas');c.width=c.height=sz;c.className='type-preview';
+  const ctx=c.getContext('2d'),hd=new Float32Array(sz*sz),sc=(50/40)*(TYPES.find(t=>t.id===type)?.scale||1);
+  for(let y=0;y<sz;y++) for(let x=0;x<sz;x++){
+    const nx=x/sz*10*sc,ny=y/sz*10*sc;let h;
+    switch(type){
+      case 'smooth':h=fbm(nx+.15*fbm(nx*1.5,ny*1.5,2),ny,2)*.15+.5;break;
+      case 'santa-barbara':{const wx=nx+.3*fbm(nx*2,ny*2,2);h=fbm(wx,ny,2)*.3+.5;}break;
+      case 'sand':h=fbm(nx*3,ny*3,4)*.5+.25;break;
+      case 'dash':h=fbm(nx,ny,2)*.2+Math.pow(Math.max(0,noise(nx*4,ny*4)),.5)*.6;break;
+      case 'lace-skip':h=fbm(nx,ny,2)*.15+(noise(nx*.7,ny*.7)>.45?fbm(nx*3,ny*3,3)*.4:0)+.3;break;
+      case 'cat-face':h=fbm(nx,ny,2)*.1+.5+(noise(nx*.8,ny*.8)>.55?fbm(nx*4,ny*4,3)*.5:0);break;
+      case 'pebble':h=fbm(nx*.5,ny*.5,2)*.1+.3+Math.pow(noise(nx*5,ny*5),.3)*.6;break;
+      default:h=.5;
+    }
+    hd[y*sz+x]=h;
+  }
+  const img=ctx.createImageData(sz,sz);
+  for(let y=0;y<sz;y++) for(let x=0;x<sz;x++){
+    const gf=(px,py)=>hd[((py%sz+sz)%sz)*sz+((px%sz+sz)%sz)];
+    const tl=gf(x-1,y-1),t=gf(x,y-1),tr=gf(x+1,y-1),l=gf(x-1,y),r=gf(x+1,y),bl=gf(x-1,y+1),b=gf(x,y+1),br=gf(x+1,y+1);
+    let dx=(tr+2*r+br-tl-2*l-bl)*2,dy=(bl+2*b+br-tl-2*t-tr)*2,dz=1;
+    const len=Math.sqrt(dx*dx+dy*dy+dz*dz),i=(y*sz+x)*4;
+    img.data[i]=(dx/len*.5+.5)*255;img.data[i+1]=(-dy/len*.5+.5)*255;img.data[i+2]=(dz/len*.5+.5)*255;img.data[i+3]=255;
+  }
+  ctx.putImageData(img,0,0);return c;
 }
 
-// Driveway
-house.add(bx(5,.04,12,driveMat,8.75,.02,-7));
+const canvas=document.getElementById('viewport');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setSize(window.innerWidth,window.innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x87CEEB);
+const camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.1,300);camera.position.set(24,15,30);
+const controls=new OrbitControls(camera,canvas);
+controls.target.set(0,3,0);controls.enableDamping=true;controls.dampingFactor=.05;
+controls.maxPolarAngle=Math.PI/2-.03;controls.minDistance=14;controls.maxDistance=65;controls.update();
 
+const sun=new THREE.DirectionalLight(0xffffff,3);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.left=-28;sun.shadow.camera.right=28;sun.shadow.camera.top=28;sun.shadow.camera.bottom=-28;
+sun.shadow.camera.near=.5;sun.shadow.camera.far=120;sun.shadow.bias=-.0005;sun.shadow.normalBias=.02;scene.add(sun);
+const ambientLight=new THREE.AmbientLight(0xc8d8f0,.4);scene.add(ambientLight);
+const hemiLight=new THREE.HemisphereLight(0x87CEEB,0x3d5929,.3);scene.add(hemiLight);
+const accentLight=new THREE.PointLight(0xd4af72,.6,30);accentLight.position.set(-8,12,10);scene.add(accentLight);
+
+let normalCanvasA=toNormal(genHeight(S.type,S.scale),S.intensity);
+let normalTexA=new THREE.CanvasTexture(normalCanvasA);normalTexA.wrapS=normalTexA.wrapT=THREE.RepeatWrapping;
+let normalCanvasB=toNormal(genHeight(S.typeB,S.scale),S.intensity);
+let normalTexB=new THREE.CanvasTexture(normalCanvasB);normalTexB.wrapS=normalTexB.wrapT=THREE.RepeatWrapping;
+const stuccoMatA=new THREE.MeshStandardMaterial({color:new THREE.Color(S.color),roughness:.75,metalness:0,normalMap:normalTexA,normalScale:new THREE.Vector2(1.2,1.2)});
+const stuccoMatB=new THREE.MeshStandardMaterial({color:new THREE.Color(S.colorB),roughness:.88,metalness:0,normalMap:normalTexB,normalScale:new THREE.Vector2(1.2,1.2)});
+const roofMat=new THREE.MeshStandardMaterial({color:0x252525,roughness:.55,metalness:.1});
+const glassMat=new THREE.MeshPhysicalMaterial({color:0x9fd4f8,roughness:.04,metalness:0,transmission:.9,thickness:.15,ior:1.52,transparent:true,opacity:.93,side:THREE.DoubleSide});
+const deckMat=new THREE.MeshStandardMaterial({color:0xc0b0a0,roughness:.8});
+const groundMat=new THREE.MeshStandardMaterial({color:0x3d6e2e,roughness:.95});
+const waterMat=new THREE.MeshStandardMaterial({color:0x1a7faa,roughness:.08,metalness:.12,transparent:true,opacity:.7});
+const columnMat=new THREE.MeshStandardMaterial({color:0xeae2d8,roughness:.45,metalness:.06});
+const trimMat=new THREE.MeshStandardMaterial({color:0xb8975a,roughness:.4,metalness:.2});
+
+function box(w,h,d,mat,x,y,z,shadow=true){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
+  m.position.set(x,y,z);m.castShadow=shadow;m.receiveShadow=true;return m;
+}
+
+const house=new THREE.Group();
+const allStuccoMeshes=[];
+function addStucco(w,h,d,x,y,z){
+  const mA=box(w,h,d,stuccoMatA,x,y,z);
+  const mB=box(w,h,d,stuccoMatB,x,y,z);mB.visible=false;
+  house.add(mA);house.add(mB);allStuccoMeshes.push({mA,mB});
+}
+addStucco(14,3.8,10,0,1.9,0);
+addStucco(8,3.2,8.5,-3,5.5,-.5);
+addStucco(5.5,3.8,7.5,8.5,1.9,-.8);
+house.add(box(16,.18,12,roofMat,0,3.9,0));
+house.add(box(10,.18,10.5,roofMat,-3,7.2,-.5));
+house.add(box(7,.18,9.5,roofMat,8.5,3.9,-.8));
+house.add(box(5.2,.12,2.6,roofMat,.5,3.9,6.2));
+house.add(box(14,.06,10.05,trimMat,0,3.82,0,false));
+house.add(box(8,.06,8.55,trimMat,-3,7.12,-.5,false));
+house.add(box(3.2,2.8,.06,glassMat,-4,2,5.03,false));
+house.add(box(3.2,2.8,.06,glassMat,.5,2,5.03,false));
+house.add(box(3.2,2.8,.06,glassMat,5,2,5.03,false));
+house.add(box(5.5,2.4,.06,glassMat,-3,5.5,3.78,false));
+house.add(box(2.8,2.6,.06,glassMat,8.5,2,3.03,false));
+house.add(box(.06,2.6,3,glassMat,-7.03,2,1,false));
+for(const cx of[-1.8,2.8]){
+  const col=new THREE.Mesh(new THREE.CylinderGeometry(.2,.22,3.9,20),columnMat);
+  col.position.set(cx,1.95,6);col.castShadow=true;col.receiveShadow=true;
+  const cap=new THREE.Mesh(new THREE.BoxGeometry(.55,.12,.55),trimMat);cap.position.set(cx,3.96,6);
+  house.add(col);house.add(cap);
+}
+house.add(box(19,.12,7.5,deckMat,0,.06,8));
+const poolInnerMat=new THREE.MeshStandardMaterial({color:0x08304a,roughness:.9});
+house.add(box(8.5,1,4,poolInnerMat,0,-.5,11));
+const water=new THREE.Mesh(new THREE.PlaneGeometry(8.1,3.8),waterMat);
+water.rotation.x=-Math.PI/2;water.position.set(0,.02,11);water.receiveShadow=true;house.add(water);
+house.add(box(9,.08,4.4,deckMat,0,.04,11,false));
+for(let i=0;i<3;i++) house.add(box(3.2,.15,.65,deckMat,.5,.08+i*.15,5.55+(2-i)*.62,false));
+const hedgeMat=new THREE.MeshStandardMaterial({color:0x2d5a1e,roughness:.95});
+for(const hx of[-6,-3,0,3,6]){
+  const hg=new THREE.Mesh(new THREE.BoxGeometry(.8,.45,1.2),hedgeMat);
+  hg.position.set(hx,.22,12.8);hg.receiveShadow=true;house.add(hg);
+}
+const longHedge=new THREE.Mesh(new THREE.BoxGeometry(.8,.55,14),hedgeMat);
+longHedge.position.set(-8.4,.27,2);longHedge.castShadow=true;longHedge.receiveShadow=true;house.add(longHedge);
 scene.add(house);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(140,140),groundMat);
+ground.rotation.x=-Math.PI/2;ground.position.y=-.01;ground.receiveShadow=true;scene.add(ground);
+const pathMat=new THREE.MeshStandardMaterial({color:0xd8cec0,roughness:.85});
+scene.add(box(4,.01,10,pathMat,.5,0,10.5,false));
 
-// Ground
-const ground=new T.Mesh(new T.PlaneGeometry(100,100),grassMat);
-ground.rotation.x=-Math.PI/2;ground.position.y=-.01;ground.receiveShadow=true;
-scene.add(ground);
-
-// ── Lighting update ──
-function updateLight(){
-  const t=S.time/100,ang=t*Math.PI,el=Math.sin(ang),hz=Math.cos(ang);
-  sun.position.set(hz*35,Math.max(.3,el*35),-10);
-  sun.lookAt(0,0,0);
-  const w=1-el;
-  sun.color.setRGB(1,1-w*.25,1-w*.5);
-  sun.intensity=Math.max(.1,el*5);
-  amb.intensity=.1+el*.35;
-  hemi.intensity=.08+el*.22;
-  renderer.toneMappingExposure=.5+el*.9;
-  const sky=new T.Color();
-  if(t<.12)sky.lerpColors(new T.Color(0x0a0618),new T.Color(0xd46a3a),t/.12);
-  else if(t<.3)sky.lerpColors(new T.Color(0xd46a3a),new T.Color(0x7db8d8),((t-.12)/.18));
-  else if(t<.7)sky.set(0x7db8d8);
-  else if(t<.88)sky.lerpColors(new T.Color(0x7db8d8),new T.Color(0xd45a2a),((t-.7)/.18));
-  else sky.lerpColors(new T.Color(0xd45a2a),new T.Color(0x06040e),((t-.88)/.12));
+function updateLighting(){
+  const t=S.time/100,angle=t*Math.PI,elev=Math.sin(angle),horiz=Math.cos(angle),dist=45;
+  sun.position.set(horiz*dist,Math.max(.5,elev*dist),-15);sun.lookAt(0,0,0);
+  const warmth=1-elev;sun.color.setRGB(1,1-warmth*.3,1-warmth*.55);
+  sun.intensity=Math.max(.06,elev*4.5);
+  ambientLight.intensity=.12+elev*.38;hemiLight.intensity=.08+elev*.28;
+  renderer.toneMappingExposure=.55+elev*.85;
+  const sky=new THREE.Color();
+  if(t<.12) sky.lerpColors(new THREE.Color(0x0a041c),new THREE.Color(0xff7744),t/.12);
+  else if(t<.3) sky.lerpColors(new THREE.Color(0xff7744),new THREE.Color(0x87CEEB),(t-.12)/.18);
+  else if(t<.68) sky.set(0x87CEEB);
+  else if(t<.85) sky.lerpColors(new THREE.Color(0x87CEEB),new THREE.Color(0xff6633),(t-.68)/.17);
+  else sky.lerpColors(new THREE.Color(0xff6633),new THREE.Color(0x03010a),(t-.85)/.15);
   scene.background=sky;
-  scene.fog=new T.FogExp2(sky,.006);
+}
+function updateTextureA(){
+  const hd=genHeight(S.type,S.scale);normalCanvasA=toNormal(hd,S.intensity);
+  normalTexA.image=normalCanvasA;normalTexA.needsUpdate=true;
+  stuccoMatA.roughness=Math.min(1,S.rough/100*1.1);
+}
+function updateTextureB(){
+  const hd=genHeight(S.typeB,S.scale);normalCanvasB=toNormal(hd,S.intensity);
+  normalTexB.image=normalCanvasB;normalTexB.needsUpdate=true;
+  stuccoMatB.roughness=Math.min(1,S.rough/100*1.1);
 }
 
-// ── Texture update ──
-let debounceTimer=0;
-function updateTexNow(){
-  nCv=getTexture(S.type,S.scale,S.intensity);
-  nTex.image=nCv;nTex.needsUpdate=true;
-  const info=TYPES.find(x=>x.id===S.type);
-  if(info)stuccoMat.roughness=info.r;
-}
-function updateTexDebounced(){
-  clearTimeout(debounceTimer);
-  debounceTimer=setTimeout(updateTexNow,120);
-}
-
-// ── UI ──
-const tg=document.getElementById('tg');
+// Build UI
+const typeGrid=document.getElementById('typeGrid');
 TYPES.forEach(t=>{
-  const b=document.createElement('div');
-  b.className='tb'+(t.id===S.type?' a':'');
-  b.innerHTML=t.name+'<span>'+t.sub+'</span>';
-  b.onclick=()=>{
-    tg.querySelectorAll('.tb').forEach(x=>x.classList.remove('a'));
-    b.classList.add('a');S.type=t.id;updateTexNow();
-  };
-  tg.appendChild(b);
+  const btn=document.createElement('button');btn.className='type-btn'+(t.id===S.type?' active':'');
+  btn.appendChild(miniPreview(t.id));
+  const info=document.createElement('div');
+  info.innerHTML='<span class="type-name">'+t.name+'</span><span class="type-desc">'+t.desc+'</span>';
+  btn.appendChild(info);
+  btn.onclick=()=>{typeGrid.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');S.type=t.id;updateTextureA();};
+  typeGrid.appendChild(btn);
 });
+const typeGridB=document.getElementById('typeGridB');
+TYPES.forEach(t=>{
+  const btn=document.createElement('button');btn.className='type-btn'+(t.id===S.typeB?' active':'');
+  btn.appendChild(miniPreview(t.id));
+  const info=document.createElement('div');
+  info.innerHTML='<span class="type-name">'+t.name+'</span><span class="type-desc">'+t.desc+'</span>';
+  btn.appendChild(info);
+  btn.onclick=()=>{typeGridB.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');S.typeB=t.id;updateTextureB();};
+  typeGridB.appendChild(btn);
+});
+const presetGrid=document.getElementById('presetGrid');
+PRESETS.forEach(p=>{
+  const sw=document.createElement('div');sw.className='preset-swatch'+(p.h.toUpperCase()===S.color.toUpperCase()?' active':'');
+  sw.style.background=p.h;sw.dataset.name=p.n;sw.title=p.n;
+  sw.onclick=()=>{presetGrid.querySelectorAll('.preset-swatch').forEach(s=>s.classList.remove('active'));sw.classList.add('active');S.color=p.h;stuccoMatA.color.set(p.h);document.getElementById('colorPicker').value=p.h;document.getElementById('hexLabel').textContent=p.h.toUpperCase();};
+  presetGrid.appendChild(sw);
+});
+document.getElementById('colorPicker').addEventListener('input',e=>{S.color=e.target.value;stuccoMatA.color.set(S.color);document.getElementById('hexLabel').textContent=S.color.toUpperCase();presetGrid.querySelectorAll('.preset-swatch').forEach(s=>s.classList.remove('active'));});
+document.getElementById('colorPickerB').addEventListener('input',e=>{S.colorB=e.target.value;stuccoMatB.color.set(S.colorB);});
+document.getElementById('scaleSlider').addEventListener('input',e=>{S.scale=+e.target.value;document.getElementById('scaleVal').textContent=S.scale;updateTextureA();if(S.compareOn)updateTextureB();});
+document.getElementById('intensitySlider').addEventListener('input',e=>{S.intensity=+e.target.value;document.getElementById('intensityVal').textContent=S.intensity;updateTextureA();if(S.compareOn)updateTextureB();});
+document.getElementById('roughSlider').addEventListener('input',e=>{S.rough=+e.target.value;document.getElementById('roughVal').textContent=S.rough;stuccoMatA.roughness=Math.min(1,S.rough/100*1.1);stuccoMatB.roughness=Math.min(1,S.rough/100*1.1);});
 
-const cg=document.getElementById('cg');
-COLORS.forEach(c=>{
-  const d=document.createElement('div');
-  d.className='cs'+(c.h.toUpperCase()===S.color.toUpperCase()?' a':'');
-  d.style.background=c.h;d.title=c.n;
-  d.onclick=()=>{
-    cg.querySelectorAll('.cs').forEach(x=>x.classList.remove('a'));
-    d.classList.add('a');S.color=c.h;stuccoMat.color.set(c.h);
-    document.getElementById('cc').value=c.h;
-    document.getElementById('cv').textContent=c.h.toUpperCase();
-  };
-  cg.appendChild(d);
-});
-const cpw=document.createElement('div');cpw.className='cp';
-cpw.innerHTML='<input type="color" id="cc" value="'+S.color+'"><span id="cv">'+S.color.toUpperCase()+'</span>';
-cg.appendChild(cpw);
-document.getElementById('cc').addEventListener('input',e=>{
-  S.color=e.target.value;stuccoMat.color.set(S.color);
-  document.getElementById('cv').textContent=S.color.toUpperCase();
-  cg.querySelectorAll('.cs').forEach(x=>x.classList.remove('a'));
-});
-
-document.getElementById('rs').addEventListener('input',e=>{
-  S.scale=+e.target.value;document.getElementById('vs').textContent=S.scale;updateTexDebounced();
-});
-document.getElementById('ri').addEventListener('input',e=>{
-  S.intensity=+e.target.value;document.getElementById('vi').textContent=S.intensity;updateTexDebounced();
-});
-document.getElementById('rt').addEventListener('input',e=>{
-  S.time=+e.target.value;
-  const hrs=6+(S.time/100)*15,h=hrs|0,m=Math.round((hrs-h)*60);
+function setTime(val){
+  S.time=val;document.getElementById('timeSlider').value=val;
+  const hrs=6+(val/100)*15,h=Math.floor(hrs),m=Math.round((hrs-h)*60);
   const p=h>=12?'PM':'AM',h12=h>12?h-12:h||12;
-  document.getElementById('tl').textContent=h12+':'+String(m).padStart(2,'0')+' '+p;
-  const names=['Dawn','Sunrise','Morning','Late Morning','Noon','Afternoon','Golden Hour','Sunset','Twilight'];
-  document.getElementById('tn').textContent=names[Math.min(8,(S.time/12)|0)];
-  updateLight();
+  document.getElementById('timeLabel').textContent=h12+':'+(String(m).padStart(2,'0'))+' '+p;
+  const names=['Dawn','Early Morn','Morning','Late Morn','Noon','Afternoon','Golden Hour','Sunset','Twilight','Night'];
+  document.getElementById('timeName').textContent=names[Math.min(9,Math.floor(val/11))];
+  updateLighting();
+}
+document.getElementById('timeSlider').addEventListener('input',e=>setTime(+e.target.value));
+document.querySelectorAll('.time-preset-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{document.querySelectorAll('.time-preset-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');setTime(+btn.dataset.val);});
 });
 
-window.addEventListener('resize',()=>{
-  camera.aspect=innerWidth/innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth,innerHeight);
+const compEl=document.getElementById('compareSlider');
+document.getElementById('compareToggle').addEventListener('change',e=>{
+  S.compareOn=e.target.checked;
+  document.getElementById('compareBPanel').classList.toggle('visible',S.compareOn);
+  compEl.style.display=S.compareOn?'block':'none';
+  compareX=window.innerWidth*0.5;compEl.style.left=compareX+'px';
 });
+let dragging=false;
+compEl.addEventListener('mousedown',()=>dragging=true);
+window.addEventListener('mousemove',e=>{if(!dragging)return;compareX=Math.max(100,Math.min(window.innerWidth-100,e.clientX));compEl.style.left=compareX+'px';});
+window.addEventListener('mouseup',()=>dragging=false);
+compEl.addEventListener('touchstart',e=>{dragging=true;e.preventDefault();},{passive:false});
+window.addEventListener('touchmove',e=>{if(!dragging)return;compareX=Math.max(100,Math.min(window.innerWidth-100,e.touches[0].clientX));compEl.style.left=compareX+'px';});
+window.addEventListener('touchend',()=>dragging=false);
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
 
-canvas.addEventListener('pointerdown',()=>{ctrl.autoRotate=false});
-
-// ── Init ──
-updateLight();
-updateTexNow();
-
-(function loop(){
-  requestAnimationFrame(loop);
-  ctrl.update();
-  water.position.y=.02+Math.sin(performance.now()*.001)*.004;
-  renderer.render(scene,camera);
+updateLighting();updateTextureA();
+let waterTime=0;
+(function animate(){
+  requestAnimationFrame(animate);controls.update();
+  waterTime+=.007;water.position.y=.02+Math.sin(waterTime)*.005;
+  if(S.compareOn){
+    renderer.setScissorTest(true);
+    renderer.setScissor(0,0,compareX,innerHeight);renderer.setViewport(0,0,innerWidth,innerHeight);
+    for(const{mA,mB}of allStuccoMeshes){mA.visible=true;mB.visible=false;}
+    renderer.render(scene,camera);
+    renderer.setScissor(compareX,0,innerWidth-compareX,innerHeight);renderer.setViewport(0,0,innerWidth,innerHeight);
+    for(const{mA,mB}of allStuccoMeshes){mA.visible=false;mB.visible=true;}
+    renderer.render(scene,camera);
+    renderer.setScissorTest(false);
+    for(const{mA,mB}of allStuccoMeshes){mA.visible=true;mB.visible=false;}
+  } else {
+    renderer.setScissorTest(false);for(const{mA}of allStuccoMeshes)mA.visible=true;
+    renderer.render(scene,camera);
+  }
 })();
 </script>
 </body>
