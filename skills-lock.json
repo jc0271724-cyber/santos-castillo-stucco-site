@@ -29,7 +29,7 @@
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
       "sourceType": "github",
       "skillPath": ".claude/skills/design-system/SKILL.md",
-      "computedHash": "49b8308dc428c66b0983f4b3d102c522c495f62538121064d1e82a040b1afd2c"
+      "computedHash": "5ab00848e1ee08ebd21ee8b62d9fbeade1da45594df503531ffd458d91838763"
     },
     "ckm:slides": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
@@ -41,7 +41,7 @@
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
       "sourceType": "github",
       "skillPath": ".claude/skills/ui-styling/SKILL.md",
-      "computedHash": "9ae38e4e201f338b6150e462b98a2db0f2ae7c180c77e8cfb1d33eba9d33bf33"
+      "computedHash": "c51b96d3283379d3c7d5e1f9cc6d255f7fae6a79092528b4c0a752a34309752d"
     },
     "dispatching-parallel-agents": {
       "source": "obra/superpowers",
