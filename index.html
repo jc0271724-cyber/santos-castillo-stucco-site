@@ -116,6 +116,14 @@
     .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s infinite;}
     @keyframes scrollPulse{0%,100%{opacity:.4;}50%{opacity:1;}}
 
+    /* HERO 3D HOUSE */
+    .hero-3d{position:relative;width:min(560px,92vw);height:clamp(200px,34vh,360px);margin:2.2rem auto 0;touch-action:none;cursor:grab;}
+    .hero-3d:active{cursor:grabbing;}
+    .hero-3d canvas{display:block;width:100%;height:100%;outline:none;}
+    .hero-3d-hint{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-family:'Inter',sans-serif;font-size:.55rem;letter-spacing:2.5px;text-transform:uppercase;color:rgba(232,228,220,0.5);pointer-events:none;transition:opacity .5s;}
+    .hero-3d-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:1rem;font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:1px;color:rgba(232,228,220,0.55);}
+    @media(max-width:600px){.hero-3d{height:clamp(170px,26vh,250px);margin-top:1.6rem;}}
+
     /* STATS */
     .intro-strip{background:var(--navy);display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(184,151,90,0.2);}
     .intro-stat{padding:2.5rem 2rem;text-align:center;border-right:1px solid rgba(184,151,90,0.15);}
@@ -425,6 +433,7 @@
   <ul class="nav-links" id="navLinks">
     <li><a href="#about" data-en="About" data-es="Nosotros">About</a></li>
     <li><a href="#services" data-en="Services" data-es="Servicios">Services</a></li>
+    <li><a href="#stucco-viewer" data-en="3D Viewer" data-es="Visor 3D">3D Viewer</a></li>
     <li><a href="#gallery" data-en="Portfolio" data-es="Portafolio">Portfolio</a></li>
     <li><a href="#reviews" data-en="Reviews" data-es="Opiniones">Reviews</a></li>
     <li><a href="#faq" data-en="FAQ" data-es="Preguntas">FAQ</a></li>
@@ -445,6 +454,10 @@
     <div class="hero-actions">
       <a href="#contact" class="btn-gold" data-en="Request a Free Estimate" data-es="Solicite un Presupuesto Gratis">Request a Free Estimate</a>
       <a href="#gallery" class="btn-ghost" data-en="View Our Portfolio" data-es="Ver Nuestro Portafolio">View Our Portfolio</a>
+    </div>
+    <div class="hero-3d" id="hero3d" role="img" aria-label="Interactive 3D model of a stucco house. Click and drag to rotate it.">
+      <canvas id="house-canvas"></canvas>
+      <span class="hero-3d-hint" id="hero3dHint" data-en="Drag to rotate" data-es="Arrastra para girar">Drag to rotate</span>
     </div>
   </div>
   <div class="hero-scroll">
@@ -497,6 +510,23 @@
       <div class="service-tile"><div class="tile-num">04</div><h3 class="tile-title" data-en="Full Remodeling" data-es="Remodelaci&oacute;n Completa">Full Remodeling</h3><p class="tile-desc" data-en="Complete interior and exterior remodels — kitchens, bathrooms, living spaces — executed with the same craftsmanship as our exterior work." data-es="Remodelaciones interiores y exteriores completas — cocinas, ba&ntilde;os, espacios de vida — ejecutadas con la misma maestr&iacute;a que nuestro trabajo exterior.">Complete interior and exterior remodels — kitchens, bathrooms, living spaces — executed with the same craftsmanship as our exterior work.</p></div>
       <div class="service-tile"><div class="tile-num">05</div><h3 class="tile-title" data-en="Residential" data-es="Residencial">Residential</h3><p class="tile-desc" data-en="From custom new builds to estate renovations, we bring the same level of care to every home, regardless of project size." data-es="Desde construcciones nuevas personalizadas hasta renovaciones de propiedades, brindamos el mismo nivel de cuidado a cada hogar, sin importar el tama&ntilde;o del proyecto.">From custom new builds to estate renovations, we bring the same level of care to every home, regardless of project size.</p></div>
       <div class="service-tile"><div class="tile-num">06</div><h3 class="tile-title" data-en="Commercial" data-es="Comercial">Commercial</h3><p class="tile-desc" data-en="Hotels, retail centers, and office complexes trust S. Castillo to deliver commercial-grade finishing on schedule and to specification." data-es="Hoteles, centros comerciales y complejos de oficinas conf&iacute;an en S. Castillo para entregar acabados de grado comercial a tiempo y seg&uacute;n las especificaciones.">Hotels, retail centers, and office complexes trust S. Castillo to deliver commercial-grade finishing on schedule and to specification.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3D STUCCO VIEWER -->
+<section class="section" id="stucco-viewer" style="background:var(--navy);padding:5rem 3rem;">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:2.5rem;">
+      <div class="eyebrow" style="color:var(--gold);justify-content:center;" data-en="Interactive Experience" data-es="Experiencia Interactiva">Interactive Experience</div>
+      <h2 class="display-title" style="color:var(--white);" data-en="Explore Our Stucco Finishes in 3D" data-es="Explore Nuestros Acabados de Estuco en 3D">Explore Our Stucco<br>Finishes in <em>3D</em></h2>
+      <p style="font-size:.9rem;color:rgba(232,228,220,0.55);margin-top:1rem;line-height:1.8;font-weight:300;max-width:640px;margin-left:auto;margin-right:auto;" data-en="Rotate the model, change stucco styles, adjust colors, and see how different textures look under varying lighting conditions — from sunrise to sunset." data-es="Gire el modelo, cambie estilos de estuco, ajuste colores y vea c&oacute;mo se ven las texturas bajo diferentes condiciones de luz — desde el amanecer hasta el atardecer.">Rotate the model, change stucco styles, adjust colors, and see how different textures look under varying lighting conditions — from sunrise to sunset.</p>
+    </div>
+    <div class="reveal" style="position:relative;width:100%;max-width:1100px;margin:0 auto;border-radius:16px;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,0.4);border:1px solid rgba(184,151,90,0.2);">
+      <iframe src="stucco-viewer.html" style="width:100%;height:600px;border:none;display:block;" loading="lazy" title="3D Stucco Texture Viewer"></iframe>
+    </div>
+    <div class="reveal" style="text-align:center;margin-top:2rem;">
+      <a href="stucco-viewer.html" target="_blank" class="btn-gold" data-en="Open Full Viewer" data-es="Abrir Visor Completo">Open Full Viewer</a>
     </div>
   </div>
 </section>
@@ -1394,6 +1424,149 @@
       if (e.key === 'Enter') send();
     });
   })();
+</script>
+
+<!-- ============================================================= -->
+<!--  Interactive 3D Stucco House  (Three.js WebGPU + TSL shaders)  -->
+<!--  Auto-spins, and visitors can click/drag to rotate it.        -->
+<!-- ============================================================= -->
+<script type="importmap">
+{
+  "imports": {
+    "three":         "https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.webgpu.js",
+    "three/webgpu":  "https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.webgpu.js",
+    "three/tsl":     "https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.tsl.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.171.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+  // 1) Pull in Three.js (WebGPU build), a few TSL shader helpers, and the drag controls.
+  import * as THREE from 'three/webgpu';
+  import { color, mix, positionLocal, mx_noise_float, mx_fractal_noise_float } from 'three/tsl';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+  const container = document.getElementById('hero3d');
+  const canvas    = document.getElementById('house-canvas');
+
+  // If someone prefers reduced motion, we turn OFF the auto-spin (drag still works).
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Build everything. If the device can't do 3D, show a small text note instead of crashing.
+  buildHouse().catch((err) => {
+    console.error('3D house could not load:', err);
+    if (container) container.innerHTML =
+      '<div class="hero-3d-fallback">3D preview isn’t available on this device.</div>';
+  });
+
+  async function buildHouse() {
+    // 2) Scene + camera (the "movie set" and the "eye" looking at it).
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, aspect(), 0.1, 100);
+    camera.position.set(3.4, 2.1, 4.8);
+
+    // 3) Renderer. WebGPURenderer uses the fast WebGPU when available and
+    //    automatically falls back to WebGL on older phones — broad support, no extra code.
+    const renderer = new THREE.WebGPURenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // cap for sharp-but-light rendering
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    await renderer.init();
+    resize();
+
+    // 4) Lighting: warm "sky" + a sun, plus a soft cool fill so the shaded side isn't black.
+    scene.add(new THREE.HemisphereLight(0xfff3e0, 0x2a2620, 0.9));
+    const sun = new THREE.DirectionalLight(0xfff0d8, 2.2); sun.position.set(4, 6, 3); scene.add(sun);
+    const fill = new THREE.DirectionalLight(0xbcd0ff, 0.5); fill.position.set(-4, 2, -3); scene.add(fill);
+
+    const house = new THREE.Group();
+
+    // 5) STUCCO WALLS — the colour/texture is generated on the GPU with TSL (no image to download).
+    const wallMat = new THREE.MeshStandardNodeMaterial();
+    const cream = color(0xEDE3D0), tan = color(0xCBB084);
+    const blotch  = mx_fractal_noise_float(positionLocal.mul(2.2), 4, 2.0, 0.5).mul(0.5).add(0.5); // soft colour patches
+    const speckle = mx_noise_float(positionLocal.mul(45.0)).mul(0.5).add(0.5);                     // fine plaster grain
+    wallMat.colorNode     = mix(cream, tan, blotch.mul(0.7)).mul(speckle.mul(0.12).add(0.88));
+    wallMat.roughnessNode = speckle.mul(0.25).add(0.7); // matte and slightly uneven, like real stucco
+    wallMat.metalness     = 0.0;
+    const walls = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1.4, 1.8), wallMat);
+    walls.position.y = 0.7;
+    house.add(walls);
+
+    // 6) ROOF — a simple 4-sided pyramid in a terracotta tone.
+    const roofMat = new THREE.MeshStandardNodeMaterial();
+    const roofN = mx_fractal_noise_float(positionLocal.mul(6.0), 3, 2.0, 0.5).mul(0.5).add(0.5);
+    roofMat.colorNode = mix(color(0x9c4a2f), color(0x7b3a25), roofN);
+    roofMat.roughness = 0.85;
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(1.75, 1.1, 4), roofMat);
+    roof.rotation.y = Math.PI / 4;   // turn 45° so the roof lines up over the square walls
+    roof.position.y = 1.95;
+    house.add(roof);
+
+    // 7) A door and two windows so it clearly reads as a house.
+    const doorMat = new THREE.MeshStandardNodeMaterial(); doorMat.colorNode = color(0x4a3526); doorMat.roughness = 0.6;
+    const door = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.8, 0.06), doorMat);
+    door.position.set(0, 0.4, 0.92);
+    house.add(door);
+
+    const winMat = new THREE.MeshStandardNodeMaterial();
+    winMat.colorNode = color(0x16202b); winMat.roughness = 0.15; winMat.metalness = 0.4;
+    const winGeo = new THREE.BoxGeometry(0.42, 0.42, 0.06);
+    for (const x of [-0.62, 0.62]) {
+      const w = new THREE.Mesh(winGeo, winMat);
+      w.position.set(x, 0.86, 0.92);
+      house.add(w);
+    }
+
+    // 8) A soft round shadow under the house (alpha fades out toward the edge) to ground it.
+    const shadowMat = new THREE.MeshBasicNodeMaterial({ transparent: true });
+    shadowMat.colorNode = color(0x000000);
+    const radius = 1.8;
+    const dist = positionLocal.xy.length().div(radius).clamp(0, 1);
+    shadowMat.opacityNode = dist.oneMinus().pow(2.0).mul(0.33);
+    const shadow = new THREE.Mesh(new THREE.CircleGeometry(radius, 48), shadowMat);
+    shadow.rotation.x = -Math.PI / 2;
+    shadow.position.y = 0.001;
+    house.add(shadow);
+
+    scene.add(house);
+
+    // 9) CONTROLS: auto-spin + click/drag to rotate. Zoom and pan are disabled on purpose.
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; controls.dampingFactor = 0.08;
+    controls.enableZoom = false;   controls.enablePan = false;
+    controls.rotateSpeed = 0.9;
+    controls.autoRotate = !reduceMotion; controls.autoRotateSpeed = 0.9;
+    controls.minPolarAngle = 0.7;  controls.maxPolarAngle = 1.45; // keep a pleasant viewing height
+    controls.target.set(0, 0.9, 0);
+    controls.update();
+
+    // Fade the "Drag to rotate" hint away once they start interacting.
+    const hint = document.getElementById('hero3dHint');
+    controls.addEventListener('start', () => { if (hint) hint.style.opacity = '0'; });
+
+    // 10) Render loop — but only run it while the house is on screen and the tab is active.
+    //     This keeps phone batteries (and the page) light.
+    let running = false, inView = true, hidden = document.hidden;
+    const loop = () => { controls.update(); renderer.render(scene, camera); };
+    const sync = () => {
+      const go = inView && !hidden;
+      if (go && !running) { running = true; renderer.setAnimationLoop(loop); }
+      else if (!go && running) { running = false; renderer.setAnimationLoop(null); }
+    };
+    new IntersectionObserver((e) => { inView = e[0].isIntersecting; sync(); }, { threshold: 0.05 }).observe(container);
+    document.addEventListener('visibilitychange', () => { hidden = document.hidden; sync(); });
+    new ResizeObserver(resize).observe(container);
+    sync();
+
+    // --- small helpers ---
+    function aspect() { const r = container.getBoundingClientRect(); return Math.max(r.width, 1) / Math.max(r.height, 1); }
+    function resize() {
+      const r = container.getBoundingClientRect();
+      renderer.setSize(r.width, r.height, false);
+      camera.aspect = aspect();
+      camera.updateProjectionMatrix();
+    }
+  }
 </script>
 </body>
 </html>
