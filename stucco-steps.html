@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>How Stucco Is Built | S. Castillo Construction, Houston TX</title>
+<meta name="description" content="See every layer of a real three-coat stucco wall in 3D: framing, sheathing, weather barrier, metal lath, scratch coat, brown coat and finish coat. S. Castillo Construction, Houston TX.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D1117;--gold:#B8975A;--gold-light:#D4AF72;--platinum:#E8E4DC;--muted:rgba(232,228,220,.55);--panel:rgba(13,17,23,.9);--line:rgba(184,151,90,.22)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',system-ui,sans-serif;color:var(--platinum);background:radial-gradient(120% 90% at 50% 25%,#1b2433 0%,#0d121b 60%,#07090e 100%)}
+#view{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#topbar{position:fixed;top:0;left:0;right:0;height:56px;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(13,17,23,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:30px;height:30px}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#fff;line-height:1.1}
+.brand-sub{font-size:.52rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500}
+.top-right{display:flex;align-items:center;gap:14px}
+.back{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;font-weight:500}
+.back:hover{color:var(--gold)}
+.cta{background:var(--gold);color:var(--navy);font-size:.62rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:.55rem 1.1rem;text-decoration:none}
+.cta:hover{background:var(--gold-light)}
+#markers{position:fixed;inset:0;pointer-events:none;z-index:5}
+.mk{position:absolute;left:0;top:0;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;border:1.5px solid var(--gold);background:rgba(13,17,23,.85);color:var(--gold-light);font-size:.7rem;font-weight:600;display:flex;align-items:center;justify-content:center;pointer-events:auto;cursor:pointer;transition:opacity .25s,background .2s,color .2s,transform .2s;will-change:transform}
+.mk.on{background:var(--gold);color:var(--navy)}
+.mk.hide{opacity:0;pointer-events:none}
+#style{position:fixed;left:14px;top:70px;z-index:10;width:236px;background:var(--panel);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+#style summary{list-style:none;cursor:pointer;padding:11px 14px;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--gold);display:flex;justify-content:space-between;align-items:center}
+#style summary::-webkit-details-marker{display:none}
+#style summary::after{content:'+';font-size:1rem;line-height:1}
+#style[open] summary::after{content:'\2013'}
+.sbody{padding:2px 14px 14px;display:flex;flex-direction:column;gap:13px}
+.lbl{font-size:.58rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.chips2{display:flex;flex-wrap:wrap;gap:6px}
+.chips2 button{font:inherit;font-size:.68rem;padding:.38rem .7rem;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:var(--platinum);cursor:pointer}
+.chips2 button.on{background:rgba(184,151,90,.18);border-color:rgba(184,151,90,.6);color:#fff}
+.sw{display:flex;gap:8px;flex-wrap:wrap}
+.sw button{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+.sw button.on{border-color:#fff}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:rgba(255,255,255,.14);border-radius:2px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:#fff}
+#sheet{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(780px,calc(100% - 24px));z-index:10;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px 12px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+.kicker{font-size:.6rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:600}
+#st{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.65rem;line-height:1.15;margin:3px 0 6px;color:#fff}
+#sd{font-size:.86rem;line-height:1.55;color:rgba(232,228,220,.82);font-weight:300;min-height:3.9em}
+.facts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.facts span{font-size:.66rem;letter-spacing:.4px;padding:.32rem .65rem;border:1px solid var(--line);border-radius:6px;color:var(--gold-light);background:rgba(184,151,90,.07)}
+#pills{display:flex;gap:6px;margin-top:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+#pills::-webkit-scrollbar{display:none}
+#pills button{flex:1 0 auto;font:inherit;font-size:.68rem;padding:.5rem .7rem;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);color:var(--muted);cursor:pointer;white-space:nowrap}
+#pills button b{color:var(--gold);margin-right:5px;font-weight:600}
+#pills button.on{background:rgba(184,151,90,.17);border-color:rgba(184,151,90,.65);color:#fff}
+#pills button.done{color:var(--platinum)}
+#ctl{display:flex;gap:8px;margin-top:10px;align-items:center}
+#ctl button{font:inherit;font-size:.64rem;letter-spacing:1.6px;text-transform:uppercase;font-weight:600;padding:.55rem 1rem;border-radius:8px;cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--platinum)}
+#ctl button:hover{border-color:var(--gold)}
+#ctl #play{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+#ctl .fine{margin-left:auto;font-size:.56rem;line-height:1.4;color:rgba(232,228,220,.38);text-align:right;max-width:330px}
+#fallback{position:fixed;inset:56px 0 0;display:none;align-items:center;justify-content:center;text-align:center;padding:2rem;color:var(--muted);font-size:.9rem;z-index:2}
+@media(max-width:640px){
+  #topbar{padding:0 12px}.back{display:none}.brand-name{font-size:.82rem;letter-spacing:2px}
+  #style{left:10px;top:64px;width:200px}
+  #sheet{padding:13px 14px 10px}
+  #st{font-size:1.35rem}#sd{font-size:.8rem;min-height:0}
+  #pills button span{display:none}#pills button{padding:.5rem .8rem}
+  #ctl .fine{display:none}#ctl{justify-content:space-between}
+}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <a class="brand" href="index.html">
+    <svg viewBox="0 0 32 32" fill="none"><rect x=".5" y=".5" width="31" height="31" stroke="#B8975A"/><text x="16" y="22" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="14" fill="#B8975A">SC</text></svg>
+    <div><div class="brand-name">S. Castillo</div><div class="brand-sub">Construction</div></div>
+  </a>
+  <div class="top-right">
+    <a class="back" href="index.html">&larr; Back to site</a>
+    <a class="cta" href="index.html#contact">Free Estimate</a>
+  </div>
+</div>
+
+<canvas id="view"></canvas>
+<div id="markers"></div>
+<div id="fallback">3D isn&rsquo;t available on this device. Please try another browser or phone.</div>
+
+<details id="style">
+  <summary>Finish &amp; light</summary>
+  <div class="sbody">
+    <div><div class="lbl">Finish texture</div><div class="chips2" id="types"></div></div>
+    <div><div class="lbl">Color</div><div class="sw" id="colors"></div></div>
+    <div><div class="lbl">Light: head-on to sideways (sideways shows texture)</div><input type="range" id="light" min="10" max="85" value="70"></div>
+  </div>
+</details>
+
+<div id="sheet">
+  <div class="kicker">Step <span id="sn">7</span> of 7</div>
+  <h2 id="st"></h2>
+  <p id="sd"></p>
+  <div class="facts" id="facts"></div>
+  <div id="pills"></div>
+  <div id="ctl">
+    <button id="prev" aria-label="Previous step">&larr; Back</button>
+    <button id="next" aria-label="Next step">Next &rarr;</button>
+    <button id="play">&#9654; Play build</button>
+    <div class="fine">Typical Houston three-coat stucco over wood framing. Layer thickness is exaggerated so each coat is easy to see. Your plans and local code decide the final spec.</div>
+  </div>
+</div>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.171.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/* ---------- content ---------- */
+const STEPS = [
+  { name:'Framing', title:'Wood framing', body:'Studs, a double top plate and blocking form the skeleton. Everything else hangs on this, so it has to be straight, dry and plumb before anything goes over it.', facts:['Studs 16 in. on center','Double top plate'] },
+  { name:'Sheathing', title:'Sheathing', body:'Plywood or OSB panels are nailed to the studs to give the wall a flat, solid base. Small gaps are left between panels so they can expand and shrink without buckling.', facts:['7/16 to 1/2 in. panels','Staggered, gapped joints'] },
+  { name:'Weather barrier', title:'Weather-resistive barrier', body:'Two layers of Grade D building paper are lapped shingle-style from the bottom up, so water always runs outward and down. Flashing goes around every window and door.', facts:['2 layers of paper','Lapped bottom to top'] },
+  { name:'Metal lath', title:'Metal lath and weep screed', body:'Galvanized diamond-mesh lath is fastened through the paper into the studs, with a weep screed at the bottom so trapped moisture can drain out. The mesh is what the plaster grabs onto.', facts:['Fasteners about 6 in. apart','Weep screed at base'] },
+  { name:'Scratch coat', title:'Scratch coat', body:'The first plaster coat is pressed through the mesh to lock into it, then raked in horizontal lines. Those scratches give the next coat something to bite into.', facts:['About 3/8 in. thick','Keep damp, wait about 48 hrs'] },
+  { name:'Brown coat', title:'Brown coat', body:'The leveling coat is troweled on to straighten and flatten the wall, then floated to an even, slightly rough surface. This coat is what makes a wall look flat and true.', facts:['About 3/8 in. thick','Cure about 7 days before finish'] },
+  { name:'Finish coat', title:'Color finish coat', body:'A thin, colored coat is applied last and textured by hand or sprayer: Santa Barbara, sand, dash and more. It is the part you see. Everything under it is what makes it last.', facts:['About 1/8 in. thick','Total wall about 7/8 in.'] }
+];
+const TYPES = [
+  { id:'smooth', name:'Smooth', str:1.6 },
+  { id:'sb', name:'Santa Barbara', str:8 },
+  { id:'sand', name:'Sand', str:6 },
+  { id:'dash', name:'Dash', str:10 }
+];
+const COLORS = [
+  ['Warm White','#F1EBDD'],['Swiss Coffee','#E9DDC6'],['Navajo','#DFC8A2'],['Desert Sand','#CBB591'],['Adobe','#B8946A'],['Terracotta','#A66F50'],['Sage','#A9B7A0']
+];
+const S = { step:7, type:'sb', color:'#E9DDC6', playing:false };
+
+/* ---------- seamless noise + texture helpers ---------- */
+const N = 512;
+function h2(ix,iy){const n=Math.sin(ix*127.1+iy*311.7)*43758.5453;return n-Math.floor(n)}
+function pn(x,y,Px,Py){const ix=Math.floor(x),iy=Math.floor(y),fx=x-ix,fy=y-iy,ux=fx*fx*(3-2*fx),uy=fy*fy*(3-2*fy);const x0=((ix%Px)+Px)%Px,x1=(x0+1)%Px,y0=((iy%Py)+Py)%Py,y1=(y0+1)%Py;const a=h2(x0,y0),b=h2(x1,y0),c=h2(x0,y1),d=h2(x1,y1);return a+(b-a)*ux+(c-a)*uy+(a-b-c+d)*ux*uy}
+function fb(u,v,oct,Px,Py){let s=0,a=.5,f=1,t=0;for(let i=0;i<oct;i++){s+=a*pn(u*Px*f,v*Py*f,Px*f,Py*f);t+=a;a*=.5;f*=2}return s/t}
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const sstep=(a,b,x)=>{const t=clamp((x-a)/(b-a));return t*t*(3-2*t)};
+function field(fn){const d=new Float32Array(N*N);for(let y=0;y<N;y++)for(let x=0;x<N;x++)d[y*N+x]=fn(x/N,y/N);return d}
+function canvas(){const c=document.createElement('canvas');c.width=c.height=N;return c}
+function normalCanvas(hd,str){
+  const c=canvas(),cx=c.getContext('2d'),im=cx.createImageData(N,N);
+  const g=(x,y)=>hd[((y+N)%N)*N+((x+N)%N)];
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    const dx=(g(x+1,y-1)+2*g(x+1,y)+g(x+1,y+1)-g(x-1,y-1)-2*g(x-1,y)-g(x-1,y+1))*str*.25;
+    const dy=(g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1)-g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1))*str*.25;
+    const l=Math.hypot(dx,dy,1),i=(y*N+x)*4;
+    im.data[i]=(-dx/l*.5+.5)*255;im.data[i+1]=(dy/l*.5+.5)*255;im.data[i+2]=(1/l*.5+.5)*255;im.data[i+3]=255;
+  }
+  cx.putImageData(im,0,0);return c;
+}
+function tintCanvas(hd,fn){
+  const c=canvas(),cx=c.getContext('2d'),im=cx.createImageData(N,N);
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    const v=clamp(fn(hd[y*N+x],x/N,y/N))*255,i=(y*N+x)*4;
+    im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255;
+  }
+  cx.putImageData(im,0,0);return c;
+}
+function tex(c,srgb){const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;if(srgb)t.colorSpace=THREE.SRGBColorSpace;return t}
+
+/* ---------- procedural material textures ---------- */
+function woodTex(){
+  const c=canvas(),cx=c.getContext('2d'),im=cx.createImageData(N,N);
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    const u=x/N,v=y/N,g=fb(u,v,3,18,2),r=.5+.5*Math.sin(6.2832*(u*9+1.6*fb(u,v,2,3,1)));
+    const m=(.7+.4*g)*(1-.28*Math.pow(r,6)),i=(y*N+x)*4;
+    im.data[i]=clamp(.80*m)*255;im.data[i+1]=clamp(.63*m)*255;im.data[i+2]=clamp(.40*m)*255;im.data[i+3]=255;
+  }
+  cx.putImageData(im,0,0);return c;
+}
+function osbTex(){
+  const c=canvas(),cx=c.getContext('2d');
+  cx.fillStyle='#b78d53';cx.fillRect(0,0,N,N);
+  const pal=['#c49d66','#a67c3f','#b48848','#cfa86f','#98703a','#bd9459'];
+  let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+  for(let i=0;i<720;i++){
+    const x=rnd()*N,y=rnd()*N,L=34+rnd()*60,W=7+rnd()*13,a=(rnd()-.5)*.9,col=pal[(rnd()*pal.length)|0];
+    for(const ox of[-N,0,N])for(const oy of[-N,0,N]){
+      cx.save();cx.translate(x+ox,y+oy);cx.rotate(a);cx.globalAlpha=.9;cx.fillStyle=col;cx.fillRect(-L/2,-W/2,L,W);
+      cx.globalAlpha=.35;cx.strokeStyle='#5a3d1c';cx.lineWidth=1;cx.strokeRect(-L/2,-W/2,L,W);cx.restore();
+    }
+  }
+  const im=cx.getImageData(0,0,N,N);
+  for(let i=0;i<im.data.length;i+=4){const n=(Math.random()-.5)*16;im.data[i]+=n;im.data[i+1]+=n;im.data[i+2]+=n}
+  cx.putImageData(im,0,0);return c;
+}
+function paperTex(){
+  const c=canvas(),cx=c.getContext('2d'),im=cx.createImageData(N,N);
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    const u=x/N,v=y/N,w=Math.abs(Math.sin(6.2832*(u*5+1.6*fb(u,v,2,2,2)))),wr=Math.pow(1-w,10);
+    const w2=Math.abs(Math.sin(6.2832*(v*4+1.2*fb(u,v,2,3,3)))),wr2=Math.pow(1-w2,12);
+    let t=.2+.07*fb(u,v,3,8,8)+.025*fb(u,v,2,120,120)+.028*wr+.024*wr2;
+    const i=(y*N+x)*4;im.data[i]=clamp(t*1.18)*255;im.data[i+1]=clamp(t*1.04)*255;im.data[i+2]=clamp(t*.86)*255;im.data[i+3]=255;
+  }
+  cx.putImageData(im,0,0);return c;
+}
+function lathTex(){
+  const S2=256,c=document.createElement('canvas');c.width=c.height=S2;const cx=c.getContext('2d');
+  const strokeAll=(w,col)=>{cx.lineWidth=w;cx.strokeStyle=col;cx.lineCap='round';
+    for(let k=-10;k<=10;k++){cx.beginPath();cx.moveTo(-10,k*32);cx.lineTo(S2+10,k*32+(S2+20)*.5);cx.stroke();cx.beginPath();cx.moveTo(-10,k*32+S2*.5+10);cx.lineTo(S2+10,k*32-10);cx.stroke()}}
+  cx.clearRect(0,0,S2,S2);
+  strokeAll(11,'#5d6368');strokeAll(7,'#c9cdd1');strokeAll(2.4,'#f2f4f6');
+  return c;
+}
+function sectionTex(){
+  const c=canvas(),cx=c.getContext('2d'),im=cx.createImageData(N,N);
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    const u=x/N,v=y/N;let t=.72+.2*fb(u,v,4,40,40);
+    if(h2(x*1.3,y*.7)>.965)t+=.18;if(h2(x*.6,y*1.9)<.03)t-=.2;
+    const i=(y*N+x)*4;im.data[i]=im.data[i+1]=im.data[i+2]=clamp(t)*255;im.data[i+3]=255;
+  }
+  cx.putImageData(im,0,0);return c;
+}
+/* plaster layers: returns {map, normal} */
+function scratchTex(){
+  const hd=field((u,v)=>{
+    const wav=(fb(u,v,2,4,4)-.5)*.022,sp=1/26,t=((((v+wav)%sp)+sp)%sp)/sp;
+    const groove=t<.3?Math.sin(t/.3*Math.PI):0,mask=.3+.7*sstep(.3,.6,fb(u,v,2,5,52));
+    return .72-groove*mask*.62+.22*fb(u,v,4,20,20)+.1*fb(u,v,2,90,90);
+  });
+  return {normal:normalCanvas(hd,6),map:tintCanvas(hd,(h,u,v)=>.5+.5*h+(fb(u,v,3,3,3)-.5)*.14)};
+}
+function brownTex(){
+  const hd=field((u,v)=>{
+    const arcs=.5+.5*Math.sin(6.2832*(u*6+(fb(u,v,2,3,3)-.5)*2.2));
+    return .5*fb(u,v,3,6,6)+.35*fb(u,v,3,60,60)+.1*arcs;
+  });
+  return {normal:normalCanvas(hd,4.2),map:tintCanvas(hd,(h,u,v)=>.58+.4*h+(fb(u,v,3,4,4)-.5)*.16)};
+}
+function finishTex(type){
+  const hd=field((u,v)=>{
+    if(type==='smooth')return .5+.15*fb(u,v,2,4,4)+.05*fb(u,v,2,80,80);
+    if(type==='sb'){const u2=u+(fb(u,v,2,3,3)-.5)*.22,v2=v+(fb(u+.3,v+.7,2,3,3)-.5)*.22;return .4+.38*fb(u2,v2,3,8,8)+.1*fb(u,v,2,70,70)}
+    if(type==='sand')return .2+.7*fb(u,v,4,110,110);
+    return .8*sstep(.5,.64,fb(u,v,3,16,16))+.15*fb(u,v,2,60,60)+.05;
+  });
+  const T=TYPES.find(t=>t.id===type);
+  return {normal:normalCanvas(hd,T.str),map:tintCanvas(hd,(h,u,v)=>.74+.26*h+(fb(u,v,3,3,3)-.5)*.16+(fb(u,v,2,120,120)-.5)*.06)};
+}
+
+/* ---------- renderer / scene ---------- */
+const cvs=document.getElementById('view');
+let R;
+try{
+  R=new THREE.WebGLRenderer({canvas:cvs,antialias:true,alpha:true,powerPreference:'high-performance'});
+}catch(e){document.getElementById('fallback').style.display='flex';throw e}
+R.setPixelRatio(Math.min(devicePixelRatio,2));
+R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;
+const scene=new THREE.Scene();
+const pm=new THREE.PMREMGenerator(R);
+scene.environment=pm.fromScene(new RoomEnvironment(),.04).texture;scene.environmentIntensity=.45;
+const cam=new THREE.PerspectiveCamera(34,1,.1,80);
+const ctrl=new OrbitControls(cam,cvs);
+ctrl.enableDamping=true;ctrl.dampingFactor=.07;ctrl.enablePan=false;
+ctrl.minAzimuthAngle=-1.15;ctrl.maxAzimuthAngle=1.15;ctrl.minPolarAngle=.9;ctrl.maxPolarAngle=1.72;ctrl.minDistance=3.2;ctrl.maxDistance=15;
+
+const key=new THREE.DirectionalLight(0xfff1dc,3.1);key.castShadow=true;
+key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-4.5,right:4.5,top:3.5,bottom:-1.5,near:.5,far:24});
+key.shadow.bias=-.0006;key.shadow.normalBias=.012;scene.add(key,key.target);
+const fillL=new THREE.DirectionalLight(0xbcd0ff,.55);fillL.position.set(4,2,5);scene.add(fillL);
+scene.add(new THREE.HemisphereLight(0xdfe8ff,0x2a2118,.35));
+function setLight(deg){
+  const az=THREE.MathUtils.degToRad(deg),el=THREE.MathUtils.degToRad(26),r=10;
+  key.position.set(-Math.sin(az)*Math.cos(el)*r,1.2+Math.sin(el)*r,.2+Math.cos(az)*Math.cos(el)*r);
+  key.target.position.set(0,1.2,.2);
+}
+
+/* ---------- dimensions ---------- */
+const W=5.2,H=2.44,X0=-W/2,STEP=.55;
+const XR=[...Array(7)].map((_,i)=>W/2-i*STEP);           // right edge of each layer (staircase)
+const ZF=[.14,.17,.176,.2,.235,.285,.305];               // front face of each layer
+const GAP=.06;                                           // plaster starts above the weep screed
+
+/* ---------- materials ---------- */
+const woodMap=tex(woodTex(),true),osbMap=tex(osbTex(),true),paperMap=tex(paperTex(),true),secMap=tex(sectionTex(),true);
+const lathMap=new THREE.CanvasTexture(lathTex());lathMap.wrapS=lathMap.wrapT=THREE.RepeatWrapping;lathMap.colorSpace=THREE.SRGBColorSpace;lathMap.anisotropy=8;
+const sc=scratchTex(),br=brownTex();
+const mWood=new THREE.MeshStandardMaterial({map:woodMap,roughness:.82});
+const mOsb=new THREE.MeshStandardMaterial({map:osbMap,bumpMap:osbMap,bumpScale:.6,roughness:.85});
+const mPaper=new THREE.MeshStandardMaterial({map:paperMap,bumpMap:paperMap,bumpScale:1.4,roughness:.62});
+const mMetal=new THREE.MeshStandardMaterial({color:0xcfd3d6,metalness:.92,roughness:.34});
+const mScratch=new THREE.MeshStandardMaterial({map:tex(sc.map,true),normalMap:tex(sc.normal),normalScale:new THREE.Vector2(1.5,1.5),color:0x9b988f,roughness:.95});
+const mBrown=new THREE.MeshStandardMaterial({map:tex(br.map,true),normalMap:tex(br.normal),normalScale:new THREE.Vector2(1.2,1.2),color:0xb0a898,roughness:.94});
+const mSecS=new THREE.MeshStandardMaterial({map:secMap,color:0x8d8a82,roughness:.97});
+const mSecB=new THREE.MeshStandardMaterial({map:secMap,color:0xa49d8d,roughness:.97});
+const mSecF=new THREE.MeshStandardMaterial({map:secMap,color:S.color,roughness:.97});
+const mFinish=new THREE.MeshStandardMaterial({color:S.color,roughness:.93,normalScale:new THREE.Vector2(2,2)});
+function applyFinish(){
+  const f=finishTex(S.type);
+  for(const k of['map','normalMap'])if(mFinish[k])mFinish[k].dispose();
+  mFinish.map=tex(f.map,true);mFinish.normalMap=tex(f.normal);mFinish.color.set(S.color);mFinish.needsUpdate=true;
+  mSecF.color.set(S.color);
+}
+applyFinish();
+
+/* ---------- geometry helpers ---------- */
+// box whose UVs follow real-world size, so textures never stretch
+function wbox(w,h,d,mats,tile,off=[0,0]){
+  const g=new THREE.BoxGeometry(w,h,d),uv=g.attributes.uv;
+  const dims=[[d,h],[d,h],[w,d],[w,d],[w,h],[w,h]];
+  for(let f=0;f<6;f++)for(let k=0;k<4;k++){const i=f*4+k;uv.setXY(i,uv.getX(i)*dims[f][0]/tile+off[0],uv.getY(i)*dims[f][1]/tile+off[1])}
+  const m=Array.isArray(mats)?mats:mats;
+  const o=new THREE.Mesh(g,m);o.castShadow=o.receiveShadow=true;return o;
+}
+const place=(o,x,y,z,grp)=>{o.position.set(x,y,z);grp.add(o);return o};
+const six=(side,front)=>[side,side,side,side,front,front];   // px,nx,py,ny,pz,nz
+
+/* ---------- build the seven layers ---------- */
+const layers=[...Array(7)].map(()=>new THREE.Group());
+const wall=new THREE.Group();layers.forEach(g=>wall.add(g));scene.add(wall);
+
+// 0 framing
+{
+  const g=layers[0],xr=XR[0],len=xr-X0,D=.14;
+  place(wbox(len,.05,D,mWood,.5),X0+len/2,.025,D/2,g);
+  place(wbox(len,.05,D,mWood,.5),X0+len/2,H-.025,D/2,g);
+  place(wbox(len,.05,D,mWood,.5),X0+len/2,H-.075,D/2,g);
+  const sh=H-.15,sx=[];
+  for(let x=X0+.025;x<xr-.02;x+=.4064)sx.push(x);sx.push(xr-.025);
+  sx.forEach((x,i)=>{
+    place(wbox(.05,sh,D,mWood,.5),x,.05+sh/2,D/2,g);
+    if(i<sx.length-1){const bw=sx[i+1]-x-.05;place(wbox(bw,.05,D,mWood,.5),(x+sx[i+1])/2,1.2+(i%2?.13:-.13),D/2,g)}
+  });
+}
+// 1 sheathing (4x8 sheets, small gaps)
+{
+  const g=layers[1],xr=XR[1],T=.03;let x=X0,i=0;
+  while(x<xr-.001){
+    const w=Math.min(1.22,xr-x),o=wbox(w-.006,H-.054,T,six(mOsb,mOsb),1.22,[(i*.37)%1,(i*.61)%1]);
+    place(o,x+w/2,H/2,.14+T/2,g);x+=1.22;i++;
+  }
+}
+// 2 weather barrier (3 courses, upper laps over lower)
+{
+  const g=layers[2],xr=XR[2],hs=[1,1,H-1.7],y0=[0,.85,1.7];
+  hs.forEach((h,i)=>{
+    const o=wbox(xr-X0,h,.004,six(mPaper,mPaper),1.6,[0,i*.3]);
+    place(o,X0+(xr-X0)/2,y0[i]+h/2,.172+.0016*i,g);
+  });
+}
+// 3 metal lath + nails + weep screed
+{
+  const g=layers[3],xr=XR[3],w=xr-X0;
+  for(let k=0;k<2;k++){
+    const t=lathMap.clone();t.needsUpdate=true;t.repeat.set(w/.2,H/.1);t.offset.set(k*.5,k*.5);
+    const m=new THREE.MeshStandardMaterial({map:t,alphaTest:.45,metalness:.9,roughness:.38,side:THREE.DoubleSide});
+    const p=new THREE.Mesh(new THREE.PlaneGeometry(w,H),m);p.receiveShadow=true;p.position.set(X0+w/2,H/2,.186+k*.009);g.add(p);
+  }
+  const pts=[];
+  for(let x=X0+.025;x<xr-.02;x+=.4064)for(let y=.18;y<H-.1;y+=.22)pts.push([x,y]);
+  const nails=new THREE.InstancedMesh(new THREE.CylinderGeometry(.014,.014,.008,10).rotateX(Math.PI/2),mMetal,pts.length),mt=new THREE.Matrix4();
+  pts.forEach((p,i)=>{mt.setPosition(p[0],p[1],.2);nails.setMatrixAt(i,mt)});nails.castShadow=true;g.add(nails);
+  place(wbox(w,GAP,.075,mMetal,.3),X0+w/2,GAP/2,.2225,g);
+}
+// 4 scratch coat, 5 brown coat, 6 finish coat
+function plaster(i,z0,z1,front,side,tile){
+  const g=layers[i],xr=XR[i],w=xr-X0,d=z1-z0;
+  place(wbox(w,H-GAP,d,six(side,front),tile),X0+w/2,GAP+(H-GAP)/2,z0+d/2,g);
+}
+plaster(4,.185,.235,mScratch,mSecS,.9);
+plaster(5,.235,.285,mBrown,mSecB,.85);
+plaster(6,.285,.305,mFinish,mSecF,.62);
+
+/* ---------- ground shadow catcher ---------- */
+{const f=new THREE.Mesh(new THREE.PlaneGeometry(14,8),new THREE.ShadowMaterial({opacity:.3}));f.rotation.x=-Math.PI/2;f.position.set(0,-.002,2);f.receiveShadow=true;scene.add(f)}
+
+/* ---------- markers ---------- */
+const mkWrap=document.getElementById('markers'),marks=[];
+for(let i=0;i<7;i++){
+  const b=document.createElement('div');b.className='mk hide';b.textContent=i+1;
+  b.addEventListener('click',()=>{stopPlay();setStep(i+1)});mkWrap.appendChild(b);
+  const x=i<6?XR[i]-STEP/2:(X0+XR[6])/2;
+  marks.push({el:b,pos:new THREE.Vector3(x,H+.16,ZF[i])});
+}
+
+/* ---------- UI ---------- */
+const $=id=>document.getElementById(id);
+const pills=$('pills');
+STEPS.forEach((s,i)=>{const b=document.createElement('button');b.innerHTML=`<b>${i+1}</b><span>${s.name}</span>`;b.addEventListener('click',()=>{stopPlay();setStep(i+1)});pills.appendChild(b)});
+TYPES.forEach(t=>{const b=document.createElement('button');b.textContent=t.name;b.dataset.id=t.id;b.addEventListener('click',()=>{S.type=t.id;applyFinish();syncStyle()});$('types').appendChild(b)});
+COLORS.forEach(([n,h])=>{const b=document.createElement('button');b.style.background=h;b.title=n;b.setAttribute('aria-label',n);b.dataset.h=h;b.addEventListener('click',()=>{S.color=h;applyFinish();syncStyle()});$('colors').appendChild(b)});
+function syncStyle(){
+  [...$('types').children].forEach(b=>b.classList.toggle('on',b.dataset.id===S.type));
+  [...$('colors').children].forEach(b=>b.classList.toggle('on',b.dataset.h===S.color));
+}
+$('light').addEventListener('input',e=>setLight(+e.target.value));
+if(innerWidth<=640)$('style').removeAttribute('open');else $('style').setAttribute('open','');
+
+function setStep(n){
+  S.step=clamp(n,1,7);
+  const st=STEPS[S.step-1];
+  $('sn').textContent=S.step;$('st').textContent=st.title;$('sd').textContent=st.body;
+  $('facts').innerHTML=st.facts.map(f=>`<span>${f}</span>`).join('');
+  [...pills.children].forEach((b,i)=>{b.classList.toggle('on',i===S.step-1);b.classList.toggle('done',i<S.step-1)});
+  const on=pills.children[S.step-1];if(on&&on.scrollIntoView)on.scrollIntoView({block:'nearest',inline:'center'});
+  marks.forEach((m,i)=>m.el.classList.toggle('on',i===S.step-1));
+}
+let timer=null;
+function stopPlay(){S.playing=false;clearInterval(timer);$('play').innerHTML='&#9654; Play build'}
+function startPlay(){
+  S.playing=true;$('play').innerHTML='&#10074;&#10074; Pause';setStep(1);
+  timer=setInterval(()=>{if(S.step>=7){stopPlay();return}setStep(S.step+1)},2600);
+}
+$('play').addEventListener('click',()=>S.playing?stopPlay():startPlay());
+$('next').addEventListener('click',()=>{stopPlay();setStep(S.step+1)});
+$('prev').addEventListener('click',()=>{stopPlay();setStep(S.step-1)});
+addEventListener('keydown',e=>{if(e.key==='ArrowRight'){stopPlay();setStep(S.step+1)}if(e.key==='ArrowLeft'){stopPlay();setStep(S.step-1)}});
+
+/* ---------- camera / resize / loop ---------- */
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let moved=false;ctrl.addEventListener('start',()=>{moved=true});
+function fit(initial){
+  const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;
+  if(initial){
+    const top=100,bottom=Math.max($('sheet').getBoundingClientRect().top-34,top+160);
+    const left=(w>900&&$('style').open)?264:10,right=w-10;
+    const tan=Math.tan(THREE.MathUtils.degToRad(cam.fov/2));
+    const distH=(H*1.2)/((bottom-top)/h)/(2*tan),distW=(W*1.1)/((right-left)/w)/(2*tan*cam.aspect);
+    const dist=clamp(Math.max(distH,distW),5.5,14),visH=2*tan*dist,visW=visH*cam.aspect;
+    const ty=H/2+((top+bottom)/2-h/2)/h*visH,tx=-(((left+right)/2)-w/2)/w*visW;
+    const az=.36,el=.1;
+    ctrl.target.set(tx,ty,.2);
+    cam.position.set(tx+dist*Math.sin(az)*Math.cos(el),ty+dist*Math.sin(el),.2+dist*Math.cos(az)*Math.cos(el));
+    ctrl.update();
+  }
+  cam.updateProjectionMatrix();
+}
+addEventListener('resize',()=>fit(!moved));
+fit(true);setLight(+$('light').value);syncStyle();setStep(7);
+
+const anim=Array(7).fill(1);if(reduce){}
+let last=performance.now();const v3=new THREE.Vector3();
+function ease(t){return 1-Math.pow(1-t,3)}
+function frame(now){
+  const dt=clamp((now-last)/1000,0,.25);last=now;
+  layers.forEach((g,i)=>{
+    const tgt=i<S.step?1:0;
+    anim[i]=reduce?tgt:anim[i]+clamp(tgt-anim[i],-dt*1.6,dt*1.6);
+    g.visible=anim[i]>.004;g.position.z=(1-ease(anim[i]))*.9;g.position.y=(1-ease(anim[i]))*.12;
+  });
+  ctrl.update();R.render(scene,cam);
+  const w=innerWidth,h=innerHeight;
+  marks.forEach((m,i)=>{
+    v3.copy(m.pos);v3.z+=layers[i].position.z;v3.project(cam);
+    const show=anim[i]>.92&&v3.z<1&&Math.abs(v3.x)<1.05&&v3.y>-1&&v3.y<.98;
+    m.el.classList.toggle('hide',!show);
+    m.el.style.transform=`translate(${(v3.x*.5+.5)*w}px,${(-v3.y*.5+.5)*h}px)`;
+  });
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+window.castilloSteps={setStep,setType:t=>{S.type=t;applyFinish();syncStyle()},ready:true};
+</script>
+</body>
+</html>
