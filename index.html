@@ -413,7 +413,7 @@
     .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
     .reveal.visible{opacity:1;transform:none;}
   </style>
-</head>
+<style>.hero-photo{position:relative;width:min(620px,92vw);aspect-ratio:16/10;margin:1.6rem auto 0;border:1px solid rgba(184,151,90,.45);box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;border-radius:4px}.hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease;transform:scale(1.04)}.hero-photo img.on{opacity:1;animation:hp 9s linear forwards}@keyframes hp{to{transform:scale(1.12)}}@media (prefers-reduced-motion:reduce){.hero-photo img.on{animation:none}}</style></head>
 <body>
 
 <!-- NAV -->
@@ -455,10 +455,7 @@
       <a href="#contact" class="btn-gold" data-en="Request a Free Estimate" data-es="Solicite un Presupuesto Gratis">Request a Free Estimate</a>
       <a href="#gallery" class="btn-ghost" data-en="View Our Portfolio" data-es="Ver Nuestro Portafolio">View Our Portfolio</a>
     </div>
-    <div class="hero-3d" id="hero3d" role="img" aria-label="Interactive 3D model of a stucco house. Click and drag to rotate it.">
-      <canvas id="house-canvas"></canvas>
-      <span class="hero-3d-hint" id="hero3dHint" data-en="Drag to rotate" data-es="Arrastra para girar">Drag to rotate</span>
-    </div>
+    <div class="hero-photo" id="heroPhoto" role="img" aria-label="Real stucco homes built by Castillo Stucco Construction"><img src="IMG_8173.jpg" alt="Luxury stucco estate with arched windows" class="on"><img src="IMG_8176.jpg" alt="Two-story stucco home" loading="lazy"><img src="IMG_8177.jpg" alt="Luxury stucco and stone home" loading="lazy"></div>
   </div>
   <div class="hero-scroll">
     <span data-en="Scroll" data-es="Desplazar">Scroll</span>
@@ -1436,143 +1433,6 @@
 <!--  Interactive 3D Stucco House  (Three.js WebGPU + TSL shaders)  -->
 <!--  Auto-spins, and visitors can click/drag to rotate it.        -->
 <!-- ============================================================= -->
-<script type="importmap">
-{
-  "imports": {
-    "three":         "https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.webgpu.js",
-    "three/webgpu":  "https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.webgpu.js",
-    "three/tsl":     "https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.tsl.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.171.0/examples/jsm/"
-  }
-}
-</script>
-<script type="module">
-  // 1) Pull in Three.js (WebGPU build), a few TSL shader helpers, and the drag controls.
-  import * as THREE from 'three/webgpu';
-  import { color, mix, positionLocal, mx_noise_float, mx_fractal_noise_float } from 'three/tsl';
-  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-  const container = document.getElementById('hero3d');
-  const canvas    = document.getElementById('house-canvas');
-
-  // If someone prefers reduced motion, we turn OFF the auto-spin (drag still works).
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Build everything. If the device can't do 3D, show a small text note instead of crashing.
-  buildHouse().catch((err) => {
-    console.error('3D house could not load:', err);
-    if (container) container.innerHTML =
-      '<div class="hero-3d-fallback">3D preview isn’t available on this device.</div>';
-  });
-
-  async function buildHouse() {
-    // 2) Scene + camera (the "movie set" and the "eye" looking at it).
-    const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, aspect(), 0.1, 100);
-    camera.position.set(3.4, 2.1, 4.8);
-
-    // 3) Renderer. WebGPURenderer uses the fast WebGPU when available and
-    //    automatically falls back to WebGL on older phones — broad support, no extra code.
-    const renderer = new THREE.WebGPURenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // cap for sharp-but-light rendering
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    await renderer.init();
-    resize();
-
-    // 4) Lighting: warm "sky" + a sun, plus a soft cool fill so the shaded side isn't black.
-    scene.add(new THREE.HemisphereLight(0xfff3e0, 0x2a2620, 0.9));
-    const sun = new THREE.DirectionalLight(0xfff0d8, 2.2); sun.position.set(4, 6, 3); scene.add(sun);
-    const fill = new THREE.DirectionalLight(0xbcd0ff, 0.5); fill.position.set(-4, 2, -3); scene.add(fill);
-
-    const house = new THREE.Group();
-
-    // 5) STUCCO WALLS — the colour/texture is generated on the GPU with TSL (no image to download).
-    const wallMat = new THREE.MeshStandardNodeMaterial();
-    const cream = color(0xEDE3D0), tan = color(0xCBB084);
-    const blotch  = mx_fractal_noise_float(positionLocal.mul(2.2), 4, 2.0, 0.5).mul(0.5).add(0.5); // soft colour patches
-    const speckle = mx_noise_float(positionLocal.mul(45.0)).mul(0.5).add(0.5);                     // fine plaster grain
-    wallMat.colorNode     = mix(cream, tan, blotch.mul(0.7)).mul(speckle.mul(0.12).add(0.88));
-    wallMat.roughnessNode = speckle.mul(0.25).add(0.7); // matte and slightly uneven, like real stucco
-    wallMat.metalness     = 0.0;
-    const walls = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1.4, 1.8), wallMat);
-    walls.position.y = 0.7;
-    house.add(walls);
-
-    // 6) ROOF — a simple 4-sided pyramid in a terracotta tone.
-    const roofMat = new THREE.MeshStandardNodeMaterial();
-    const roofN = mx_fractal_noise_float(positionLocal.mul(6.0), 3, 2.0, 0.5).mul(0.5).add(0.5);
-    roofMat.colorNode = mix(color(0x9c4a2f), color(0x7b3a25), roofN);
-    roofMat.roughness = 0.85;
-    const roof = new THREE.Mesh(new THREE.ConeGeometry(1.75, 1.1, 4), roofMat);
-    roof.rotation.y = Math.PI / 4;   // turn 45° so the roof lines up over the square walls
-    roof.position.y = 1.95;
-    house.add(roof);
-
-    // 7) A door and two windows so it clearly reads as a house.
-    const doorMat = new THREE.MeshStandardNodeMaterial(); doorMat.colorNode = color(0x4a3526); doorMat.roughness = 0.6;
-    const door = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.8, 0.06), doorMat);
-    door.position.set(0, 0.4, 0.92);
-    house.add(door);
-
-    const winMat = new THREE.MeshStandardNodeMaterial();
-    winMat.colorNode = color(0x16202b); winMat.roughness = 0.15; winMat.metalness = 0.4;
-    const winGeo = new THREE.BoxGeometry(0.42, 0.42, 0.06);
-    for (const x of [-0.62, 0.62]) {
-      const w = new THREE.Mesh(winGeo, winMat);
-      w.position.set(x, 0.86, 0.92);
-      house.add(w);
-    }
-
-    // 8) A soft round shadow under the house (alpha fades out toward the edge) to ground it.
-    const shadowMat = new THREE.MeshBasicNodeMaterial({ transparent: true });
-    shadowMat.colorNode = color(0x000000);
-    const radius = 1.8;
-    const dist = positionLocal.xy.length().div(radius).clamp(0, 1);
-    shadowMat.opacityNode = dist.oneMinus().pow(2.0).mul(0.33);
-    const shadow = new THREE.Mesh(new THREE.CircleGeometry(radius, 48), shadowMat);
-    shadow.rotation.x = -Math.PI / 2;
-    shadow.position.y = 0.001;
-    house.add(shadow);
-
-    scene.add(house);
-
-    // 9) CONTROLS: auto-spin + click/drag to rotate. Zoom and pan are disabled on purpose.
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true; controls.dampingFactor = 0.08;
-    controls.enableZoom = false;   controls.enablePan = false;
-    controls.rotateSpeed = 0.9;
-    controls.autoRotate = !reduceMotion; controls.autoRotateSpeed = 0.9;
-    controls.minPolarAngle = 0.7;  controls.maxPolarAngle = 1.45; // keep a pleasant viewing height
-    controls.target.set(0, 0.9, 0);
-    controls.update();
-
-    // Fade the "Drag to rotate" hint away once they start interacting.
-    const hint = document.getElementById('hero3dHint');
-    controls.addEventListener('start', () => { if (hint) hint.style.opacity = '0'; });
-
-    // 10) Render loop — but only run it while the house is on screen and the tab is active.
-    //     This keeps phone batteries (and the page) light.
-    let running = false, inView = true, hidden = document.hidden;
-    const loop = () => { controls.update(); renderer.render(scene, camera); };
-    const sync = () => {
-      const go = inView && !hidden;
-      if (go && !running) { running = true; renderer.setAnimationLoop(loop); }
-      else if (!go && running) { running = false; renderer.setAnimationLoop(null); }
-    };
-    new IntersectionObserver((e) => { inView = e[0].isIntersecting; sync(); }, { threshold: 0.05 }).observe(container);
-    document.addEventListener('visibilitychange', () => { hidden = document.hidden; sync(); });
-    new ResizeObserver(resize).observe(container);
-    sync();
-
-    // --- small helpers ---
-    function aspect() { const r = container.getBoundingClientRect(); return Math.max(r.width, 1) / Math.max(r.height, 1); }
-    function resize() {
-      const r = container.getBoundingClientRect();
-      renderer.setSize(r.width, r.height, false);
-      camera.aspect = aspect();
-      camera.updateProjectionMatrix();
-    }
-  }
-</script>
+<script>(function(){var p=document.getElementById("heroPhoto");if(!p)return;var im=p.querySelectorAll("img"),k=0;setInterval(function(){im[k].classList.remove("on");k=(k+1)%im.length;im[k].classList.add("on");},4500);})();</script>
 </body>
 </html>
