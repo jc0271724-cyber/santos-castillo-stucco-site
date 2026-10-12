@@ -127,6 +127,7 @@ const STEPS = [
   { name:'Finish coat', title:'Color finish coat', body:'A thin, colored coat is applied last and textured by hand or sprayer: Santa Barbara, sand, dash and more. It is the part you see. Everything under it is what makes it last.', facts:['About 1/8 in. thick','Total wall about 7/8 in.'] }
 ];
 const TYPES = [
+  { id:'photo', name:'Real stucco', str:0 },
   { id:'smooth', name:'Smooth', str:1.6 },
   { id:'sb', name:'Santa Barbara', str:8 },
   { id:'sand', name:'Sand', str:6 },
@@ -135,7 +136,7 @@ const TYPES = [
 const COLORS = [
   ['Warm White','#F1EBDD'],['Swiss Coffee','#E9DDC6'],['Navajo','#DFC8A2'],['Desert Sand','#CBB591'],['Adobe','#B8946A'],['Terracotta','#A66F50'],['Sage','#A9B7A0']
 ];
-const S = { step:7, type:'sb', color:'#E9DDC6', playing:false };
+const S = { step:7, type:'photo', color:'#E9DDC6', playing:false };
 
 /* ---------- seamless noise + texture helpers ---------- */
 const N = 512;
@@ -295,13 +296,30 @@ const mSecS=new THREE.MeshStandardMaterial({map:secMap,color:0x8d8a82,roughness:
 const mSecB=new THREE.MeshStandardMaterial({map:secMap,color:0xa49d8d,roughness:.97});
 const mSecF=new THREE.MeshStandardMaterial({map:secMap,color:S.color,roughness:.97});
 const mFinish=new THREE.MeshStandardMaterial({color:S.color,roughness:.93,normalScale:new THREE.Vector2(2,2)});
+/* Real photo-scanned textures (Poly Haven, CC0). Loaded in the visitor's browser; if they fail, the built-in look stays. */
+const PH='https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/';
+const photo={finish:null,brown:null};
+function loadPhoto(id,rep,done){
+  const L=new THREE.TextureLoader();L.setCrossOrigin('anonymous');
+  const one=(f,srgb)=>new Promise((ok,no)=>L.load(PH+id+'/'+id+'_'+f+'_1k.jpg',t=>{t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep,rep);t.anisotropy=8;if(srgb)t.colorSpace=THREE.SRGBColorSpace;ok(t)},undefined,no));
+  Promise.all([one('diff',true),one('nor_gl',false),one('rough',false)]).then(([map,normal,rough])=>done({map,normal,rough})).catch(()=>{});
+}
 function applyFinish(){
-  const f=finishTex(S.type);
-  for(const k of['map','normalMap'])if(mFinish[k])mFinish[k].dispose();
-  mFinish.map=tex(f.map,true);mFinish.normalMap=tex(f.normal);mFinish.color.set(S.color);mFinish.needsUpdate=true;
+  for(const k of['map','normalMap','roughnessMap'])if(mFinish[k]&&!(photo.finish&&mFinish[k]===photo.finish[k==='map'?'map':k==='normalMap'?'normal':'rough']))mFinish[k].dispose();
+  if(S.type==='photo'&&photo.finish){
+    mFinish.map=photo.finish.map;mFinish.normalMap=photo.finish.normal;mFinish.roughnessMap=photo.finish.rough;mFinish.roughness=1;
+    mFinish.normalScale.set(1.1,1.1);
+  }else{
+    const f=finishTex(S.type==='photo'?'sb':S.type);
+    mFinish.map=tex(f.map,true);mFinish.normalMap=tex(f.normal);mFinish.roughnessMap=null;mFinish.roughness=.93;
+    mFinish.normalScale.set(2,2);
+  }
+  mFinish.color.set(S.color);mFinish.needsUpdate=true;
   mSecF.color.set(S.color);
 }
 applyFinish();
+loadPhoto('white_stucco',.62,t=>{photo.finish=t;applyFinish()});
+loadPhoto('beige_wall_001',.85,t=>{photo.brown=t;mBrown.map=t.map;mBrown.normalMap=t.normal;mBrown.roughnessMap=t.rough;mBrown.color.set(0x9a9488);mBrown.needsUpdate=true});
 
 /* ---------- geometry helpers ---------- */
 // box whose UVs follow real-world size, so textures never stretch
